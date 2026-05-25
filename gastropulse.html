@@ -1,0 +1,1516 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#064E4A;--brand-light:#E6F4F1;--brand-mid:#0F766E;
+  --success-bg:#EAF3DE;--success-txt:#3B6D11;
+  --warn-bg:#FAEEDA;--warn-txt:#854F0B;
+  --danger-bg:#FCEBEB;--danger-txt:#A32D2D;
+  --info-bg:#E6F4F1;--info-txt:#0F766E;
+}
+body{font-family:var(--font-sans,'system-ui');background:#F3F7FB;min-height:100vh}
+
+.app{display:flex;flex-direction:column;min-height:100vh;background:#F3F7FB}
+
+/* Top nav */
+.topnav{background:#064E4A;color:#fff;padding:0 1.25rem;display:flex;align-items:center;gap:1rem;height:48px;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.12) inset}
+.topnav-logo{font-size:16px;font-weight:650;letter-spacing:.1px;opacity:.98}
+.topnav-logo span{opacity:.6;font-weight:400}
+.topnav-role{margin-left:auto;display:flex;align-items:center;gap:8px}
+.role-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:3px 12px;font-size:12px;cursor:pointer;transition:background .15s}
+.role-badge:hover{background:rgba(255,255,255,.28)}
+.role-badge.active{background:rgba(255,255,255,.32);font-weight:500}
+.topnav-user{font-size:13px;opacity:.82;margin-left:8px}
+.app.patient-link-mode .topnav,.app.patient-link-mode .sidebar{display:none}
+.app.patient-link-mode .main{padding:2rem}
+
+/* Layout */
+.layout{display:flex;flex:1;min-height:0}
+.sidebar{width:224px;background:#F8FBFE;border-right:1px solid #DDE8F4;padding:.75rem .75rem;flex-shrink:0;box-shadow:8px 0 24px rgba(12,47,92,.04)}
+.sidebar-section{font-size:10px;font-weight:600;color:#7390AE;text-transform:uppercase;letter-spacing:.8px;padding:1rem .65rem .45rem}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px .75rem;font-size:13px;color:#39556F;cursor:pointer;border-radius:8px;border-left:0;transition:all .15s;margin:2px 0;font-weight:500}
+.nav-item:hover{background:#E6F4F1;color:#064E4A;transform:translateX(2px)}
+.nav-item.active{background:#D7EFEC;color:#064E4A;font-weight:650;box-shadow:inset 3px 0 0 #064E4A}
+.nav-item .ti{font-size:16px}
+
+.main{flex:1;overflow-y:auto;padding:1.5rem 1.6rem}
+.page{display:none}
+.page.active{display:block}
+.page:not(#page-dashboard){max-width:1480px;margin:0 auto}
+
+/* Page header */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.2rem;gap:1rem}
+.page-title{font-size:24px;font-weight:700;color:#10283E;letter-spacing:-.01em}
+.page-sub{font-size:13px;color:#5C7186;margin-top:4px}
+
+/* Cards */
+.card{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:1rem 1.15rem;margin-bottom:1rem;box-shadow:0 8px 22px rgba(13,58,108,.05)}
+.card-title{font-size:14px;font-weight:700;color:#18344E;margin-bottom:.8rem}
+
+/* Metric grid */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1rem}
+.metric{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:1rem 1.05rem;text-align:left;box-shadow:0 8px 20px rgba(13,58,108,.045);position:relative;overflow:hidden}
+.metric::after{content:'';position:absolute;right:-24px;top:-24px;width:70px;height:70px;border-radius:50%;background:#E6F4F1}
+.metric-val{font-size:28px;font-weight:750;color:#10283E;letter-spacing:-.02em}
+.metric-lbl{font-size:12px;color:#536B82;margin-top:3px;font-weight:600}
+.metric-delta{font-size:11px;margin-top:4px}
+.delta-up{color:var(--success-txt)}
+.delta-warn{color:var(--warn-txt)}
+
+/* Study dashboard */
+.study-link{cursor:pointer;color:var(--color-text-primary)}
+.study-link:hover{color:var(--brand);text-decoration:underline}
+.study-hero{background:linear-gradient(135deg,#033B3A,#064E4A 58%,#14A37F);color:#fff;border-radius:var(--border-radius-lg);padding:1.35rem 1.5rem;margin-bottom:1rem;display:grid;grid-template-columns:1.5fr 1fr;gap:1rem;align-items:end}
+.study-hero h2{font-size:24px;font-weight:500;margin-bottom:6px;letter-spacing:0}
+.study-hero p{font-size:13px;opacity:.82;max-width:720px}
+.hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hero-meta .meta-tile{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:var(--border-radius-md);padding:9px 10px}
+.meta-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.6px;opacity:.65;margin-bottom:3px}
+.meta-val{font-size:13px;font-weight:500}
+.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1rem}
+.detail-tile{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
+.detail-tile .ti{font-size:18px;color:var(--brand);margin-bottom:8px}
+.detail-val{font-size:24px;font-weight:500;color:var(--color-text-primary)}
+.detail-lbl{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.split-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.split-3{display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:1rem}
+.question-preview{border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:10px;background:var(--color-background-primary)}
+.question-preview-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.question-preview-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.question-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.option-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;margin-left:34px}
+.option-pill{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:4px;padding:6px 8px}
+.timeline{display:flex;flex-direction:column;gap:10px}
+.timeline-item{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start}
+.timeline-dot{width:22px;height:22px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:12px}
+.timeline-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.timeline-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.segment-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px}
+.segment-name{font-size:13px;color:var(--color-text-primary)}
+.segment-count{font-size:12px;color:var(--color-text-secondary)}
+.mini-bar{height:7px;background:var(--color-background-secondary);border-radius:8px;overflow:hidden;margin-top:5px}
+.mini-bar span{display:block;height:100%;background:var(--brand-mid);border-radius:8px}
+.home-hero{width:100%;margin:0;display:grid;grid-template-columns:1fr;gap:1.1rem;align-items:start;padding:1.7rem 1.8rem 1.2rem}
+.home-copy{padding-top:0;color:#fff;position:relative;z-index:2}
+.home-hello{font-size:36px;font-weight:720;color:#fff;letter-spacing:-.02em;margin-bottom:8px;line-height:1.08}
+.home-sub{font-size:15px;color:rgba(255,255,255,.8);margin-bottom:1.15rem;max-width:560px;line-height:1.5}
+.home-status{display:flex;gap:10px;flex-wrap:wrap}
+.home-status span{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.88);font-size:12px;font-weight:650}
+.home-stage{background:linear-gradient(135deg,#063D3B 0%,#075955 54%,#0D7F76 100%);border-radius:14px;position:relative;overflow:hidden;min-height:0;padding:0;box-shadow:0 16px 36px rgba(4,45,43,.18)}
+.home-stage::before{content:'';position:absolute;inset:-40%;background:radial-gradient(circle at 18% 18%,rgba(255,255,255,.14),transparent 22%),radial-gradient(circle at 86% 18%,rgba(94,234,212,.18),transparent 20%),radial-gradient(circle at 70% 90%,rgba(255,255,255,.10),transparent 24%);animation:floatGlow 11s ease-in-out infinite alternate}
+.home-stage::after{content:'';position:absolute;inset:14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;pointer-events:none}
+.bg-orbits{position:absolute;inset:0;overflow:hidden;z-index:1;pointer-events:none}
+.bg-orbits span{position:absolute;width:170px;height:170px;border-radius:50%;border:1px solid rgba(204,251,241,.22);box-shadow:0 0 38px rgba(94,234,212,.08) inset;animation:orbitDrift 10s ease-in-out infinite alternate}
+.bg-orbits span:nth-child(1){right:9%;top:18%;animation-delay:0s}
+.bg-orbits span:nth-child(2){right:23%;top:42%;width:110px;height:110px;animation-delay:1.4s}
+.bg-orbits span:nth-child(3){left:8%;bottom:18%;width:90px;height:90px;animation-delay:2.1s}
+.bg-grid{position:absolute;inset:0;z-index:1;opacity:.23;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at 68% 40%,black,transparent 62%);animation:gridSlide 14s linear infinite;pointer-events:none}
+.home-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;grid-column:1 / -1;position:relative;z-index:2;margin-top:.4rem;padding:0 0 .2rem}
+.home-card{background:#fff;border:1px solid rgba(213,227,235,.95);border-radius:12px;padding:1rem;cursor:pointer;transition:all .16s;min-height:132px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 10px 24px rgba(3,59,58,.12)}
+.home-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(3,59,58,.18);border-color:#5EEAD4}
+.home-card .ti{font-size:24px;color:var(--brand)}
+.home-card-title{font-size:16px;font-weight:720;color:#10283E;margin-top:12px}
+.home-card-sub{font-size:13px;color:#486176;margin-top:6px;line-height:1.42}
+.signal-panel{position:absolute;right:1.8rem;top:1.6rem;width:260px;z-index:2;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);border-radius:14px;padding:14px;backdrop-filter:blur(10px);box-shadow:0 16px 38px rgba(0,0,0,.12)}
+.signal-row{display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.86);font-size:12px;margin-bottom:10px}
+.signal-line{height:7px;border-radius:999px;background:rgba(255,255,255,.14);overflow:hidden}
+.signal-line span{display:block;height:100%;border-radius:999px;background:#99F6E4;animation:signalFill 3.2s ease-in-out infinite alternate}
+.signal-line.two span{width:68%;animation-delay:.7s}
+.signal-line.three span{width:44%;animation-delay:1.4s}
+@keyframes signalFill{0%{width:35%}100%{width:92%}}
+@keyframes gridSlide{0%{background-position:0 0}100%{background-position:84px 42px}}
+@keyframes orbitDrift{0%{transform:translate3d(0,0,0) scale(1);opacity:.55}100%{transform:translate3d(-24px,18px,0) scale(1.08);opacity:.9}}
+@keyframes floatGlow{0%{transform:translate3d(-1%,0,0) rotate(0deg)}100%{transform:translate3d(2%,1%,0) rotate(4deg)}}
+.program-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-bottom:1rem}
+.program-card{background:#fff;border:1px solid #E1EAF3;border-radius:14px;padding:1rem;cursor:pointer;box-shadow:0 12px 28px rgba(13,58,108,.065);transition:all .16s}
+.program-card:hover{border-color:#5EEAD4;transform:translateY(-2px);box-shadow:0 18px 34px rgba(13,58,108,.11)}
+.program-title{font-size:15px;font-weight:750;color:#10283E;margin-bottom:8px;letter-spacing:-.01em}
+.program-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.program-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.program-stat{background:#F4F8FC;border-radius:8px;padding:9px;border:1px solid #E6EEF7}
+.program-stat b{font-size:18px;font-weight:750;color:#10283E}
+.program-stat div{font-size:11px;color:#60768B;margin-top:2px}
+.analysis-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:1rem}
+.dashboard-program-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1rem}
+.dashboard-program-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;cursor:pointer;transition:all .15s;min-height:132px}
+.dashboard-program-card:hover{border-color:var(--brand);box-shadow:0 10px 24px rgba(0,0,0,.07)}
+.dashboard-program-card.active{border-color:var(--brand);background:var(--brand-light)}
+.dashboard-program-card .program-title{font-size:14px}
+.dashboard-program-card .program-stat{padding:7px}
+.insight-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1rem}
+.insight-callout{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
+.insight-callout .ti{font-size:18px;color:var(--brand);margin-bottom:8px}
+.insight-callout b{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.insight-callout p{font-size:12px;color:var(--color-text-secondary);margin-top:4px;line-height:1.4}
+.question-tile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.analysis-question-tile{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;display:flex;flex-direction:column;gap:10px;min-height:230px}
+.analysis-question-head{display:flex;align-items:flex-start;gap:10px}
+.analysis-question-title{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.35}
+.analysis-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.analysis-stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px}
+.analysis-stat b{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.analysis-stat div{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.analysis-intel{font-size:12px;line-height:1.45;color:var(--color-text-secondary);background:var(--info-bg);border-radius:var(--border-radius-md);padding:9px;color:var(--info-txt)}
+.matrix{display:grid;grid-template-columns:1.2fr repeat(4,1fr);gap:6px;font-size:12px}
+.matrix div{padding:8px;border-radius:var(--border-radius-md);background:var(--color-background-secondary)}
+.matrix .head{font-weight:500;color:var(--color-text-primary);background:var(--brand-light)}
+.matrix .hot{background:#DDF1EA;color:#0B684B;font-weight:500}
+.matrix .mid{background:#FAEEDA;color:var(--warn-txt);font-weight:500}
+.matrix .low{background:#FCEBEB;color:var(--danger-txt);font-weight:500}
+.finding-list{display:flex;flex-direction:column;gap:10px}
+.finding{padding:10px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);font-size:13px;color:var(--color-text-primary)}
+.finding span{display:block;font-size:12px;color:var(--color-text-secondary);margin-top:3px;line-height:1.4}
+.programs-page .metric-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.programs-page .program-card .progress-wrap{height:8px;background:#E7EFF7;margin:10px 0 12px}
+.programs-page .program-card:nth-child(1){border-top:4px solid #0F766E}
+.programs-page .program-card:nth-child(2){border-top:4px solid #14A37F}
+.programs-page .program-card:nth-child(3){border-top:4px solid #BA7517}
+.filter-panel{display:flex;gap:10px;margin-bottom:0;padding:.9rem;background:#F7FAFD;border-bottom:1px solid #E1EAF3;align-items:center}
+.filter-panel input{max-width:300px}
+.data-card{padding:0;overflow:hidden}
+.data-card .tbl-wrap{padding:0}
+.program-name-main{font-weight:750;color:#10283E}
+.program-name-sub{font-size:11px;color:#6D8194;margin-top:3px}
+.completion-cell{display:flex;align-items:center;gap:10px;min-width:150px}
+.completion-cell .progress-wrap{flex:1;height:7px;background:#E7EFF7}
+.completion-value{font-weight:750;min-width:38px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;border:1px solid #D6E2EE;background:#fff;color:#19334C;transition:all .12s;font-family:inherit;font-weight:650}
+.btn:hover{background:#F2F7FC;border-color:#B9D4EE}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 8px 18px rgba(6,78,74,.2)}
+.btn-primary:hover{background:#0B5F5A;color:#fff}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-danger{background:var(--danger-bg);color:var(--danger-txt);border-color:var(--danger-txt)}
+
+/* Table */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+th{text-align:left;padding:11px 12px;font-weight:750;font-size:11px;color:#6C8196;border-bottom:1px solid #DDE8F4;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em;background:#F7FAFD}
+td{padding:12px;border-bottom:1px solid #E8EFF6;color:#18344E;vertical-align:middle;background:#fff}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F7FBFF}
+
+/* Status badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.badge-success{background:var(--success-bg);color:var(--success-txt)}
+.badge-warn{background:var(--warn-bg);color:var(--warn-txt)}
+.badge-info{background:var(--info-bg);color:var(--info-txt)}
+.badge-danger{background:var(--danger-bg);color:var(--danger-txt)}
+.badge-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+
+/* Form elements */
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px}
+.form-hint{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+input,select,textarea{width:100%;font-family:inherit;font-size:13px;border:1px solid #CCD9E6;border-radius:8px;background:#fff;color:#18344E;padding:8px 10px;outline:none}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#60768B 50%),linear-gradient(135deg,#60768B 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:30px}
+input:focus,select:focus,textarea:focus{border-color:#0F766E;box-shadow:0 0 0 3px rgba(15,118,110,.14)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Progress bar */
+.progress-wrap{background:var(--color-background-secondary);border-radius:4px;height:6px;overflow:hidden}
+.progress-bar{height:100%;border-radius:4px;background:var(--brand-mid);transition:width .4s}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:1.25rem;gap:0}
+.tab{padding:9px 16px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .12s}
+.tab:hover{color:var(--color-text-primary)}
+.tab.active{color:var(--brand);border-bottom-color:var(--brand);font-weight:500}
+
+/* Upload zone */
+.upload-zone{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:2rem;text-align:center;cursor:pointer;transition:all .12s;color:var(--color-text-secondary)}
+.upload-zone:hover{border-color:var(--brand);background:var(--brand-light)}
+.upload-zone .ti{font-size:28px;display:block;margin-bottom:.5rem}
+
+/* Modal overlay */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;padding:1.5rem;box-shadow:0 20px 60px rgba(0,0,0,.18)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.modal-title{font-size:16px;font-weight:500}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:20px;line-height:1;padding:4px}
+
+/* Steps */
+.steps{display:flex;gap:0;margin-bottom:1.5rem;counter-reset:step}
+.step-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:15px;left:50%;width:100%;height:1.5px;background:var(--color-border-tertiary)}
+.step-dot{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--color-border-secondary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--color-text-secondary);z-index:1;position:relative}
+.step-item.done .step-dot{background:var(--success-bg);border-color:var(--success-txt);color:var(--success-txt)}
+.step-item.active .step-dot{background:var(--brand);border-color:var(--brand);color:#fff}
+.step-lbl{font-size:11px;color:var(--color-text-secondary);text-align:center}
+.step-item.active .step-lbl{color:var(--brand);font-weight:500}
+
+/* Radio/check custom */
+.radio-group,.check-group{display:flex;flex-direction:column;gap:8px}
+.radio-opt,.check-opt{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding:8px 12px;border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);transition:all .12s}
+.radio-opt:hover,.check-opt:hover{border-color:var(--brand);background:var(--brand-light)}
+.radio-opt.selected,.check-opt.selected{border-color:var(--brand);background:var(--brand-light)}
+
+/* PRO link table */
+.link-code{font-family:var(--font-mono,'monospace');font-size:11px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px;color:var(--color-text-primary)}
+button.link-code{border:0;cursor:pointer}
+button.link-code:hover{color:var(--brand)}
+
+/* Analytics section */
+.chart-container{position:relative;width:100%;height:260px}
+.chart-container-sm{position:relative;width:100%;height:200px}
+
+/* Notification toast */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--color-background-primary);border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:12px 16px;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,.12);z-index:200;display:none;align-items:center;gap:8px;max-width:320px}
+.toast.show{display:flex}
+.toast-icon{font-size:18px}
+
+/* Form builder */
+.question-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;margin-bottom:.75rem;border:.5px solid var(--color-border-tertiary)}
+.q-num{width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
+
+/* Doctor survey form */
+.survey-header{background:var(--brand);color:#fff;padding:1.5rem;border-radius:var(--border-radius-lg);margin-bottom:1rem}
+.survey-header h2{font-size:18px;font-weight:500}
+.survey-header p{font-size:13px;opacity:.8;margin-top:4px}
+.likert-row{display:flex;gap:8px;margin-top:.5rem}
+.likert-btn{flex:1;padding:8px 4px;text-align:center;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:11px;cursor:pointer;color:var(--color-text-secondary);transition:all .12s}
+.likert-btn:hover{border-color:var(--brand);color:var(--brand)}
+.likert-btn.sel{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+/* Role switcher highlight */
+.role-label{font-size:11px;color:#fff;opacity:.55;margin-right:4px}
+</style>
+
+<!-- Top Nav -->
+<div class="app" id="app">
+<div class="topnav">
+  <div class="topnav-logo">GastroPulse</div>
+  <span class="topnav-user" id="nav-user" style="margin-left:auto">Demo Account</span>
+</div>
+
+<div class="layout">
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="nav-item active" onclick="showPage('dashboard',this)" id="nav-dashboard"><i class="ti ti-home"></i>Home</div>
+  <div class="nav-item" onclick="showPage('studies',this)" id="nav-studies"><i class="ti ti-folders"></i>All Programs</div>
+  <div class="nav-item" onclick="showPage('analytics',this)" id="nav-analytics"><i class="ti ti-chart-infographic"></i>Dashboard</div>
+  <div class="nav-item" onclick="showPage('create',this)" id="nav-create"><i class="ti ti-plus"></i>Create Program</div>
+  <div class="sidebar-section">Participants</div>
+  <div class="nav-item" onclick="showPage('doctors',this)" id="nav-doctors"><i class="ti ti-stethoscope"></i>Doctor List</div>
+  <div class="nav-item" onclick="showPage('pro-links',this)" id="nav-pro-links"><i class="ti ti-link"></i>PRO Links</div>
+  <div class="sidebar-section" id="nav-section-dr" style="display:none">Doctor</div>
+  <div class="nav-item" onclick="showPage('my-studies',this)" id="nav-my-studies" style="display:none"><i class="ti ti-clipboard-list"></i>My Studies</div>
+  <div class="nav-item" onclick="showPage('my-patients',this)" id="nav-my-patients" style="display:none"><i class="ti ti-users"></i>My Patients</div>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+<!-- =================== HOME =================== -->
+<div class="page active" id="page-dashboard">
+  <div class="home-stage">
+  <div class="bg-grid"></div>
+  <div class="bg-orbits"><span></span><span></span><span></span></div>
+  <div class="signal-panel" aria-hidden="true">
+    <div class="signal-row"><span>Response velocity</span><b>+18%</b></div>
+    <div class="signal-line"><span style="width:82%"></span></div>
+    <div class="signal-row" style="margin-top:12px"><span>Program health</span><b>Good</b></div>
+    <div class="signal-line two"><span></span></div>
+    <div class="signal-row" style="margin-top:12px"><span>Insight readiness</span><b>64%</b></div>
+    <div class="signal-line three"><span></span></div>
+  </div>
+  <div class="home-hero">
+    <div class="home-copy">
+      <div class="home-hello">Hi! Welcome back!</div>
+      <div class="home-sub">Monitor GI research programs, inspect questionnaire intelligence, and launch new evidence workflows from one clinical command center.</div>
+      <div class="home-status"><span><i class="ti ti-activity"></i>3 active programs</span><span><i class="ti ti-users"></i>580 verified doctors</span><span><i class="ti ti-chart-bar"></i>314 responses</span></div>
+    </div>
+    <div class="home-actions">
+      <div class="home-card" onclick="showPage('studies',document.getElementById('nav-studies'))">
+        <div><i class="ti ti-folders"></i><div class="home-card-title">All Programs</div><div class="home-card-sub">Track program progress, sends, completions, patient links, and status.</div></div>
+        <span class="badge badge-info">3 active</span>
+      </div>
+      <div class="home-card" onclick="showPage('analytics',document.getElementById('nav-analytics'))">
+        <div><i class="ti ti-chart-infographic"></i><div class="home-card-title">Dashboard</div><div class="home-card-sub">Analyze every questionnaire item with insights, patterns, and actions.</div></div>
+        <span class="badge badge-success">180 responses</span>
+      </div>
+      <div class="home-card" onclick="showPage('create',document.getElementById('nav-create'))">
+        <div><i class="ti ti-plus"></i><div class="home-card-title">Create a New Program</div><div class="home-card-sub">Set up a new KAP, PRO, or registry workflow with audience and instruments.</div></div>
+        <span class="badge badge-gray">Start</span>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- =================== ALL PROGRAMS =================== -->
+<div class="page programs-page" id="page-studies">
+  <div class="page-header">
+    <div><div class="page-title">All Programs</div><div class="page-sub">Operational progress for KAP, PRO, and patient-link programs</div></div>
+    <button class="btn btn-primary" onclick="showPage('create',document.getElementById('nav-create'))"><i class="ti ti-plus"></i>Create Program</button>
+  </div>
+  <div class="metric-grid">
+    <div class="metric"><div class="metric-val">3</div><div class="metric-lbl">Active Programs</div><div class="metric-delta delta-up">1 enrolling</div></div>
+    <div class="metric"><div class="metric-val">600</div><div class="metric-lbl">Doctors Targeted</div><div class="metric-delta delta-up">580 verified</div></div>
+    <div class="metric"><div class="metric-val">314</div><div class="metric-lbl">Doctor Responses</div><div class="metric-delta delta-up">198 KAP complete</div></div>
+    <div class="metric"><div class="metric-val">203</div><div class="metric-lbl">Patient Links</div><div class="metric-delta delta-up">116 completed</div></div>
+    <div class="metric"><div class="metric-val">52%</div><div class="metric-lbl">Portfolio Completion</div><div class="metric-delta delta-warn">H. pylori dragging</div></div>
+  </div>
+  <div class="program-card-grid">
+    <div class="program-card" onclick="openStudyDetail('ibs-kap')">
+      <div class="program-title">IBS-D KAP Survey 2025</div>
+      <div class="program-meta"><span class="badge badge-info">KAP</span><span class="badge badge-success">Live</span><span class="badge badge-gray">Sent 15 Jan</span></div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:72%"></div></div>
+      <div class="program-stats"><div class="program-stat"><b>250</b><div>Doctors targeted</div></div><div class="program-stat"><b>180</b><div>Completed</div></div><div class="program-stat"><b>221</b><div>Opened invite</div></div><div class="program-stat"><b>72%</b><div>Completion</div></div></div>
+    </div>
+    <div class="program-card" onclick="openStudyDetail('ibs-pro')">
+      <div class="program-title">IBS-D PRO - QoL Assessment</div>
+      <div class="program-meta"><span class="badge badge-gray">PRO</span><span class="badge badge-success">Live</span><span class="badge badge-gray">Links from 3 Mar</span></div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:58%"></div></div>
+      <div class="program-stats"><div class="program-stat"><b>203</b><div>Patient links</div></div><div class="program-stat"><b>116</b><div>Patients filled</div></div><div class="program-stat"><b>72</b><div>Doctors enabled</div></div><div class="program-stat"><b>58%</b><div>Completion</div></div></div>
+    </div>
+    <div class="program-card" onclick="openStudyDetail('hpylori')">
+      <div class="program-title">H. pylori Eradication Survey</div>
+      <div class="program-meta"><span class="badge badge-info">KAP</span><span class="badge badge-warn">Enrolling</span><span class="badge badge-gray">Batch pending</span></div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:12%"></div></div>
+      <div class="program-stats"><div class="program-stat"><b>150</b><div>Doctors targeted</div></div><div class="program-stat"><b>18</b><div>Completed</div></div><div class="program-stat"><b>84</b><div>Invites cleared</div></div><div class="program-stat"><b>12%</b><div>Completion</div></div></div>
+    </div>
+  </div>
+  <div class="card data-card">
+    <div class="filter-panel">
+      <input type="text" placeholder="Search programs..." style="max-width:260px">
+      <select style="max-width:140px"><option>All Types</option><option>KAP Survey</option><option>PRO</option><option>RWS</option></select>
+      <select style="max-width:140px"><option>All Status</option><option>Live</option><option>Draft</option><option>Closed</option></select>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Program Name</th><th>Type</th><th>Condition</th><th>Doctors</th><th>Responses / Patients</th><th>Completion</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><div class="program-name-main study-link" onclick="openStudyDetail('ibs-kap')">IBS-D KAP Survey 2025</div><div class="program-name-sub">Created 14 Jan 2025 · Sent 15 Jan</div></td><td><span class="badge badge-info">KAP</span></td><td>IBS-D</td><td>250</td><td>180</td><td><div class="completion-cell"><span class="completion-value" style="color:var(--success-txt)">72%</span><div class="progress-wrap"><div class="progress-bar" style="width:72%"></div></div></div></td><td><span class="badge badge-success">Live</span></td><td><button class="btn btn-sm" onclick="openStudyDetail('ibs-kap')"><i class="ti ti-eye"></i></button> <button class="btn btn-sm" onclick="showPage('analytics',document.getElementById('nav-analytics'))"><i class="ti ti-chart-bar"></i></button></td></tr>
+      <tr><td><div class="program-name-main study-link" onclick="openStudyDetail('ibs-pro')">IBS-D PRO - QoL Assessment</div><div class="program-name-sub">Created 18 Feb 2025 · Links from 3 Mar</div></td><td><span class="badge badge-gray">PRO</span></td><td>IBS-D</td><td>200</td><td>116</td><td><div class="completion-cell"><span class="completion-value" style="color:var(--warn-txt)">58%</span><div class="progress-wrap"><div class="progress-bar" style="width:58%"></div></div></div></td><td><span class="badge badge-success">Live</span></td><td><button class="btn btn-sm" onclick="openStudyDetail('ibs-pro')"><i class="ti ti-eye"></i></button> <button class="btn btn-sm" onclick="showPage('pro-links',document.getElementById('nav-pro-links'))"><i class="ti ti-link"></i></button></td></tr>
+      <tr><td><div class="program-name-main study-link" onclick="openStudyDetail('hpylori')">H. pylori Eradication Survey</div><div class="program-name-sub">Created 1 Mar 2025 · First batch pending</div></td><td><span class="badge badge-info">KAP</span></td><td>H. pylori</td><td>150</td><td>18</td><td><div class="completion-cell"><span class="completion-value" style="color:var(--danger-txt)">12%</span><div class="progress-wrap"><div class="progress-bar" style="width:12%"></div></div></div></td><td><span class="badge badge-warn">Enrolling</span></td><td><button class="btn btn-sm" onclick="openStudyDetail('hpylori')"><i class="ti ti-eye"></i></button> <button class="btn btn-sm"><i class="ti ti-edit"></i></button></td></tr>
+      <tr><td><div class="program-name-main">Constipation Management KAP</div><div class="program-name-sub">Created 5 Dec 2024 · Closed benchmark</div></td><td><span class="badge badge-info">KAP</span></td><td>Constipation</td><td>180</td><td>178</td><td><div class="completion-cell"><span class="completion-value" style="color:var(--success-txt)">99%</span><div class="progress-wrap"><div class="progress-bar" style="width:99%"></div></div></div></td><td><span class="badge badge-gray">Closed</span></td><td><button class="btn btn-sm" onclick="showPage('analytics',document.getElementById('nav-analytics'))"><i class="ti ti-chart-bar"></i></button> <button class="btn btn-sm"><i class="ti ti-download"></i></button></td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<!-- =================== STUDY DETAIL =================== -->
+<div class="page" id="page-study-detail">
+  <div class="page-header">
+    <div>
+      <button class="btn btn-sm" style="margin-bottom:10px" onclick="showPage('studies',document.getElementById('nav-studies'))"><i class="ti ti-arrow-left"></i>All Programs</button>
+      <div class="page-title" id="detail-title">IBS-D KAP Survey 2025</div>
+      <div class="page-sub" id="detail-subtitle">Knowledge, Attitudes & Practices survey for gastroenterologists across India</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn" onclick="switchDetailTab('questions')"><i class="ti ti-clipboard-list"></i>View Questionnaire</button>
+      <button class="btn" onclick="showPage('analytics',document.getElementById('nav-analytics'))"><i class="ti ti-chart-bar"></i>Dashboard</button>
+      <button class="btn btn-primary" onclick="showToast('Study report exported','ti-download')"><i class="ti ti-download"></i>Export Report</button>
+    </div>
+  </div>
+
+  <div class="study-hero">
+    <div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-info" id="detail-type-badge">KAP Survey</span>
+        <span class="badge badge-success" id="detail-status-badge">Live</span>
+        <span class="badge badge-gray" id="detail-condition-badge">IBS-D</span>
+      </div>
+      <h2 id="detail-hero-title">IBS-D KAP Survey 2025</h2>
+      <p id="detail-objective">To assess gastroenterologist knowledge, attitudes and practices regarding IBS-D diagnosis and management across tier 1, 2 and 3 cities in India.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-tile"><div class="meta-lbl">Created</div><div class="meta-val" id="detail-created">14 Jan 2025</div></div>
+      <div class="meta-tile"><div class="meta-lbl">Sent</div><div class="meta-val" id="detail-sent">15 Jan 2025, 09:00</div></div>
+      <div class="meta-tile"><div class="meta-lbl">Closes</div><div class="meta-val" id="detail-closes">30 Jun 2025</div></div>
+      <div class="meta-tile"><div class="meta-lbl">Questionnaire</div><div class="meta-val" id="detail-questionnaire">24 questions · 12 min</div></div>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-tile"><i class="ti ti-users"></i><div class="detail-val" id="detail-target">250</div><div class="detail-lbl">Doctors targeted</div></div>
+    <div class="detail-tile"><i class="ti ti-send"></i><div class="detail-val" id="detail-sent-count">248</div><div class="detail-lbl">Invitations sent</div></div>
+    <div class="detail-tile"><i class="ti ti-mail-opened"></i><div class="detail-val" id="detail-opened">221</div><div class="detail-lbl">Opened email</div></div>
+    <div class="detail-tile"><i class="ti ti-circle-check"></i><div class="detail-val" id="detail-completed">180</div><div class="detail-lbl">Completed responses</div></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchDetailTab('overview',this)" id="detail-tab-overview">Overview</div>
+    <div class="tab" onclick="switchDetailTab('questions',this)" id="detail-tab-questions">Questionnaire Sent</div>
+    <div class="tab" onclick="switchDetailTab('audience',this)" id="detail-tab-audience">Doctors & Delivery</div>
+  </div>
+
+  <div id="detail-panel-overview">
+    <div class="split-3">
+      <div class="card">
+        <div class="card-title">Delivery Funnel</div>
+        <div class="chart-container-sm"><canvas id="deliveryFunnelChart" role="img" aria-label="Bar chart of targeted, sent, opened, started and completed doctors">Delivery funnel for selected study.</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Study Setup</div>
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-dot"><i class="ti ti-file-plus"></i></div><div><div class="timeline-title">Study created</div><div class="timeline-sub" id="setup-created">14 Jan 2025 · Demo Account</div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"><i class="ti ti-list-check"></i></div><div><div class="timeline-title">Questionnaire locked</div><div class="timeline-sub" id="setup-locked">24 KAP questions · mandatory consent</div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"><i class="ti ti-upload"></i></div><div><div class="timeline-title">Doctor list verified</div><div class="timeline-sub" id="setup-verified">250 uploaded · 248 email IDs verified</div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"><i class="ti ti-send"></i></div><div><div class="timeline-title">Invitations sent</div><div class="timeline-sub" id="setup-sent">15 Jan 2025, 09:00 · email batch GP-IBS-001</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Operational Alerts</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="padding:10px;border-radius:var(--border-radius-md);background:var(--success-bg);color:var(--success-txt);font-size:13px"><i class="ti ti-trending-up"></i> Completion is ahead of last KAP benchmark by 9%.</div>
+          <div style="padding:10px;border-radius:var(--border-radius-md);background:var(--warn-bg);color:var(--warn-txt);font-size:13px"><i class="ti ti-bell"></i> 27 verified doctors have not started. Reminder scheduled tomorrow.</div>
+          <div style="padding:10px;border-radius:var(--border-radius-md);background:var(--info-bg);color:var(--info-txt);font-size:13px"><i class="ti ti-shield-check"></i> Consent capture and anonymisation checks passed.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="split-2" style="margin-top:1rem">
+      <div class="card">
+        <div class="card-title">Completion by City Tier</div>
+        <div class="chart-container-sm"><canvas id="detailCityChart" role="img" aria-label="Completion by city tier">Completion by city tier.</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Doctor Segments</div>
+        <div class="segment-row"><div><div class="segment-name">Gastroenterology specialists</div><div class="mini-bar"><span style="width:72%"></span></div></div><div class="segment-count">180</div></div>
+        <div class="segment-row"><div><div class="segment-name">Internal medicine</div><div class="mini-bar"><span style="width:18%"></span></div></div><div class="segment-count">45</div></div>
+        <div class="segment-row"><div><div class="segment-name">General physicians</div><div class="mini-bar"><span style="width:10%"></span></div></div><div class="segment-count">25</div></div>
+        <div style="margin-top:1rem;font-size:12px;color:var(--color-text-secondary)">Audience uploaded from <span class="link-code">IBSD_Doctor_Master_Jan2025.xlsx</span>. Two invalid email IDs were excluded before launch.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detail-panel-questions" style="display:none">
+    <div class="split-2">
+      <div class="card">
+        <div class="card-title" id="questionnaire-title">Questionnaire Sent to Doctors</div>
+        <div id="questionnaire-list"></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title">Instrument Summary</div>
+          <table><tbody>
+            <tr><td>Study type</td><td><b id="detail-kind">KAP Survey</b></td></tr>
+            <tr><td>Instrument</td><td id="summary-instrument">KAP - Custom GI</td></tr>
+            <tr><td>Total questions</td><td id="summary-total">24</td></tr>
+            <tr><td>Mandatory questions</td><td id="summary-required">22</td></tr>
+            <tr><td>Estimated time</td><td id="summary-time">12 minutes</td></tr>
+            <tr><td>Languages</td><td id="summary-languages">English</td></tr>
+            <tr><td>Sent via</td><td id="summary-channel">Email invitation with unique doctor link</td></tr>
+          </tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-title">Question Mix</div>
+          <div class="chart-container-sm"><canvas id="questionMixChart" role="img" aria-label="Question type mix">Question type mix.</canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detail-panel-audience" style="display:none">
+    <div class="split-2">
+      <div class="card">
+        <div class="card-title">Doctor Delivery Ledger</div>
+        <div class="tbl-wrap"><table><thead><tr><th>Doctor</th><th>City</th><th>Speciality</th><th>Invite</th><th>Status</th><th>Completed</th></tr></thead>
+        <tbody>
+          <tr><td>Dr. Rajesh Kumar</td><td>Delhi</td><td>Gastroenterology</td><td>15 Jan, 09:03</td><td><span class="badge badge-success">Completed</span></td><td>16 Jan, 10:22</td></tr>
+          <tr><td>Dr. Anita Sharma</td><td>Mumbai</td><td>Internal Medicine</td><td>15 Jan, 09:04</td><td><span class="badge badge-success">Completed</span></td><td>17 Jan, 14:08</td></tr>
+          <tr><td>Dr. Suresh Iyer</td><td>Bangalore</td><td>Gastroenterology</td><td>15 Jan, 09:04</td><td><span class="badge badge-info">Started</span></td><td>-</td></tr>
+          <tr><td>Dr. Meera Pillai</td><td>Chennai</td><td>Gastroenterology</td><td>15 Jan, 09:05</td><td><span class="badge badge-warn">Not opened</span></td><td>-</td></tr>
+          <tr><td>Dr. Vikram Patel</td><td>Hyderabad</td><td>Gastroenterology</td><td>Excluded</td><td><span class="badge badge-danger">Invalid email</span></td><td>-</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Audience by Region</div>
+        <div class="chart-container"><canvas id="detailRegionChart" role="img" aria-label="Audience distribution by region">Audience distribution by region.</canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== CREATE PROGRAM =================== -->
+<div class="page" id="page-create">
+  <div class="page-header">
+    <div><div class="page-title">Create a New Program</div><div class="page-sub">Define program parameters, upload participant list, and select instruments</div></div>
+  </div>
+
+  <div class="steps">
+    <div class="step-item done" id="step1"><div class="step-dot"><i class="ti ti-check" style="font-size:13px"></i></div><div class="step-lbl">Study Info</div></div>
+    <div class="step-item active" id="step2"><div class="step-dot">2</div><div class="step-lbl">Form Design</div></div>
+    <div class="step-item" id="step3"><div class="step-dot">3</div><div class="step-lbl">Upload Doctors</div></div>
+    <div class="step-item" id="step4"><div class="step-dot">4</div><div class="step-lbl">Review & Launch</div></div>
+  </div>
+
+  <div id="create-step-1" style="display:none">
+    <div class="card">
+      <div class="card-title">Study Information</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Study name</label><input type="text" value="IBS-D KAP Survey 2025" placeholder="e.g. IBS-D Awareness Survey Q2 2025"></div>
+        <div class="form-group"><label class="form-label">Study type</label><select><option>KAP Survey</option><option>Patient Reported Outcomes (PRO)</option><option>Retrospective Real-World Study</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Therapeutic area</label><select><option>IBS-D</option><option>GERD</option><option>H. pylori</option><option>Constipation</option><option>Dyspepsia</option><option>+ Add condition</option></select></div>
+        <div class="form-group"><label class="form-label">Target sample size</label><input type="number" value="250"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Study start date</label><input type="date" value="2025-01-14"></div>
+        <div class="form-group"><label class="form-label">Study end date</label><input type="date" value="2025-06-30"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Study description / objectives</label><textarea rows="3" placeholder="Brief objective of this study...">To assess gastroenterologist knowledge, attitudes and practices regarding IBS-D diagnosis and management across tier 1, 2 and 3 cities in India.</textarea></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn btn-primary" onclick="goStep(2)">Next: Form Design <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+  </div>
+
+  <div id="create-step-2">
+    <div class="card">
+      <div class="card-title">Form Design</div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchFormTab('library',this)">Instrument Library</div>
+        <div class="tab" onclick="switchFormTab('builder',this)">Custom Builder</div>
+        <div class="tab" onclick="switchFormTab('preview',this)">Preview</div>
+      </div>
+
+      <div id="form-library">
+        <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">Select validated instruments to include. You can combine multiple.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="check-opt selected" onclick="toggleOpt(this)"><input type="checkbox" checked style="width:auto"> <div><div style="font-weight:500;font-size:13px">KAP — Custom GI</div><div style="font-size:11px;color:var(--color-text-secondary)">Knowledge, Attitude & Practice · 24 Q</div></div></div>
+          <div class="check-opt" onclick="toggleOpt(this)"><input type="checkbox" style="width:auto"> <div><div style="font-weight:500;font-size:13px">IBS-SSS</div><div style="font-size:11px;color:var(--color-text-secondary)">IBS Symptom Severity Scale · 5 Q</div></div></div>
+          <div class="check-opt" onclick="toggleOpt(this)"><input type="checkbox" style="width:auto"> <div><div style="font-weight:500;font-size:13px">SF-36 v2</div><div style="font-size:11px;color:var(--color-text-secondary)">Short Form Health Survey · 36 Q</div></div></div>
+          <div class="check-opt" onclick="toggleOpt(this)"><input type="checkbox" style="width:auto"> <div><div style="font-weight:500;font-size:13px">IBS-QoL</div><div style="font-size:11px;color:var(--color-text-secondary)">Disease-specific Quality of Life · 34 Q</div></div></div>
+          <div class="check-opt" onclick="toggleOpt(this)"><input type="checkbox" style="width:auto"> <div><div style="font-weight:500;font-size:13px">GSRS</div><div style="font-size:11px;color:var(--color-text-secondary)">GI Symptom Rating Scale · 15 Q</div></div></div>
+          <div class="check-opt" onclick="toggleOpt(this)"><input type="checkbox" style="width:auto"> <div><div style="font-weight:500;font-size:13px">PHQ-9</div><div style="font-size:11px;color:var(--color-text-secondary)">Patient Health Questionnaire · 9 Q</div></div></div>
+          <div class="check-opt" onclick="toggleOpt(this)"><input type="checkbox" style="width:auto"> <div><div style="font-weight:500;font-size:13px">Bristol Stool Form Scale</div><div style="font-size:11px;color:var(--color-text-secondary)">Stool classification · 1 Q</div></div></div>
+          <div class="check-opt" onclick="toggleOpt(this)" style="border-style:dashed;justify-content:center"><i class="ti ti-plus" style="color:var(--color-text-secondary)"></i> <span style="font-size:13px;color:var(--color-text-secondary)">Upload custom instrument</span></div>
+        </div>
+      </div>
+
+      <div id="form-builder" style="display:none">
+        <div class="question-card"><div style="display:flex;align-items:flex-start;gap:10px"><span class="q-num">1</span><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:6px">How many IBS-D patients do you consult per month on average?</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-gray">Single choice</span><span class="badge badge-info">Required</span></div></div><button class="btn btn-sm"><i class="ti ti-edit"></i></button></div></div>
+        <div class="question-card"><div style="display:flex;align-items:flex-start;gap:10px"><span class="q-num">2</span><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:6px">What diagnostic criteria do you typically use for IBS-D diagnosis?</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-gray">Multi-select</span><span class="badge badge-info">Required</span></div></div><button class="btn btn-sm"><i class="ti ti-edit"></i></button></div></div>
+        <div class="question-card"><div style="display:flex;align-items:flex-start;gap:10px"><span class="q-num">3</span><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:6px">Rate your confidence in diagnosing IBS-D (1 = not confident, 5 = very confident)</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-gray">Likert scale</span><span class="badge badge-info">Required</span></div></div><button class="btn btn-sm"><i class="ti ti-edit"></i></button></div></div>
+        <button class="btn" style="width:100%;justify-content:center;border-style:dashed" onclick="showToast('Question added','ti-plus')"><i class="ti ti-plus"></i>Add Question</button>
+      </div>
+
+      <div id="form-preview" style="display:none">
+        <div class="survey-header"><h2>IBS-D Knowledge, Attitudes & Practices Survey</h2><p>GastroPulse Research · Estimated 12 minutes</p></div>
+        <div class="card" style="margin-bottom:.75rem">
+          <div class="form-group" style="margin-bottom:0"><label class="form-label">Q1. How many IBS-D patients do you consult per month on average?</label>
+          <div class="radio-group" style="margin-top:8px">
+            <div class="radio-opt" onclick="selectOpt(this,'.radio-group')">Less than 5</div>
+            <div class="radio-opt selected" onclick="selectOpt(this,'.radio-group')">5–15</div>
+            <div class="radio-opt" onclick="selectOpt(this,'.radio-group')">16–30</div>
+            <div class="radio-opt" onclick="selectOpt(this,'.radio-group')">More than 30</div>
+          </div></div>
+        </div>
+        <div class="card" style="margin-bottom:.75rem">
+          <label class="form-label">Q2. Rate your confidence in diagnosing IBS-D</label>
+          <div class="likert-row">
+            <div class="likert-btn" onclick="selLikert(this)">1<br>Not at all</div>
+            <div class="likert-btn" onclick="selLikert(this)">2</div>
+            <div class="likert-btn sel" onclick="selLikert(this)">3<br>Neutral</div>
+            <div class="likert-btn" onclick="selLikert(this)">4</div>
+            <div class="likert-btn" onclick="selLikert(this)">5<br>Very confident</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;margin-top:1rem">
+        <button class="btn" onclick="goStep(1)"><i class="ti ti-arrow-left"></i>Back</button>
+        <button class="btn btn-primary" onclick="goStep(3)">Next: Upload Doctors <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="create-step-3" style="display:none">
+    <div class="card">
+      <div class="card-title">Upload Doctor List</div>
+      <div class="upload-zone" onclick="showToast('Excel upload simulated — 250 doctors imported','ti-check')">
+        <i class="ti ti-upload"></i>
+        <div style="font-weight:500;font-size:14px">Click to upload doctor list</div>
+        <div style="font-size:12px;margin-top:4px">Excel (.xlsx) or CSV · Required columns: Name, Email, Hospital, City, Speciality</div>
+        <div style="font-size:11px;margin-top:8px;color:var(--color-text-tertiary)">Only doctors with verified email IDs will receive the survey link</div>
+      </div>
+      <div style="margin-top:1rem;padding:12px;background:var(--success-bg);border-radius:var(--border-radius-md);font-size:13px;color:var(--success-txt);display:flex;align-items:center;gap:8px">
+        <i class="ti ti-check-circle" style="font-size:18px"></i>
+        250 doctors imported · 248 emails verified · 2 flagged (invalid email)
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:1rem">
+        <button class="btn" onclick="goStep(2)"><i class="ti ti-arrow-left"></i>Back</button>
+        <button class="btn btn-primary" onclick="goStep(4)">Next: Review & Launch <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="create-step-4" style="display:none">
+    <div class="card">
+      <div class="card-title">Review & Launch</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div><div style="font-size:12px;color:var(--color-text-secondary)">Study name</div><div style="font-size:14px;font-weight:500;margin-top:2px">IBS-D KAP Survey 2025</div></div>
+        <div><div style="font-size:12px;color:var(--color-text-secondary)">Type</div><div style="font-size:14px;margin-top:2px">KAP Survey</div></div>
+        <div><div style="font-size:12px;color:var(--color-text-secondary)">Instruments</div><div style="font-size:14px;margin-top:2px">KAP — Custom GI (24 Q)</div></div>
+        <div><div style="font-size:12px;color:var(--color-text-secondary)">Target sample</div><div style="font-size:14px;margin-top:2px">250 doctors</div></div>
+        <div><div style="font-size:12px;color:var(--color-text-secondary)">Email invitations</div><div style="font-size:14px;margin-top:2px">248 verified emails</div></div>
+        <div><div style="font-size:12px;color:var(--color-text-secondary)">Timeline</div><div style="font-size:14px;margin-top:2px">14 Jan – 30 Jun 2025</div></div>
+      </div>
+      <div style="padding:12px;background:var(--warn-bg);border-radius:var(--border-radius-md);font-size:13px;color:var(--warn-txt);margin-bottom:1rem">
+        <i class="ti ti-alert-triangle"></i> Each doctor will receive a unique, personalised survey link. Responses are anonymous to doctors; aggregated analytics visible to admin only.
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <button class="btn" onclick="goStep(3)"><i class="ti ti-arrow-left"></i>Back</button>
+        <button class="btn btn-primary" onclick="launchStudy()"><i class="ti ti-rocket"></i>Launch Study & Send Emails</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== DOCTOR LIST =================== -->
+<div class="page" id="page-doctors">
+  <div class="page-header">
+    <div><div class="page-title">Doctor List</div><div class="page-sub">Manage enrolled doctors across all studies</div></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="showToast('Template downloaded','ti-download')"><i class="ti ti-download"></i>Download Template</button>
+      <button class="btn btn-primary" onclick="showToast('Upload dialog opened','ti-upload')"><i class="ti ti-upload"></i>Upload Doctors</button>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+      <input type="text" placeholder="Search by name, hospital, city..." style="max-width:260px">
+      <select style="max-width:150px"><option>All Programs</option><option>IBS-D KAP 2025</option><option>IBS-D PRO</option><option>H. pylori Survey</option></select>
+      <select style="max-width:130px"><option>All Cities</option><option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Chennai</option></select>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Doctor</th><th>Hospital</th><th>City</th><th>Speciality</th><th>Email Verified</th><th>Studies</th><th>Last Response</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><div style="font-weight:500">Dr. Rajesh Kumar</div><div style="font-size:11px;color:var(--color-text-secondary)">DM Gastroenterology</div></td><td>AIIMS Delhi</td><td>Delhi</td><td>Gastroenterology</td><td><span class="badge badge-success"><i class="ti ti-check" style="font-size:11px"></i>Verified</span></td><td>3</td><td>Today, 10:22</td><td><button class="btn btn-sm"><i class="ti ti-eye"></i></button></td></tr>
+      <tr><td><div style="font-weight:500">Dr. Anita Sharma</div><div style="font-size:11px;color:var(--color-text-secondary)">MD Medicine</div></td><td>KEM Hospital</td><td>Mumbai</td><td>Internal Medicine</td><td><span class="badge badge-success"><i class="ti ti-check" style="font-size:11px"></i>Verified</span></td><td>2</td><td>Yesterday</td><td><button class="btn btn-sm"><i class="ti ti-eye"></i></button></td></tr>
+      <tr><td><div style="font-weight:500">Dr. Suresh Iyer</div><div style="font-size:11px;color:var(--color-text-secondary)">DM Gastroenterology</div></td><td>Manipal Hospitals</td><td>Bangalore</td><td>Gastroenterology</td><td><span class="badge badge-success"><i class="ti ti-check" style="font-size:11px"></i>Verified</span></td><td>3</td><td>2 days ago</td><td><button class="btn btn-sm"><i class="ti ti-eye"></i></button></td></tr>
+      <tr><td><div style="font-weight:500">Dr. Meera Pillai</div><div style="font-size:11px;color:var(--color-text-secondary)">MD Gastroenterology</div></td><td>Apollo Hospitals</td><td>Chennai</td><td>Gastroenterology</td><td><span class="badge badge-warn"><i class="ti ti-clock" style="font-size:11px"></i>Pending</span></td><td>1</td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Reminder sent to Dr. Pillai','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
+      <tr><td><div style="font-weight:500">Dr. Vikram Patel</div><div style="font-size:11px;color:var(--color-text-secondary)">DM Gastroenterology</div></td><td>Fortis Hospitals</td><td>Hyderabad</td><td>Gastroenterology</td><td><span class="badge badge-danger"><i class="ti ti-x" style="font-size:11px"></i>Invalid</span></td><td>0</td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Email correction dialog opened','ti-edit')"><i class="ti ti-edit"></i></button></td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<!-- =================== PRO LINKS =================== -->
+<div class="page" id="page-pro-links">
+  <div class="page-header">
+    <div><div class="page-title">PRO Patient Links</div><div class="page-sub">Unique patient-level links for IBS-D PRO — QoL Assessment</div></div>
+    <button class="btn btn-primary" onclick="openPROModal()"><i class="ti ti-user-plus"></i>Add Patient Links</button>
+  </div>
+
+  <div class="metric-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="metric"><div class="metric-val">203</div><div class="metric-lbl">Links Generated</div></div>
+    <div class="metric"><div class="metric-val">116</div><div class="metric-lbl">Completed</div><div class="metric-delta delta-up">57%</div></div>
+    <div class="metric"><div class="metric-val">48</div><div class="metric-lbl">In Progress</div></div>
+    <div class="metric"><div class="metric-val">39</div><div class="metric-lbl">Not Opened</div><div class="metric-delta delta-warn">Reminder due</div></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+      <input type="text" placeholder="Search patient name or link ID..." style="max-width:260px">
+      <select style="max-width:180px"><option>All Doctors</option><option>Dr. Rajesh Kumar</option><option>Dr. Anita Sharma</option><option>Dr. Suresh Iyer</option></select>
+      <select style="max-width:140px"><option>All Status</option><option>Completed</option><option>In Progress</option><option>Not Opened</option></select>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Link ID</th><th>Doctor</th><th>Patient Name</th><th>Generated</th><th>Link Sent</th><th>Status</th><th>Completed</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><span class="link-code">PRO-2025-0041</span></td><td>Dr. Rajesh Kumar</td><td>Amit Verma</td><td>3 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-success">Completed</span></td><td>5 Mar, 11:14</td><td><button class="btn btn-sm" onclick="showToast('Response detail opened','ti-eye')"><i class="ti ti-eye"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0042</span></td><td>Dr. Rajesh Kumar</td><td>Sunita Rao</td><td>3 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-info">In Progress</span></td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Reminder sent to patient','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0043</span></td><td>Dr. Anita Sharma</td><td><span style="color:var(--color-text-tertiary);font-style:italic">Not named</span></td><td>4 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-warn">Not Opened</span></td><td>—</td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i></button> <button class="btn btn-sm"><i class="ti ti-mail"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0044</span></td><td>Dr. Suresh Iyer</td><td>Lakshmi Nair</td><td>5 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-success">Completed</span></td><td>6 Mar, 09:32</td><td><button class="btn btn-sm"><i class="ti ti-eye"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0045</span></td><td>Dr. Suresh Iyer</td><td>Ravi Krishnamurthy</td><td>5 Mar</td><td><span class="badge badge-gray">Not Sent</span></td><td><span class="badge badge-gray">Pending</span></td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Link copied to clipboard','ti-copy')"><i class="ti ti-copy"></i></button></td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<!-- =================== QUESTION ANALYSIS DASHBOARD =================== -->
+<div class="page" id="page-analytics">
+  <div class="page-header">
+    <div><div class="page-title">Dashboard</div><div class="page-sub" id="analysis-subtitle">Question-level analysis for IBS-D KAP Survey 2025</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn" onclick="showToast('Report exported to Excel','ti-download')"><i class="ti ti-download"></i>Export</button>
+    </div>
+  </div>
+
+  <div class="dashboard-program-grid">
+    <div class="dashboard-program-card active" data-analysis-program="ibs-kap" onclick="selectAnalysisProgram('ibs-kap',this)">
+      <div class="program-title">IBS-D KAP Survey 2025</div>
+      <div class="program-meta"><span class="badge badge-info">KAP</span><span class="badge badge-success">Live</span></div>
+      <div class="program-stats"><div class="program-stat"><b>24</b><div>Questions</div></div><div class="program-stat"><b>180</b><div>Responses</div></div></div>
+    </div>
+    <div class="dashboard-program-card" data-analysis-program="ibs-pro" onclick="selectAnalysisProgram('ibs-pro',this)">
+      <div class="program-title">IBS-D PRO - QoL Assessment</div>
+      <div class="program-meta"><span class="badge badge-gray">PRO</span><span class="badge badge-success">Live</span></div>
+      <div class="program-stats"><div class="program-stat"><b>18</b><div>Questions</div></div><div class="program-stat"><b>116</b><div>Patients</div></div></div>
+    </div>
+    <div class="dashboard-program-card" data-analysis-program="hpylori" onclick="selectAnalysisProgram('hpylori',this)">
+      <div class="program-title">H. pylori Eradication Survey</div>
+      <div class="program-meta"><span class="badge badge-info">KAP</span><span class="badge badge-warn">Enrolling</span></div>
+      <div class="program-stats"><div class="program-stat"><b>18</b><div>Questions</div></div><div class="program-stat"><b>18</b><div>Responses</div></div></div>
+    </div>
+    <div class="dashboard-program-card" data-analysis-program="constipation" onclick="selectAnalysisProgram('constipation',this)">
+      <div class="program-title">Constipation Management KAP</div>
+      <div class="program-meta"><span class="badge badge-info">KAP</span><span class="badge badge-gray">Closed</span></div>
+      <div class="program-stats"><div class="program-stat"><b>20</b><div>Questions</div></div><div class="program-stat"><b>178</b><div>Responses</div></div></div>
+    </div>
+  </div>
+
+  <div class="analysis-toolbar">
+    <select style="max-width:160px"><option>All city tiers</option><option>Tier 1</option><option>Tier 2</option><option>Tier 3</option></select>
+    <select style="max-width:190px"><option>All specialties</option><option>Gastroenterology</option><option>Internal Medicine</option><option>General Physician</option></select>
+    <select style="max-width:160px"><option>All regions</option><option>North</option><option>West</option><option>South</option><option>East</option></select>
+    <button class="btn btn-primary" onclick="showToast('Dashboard refreshed','ti-refresh')"><i class="ti ti-refresh"></i>Refresh</button>
+  </div>
+
+  <div class="insight-strip">
+    <div class="insight-callout"><i class="ti ti-brain"></i><b>4.2 / 5</b><p>Average KAP score. Strong knowledge base, but practice consistency varies by city tier.</p></div>
+    <div class="insight-callout"><i class="ti ti-alert-triangle"></i><b>27%</b><p>Do not consistently document baseline stool form and pain severity before treatment.</p></div>
+    <div class="insight-callout"><i class="ti ti-map-pin"></i><b>+14 pts</b><p>Tier 1 doctors report higher confidence than Tier 2/3 doctors on differential diagnosis.</p></div>
+    <div class="insight-callout"><i class="ti ti-bulb"></i><b>Top action</b><p>Create a diagnostic checklist and follow-up tracker for lower-volume clinics.</p></div>
+  </div>
+
+  <div class="split-2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Knowledge vs Practice Gap</div>
+      <div class="chart-container"><canvas id="kapGapChart" role="img" aria-label="Knowledge attitude practice score gap by domain">Domain score comparison.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Response Quality Signals</div>
+      <table><tbody>
+        <tr><td>Median completion time</td><td><b>11.4 min</b></td><td><span class="badge badge-success">Healthy</span></td></tr>
+        <tr><td>Straight-line Likert patterns</td><td><b>3.1%</b></td><td><span class="badge badge-success">Low</span></td></tr>
+        <tr><td>Open-text richness</td><td><b>64%</b></td><td><span class="badge badge-info">Usable</span></td></tr>
+        <tr><td>Partial responses</td><td><b>17</b></td><td><span class="badge badge-warn">Review</span></td></tr>
+      </tbody></table>
+      <div class="analysis-intel" style="margin-top:12px">No evidence of low-effort response clusters. Most partials drop after the practice section, suggesting survey length is acceptable but final barrier questions may need clearer wording.</div>
+    </div>
+  </div>
+
+  <div class="split-2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Composite Practice Archetypes</div>
+      <div class="chart-container"><canvas id="practiceArchetypeChart" role="img" aria-label="Scatter chart combining diagnostic confidence and structured practice behavior">Practice archetype scatter.</canvas></div>
+      <div class="analysis-intel" style="margin-top:10px"><b>Compiled from Q8, Q13, Q16, Q17, Q18.</b> High-confidence doctors do not always run structured follow-up. The best intervention is not more disease education; it is operational tools for documentation and follow-up.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Treatment Choice vs Barrier Cluster</div>
+      <div class="chart-container"><canvas id="barrierClusterChart" role="img" aria-label="Stacked chart combining treatment selections and reported barriers">Treatment and barrier clusters.</canvas></div>
+      <div class="analysis-intel" style="margin-top:10px"><b>Compiled from Q14, Q15, Q21, Q22.</b> Cost-sensitive physicians select lower-access regimens and request patient handouts more often than digital trackers.</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;margin-bottom:1rem">
+    <div class="card">
+      <div class="card-title">Cohort Heatmap: Where the Gaps Are</div>
+      <div class="matrix">
+        <div class="head">Cohort</div><div class="head">Knowledge</div><div class="head">Confidence</div><div class="head">Documentation</div><div class="head">Follow-up</div>
+        <div class="head">Tier 1 GI</div><div class="hot">86</div><div class="hot">82</div><div class="mid">66</div><div class="mid">61</div>
+        <div class="head">Tier 2 GI</div><div class="hot">80</div><div class="mid">68</div><div class="mid">58</div><div class="low">49</div>
+        <div class="head">Internal medicine</div><div class="mid">72</div><div class="mid">64</div><div class="low">44</div><div class="low">41</div>
+        <div class="head">Low-volume clinics</div><div class="mid">69</div><div class="low">52</div><div class="low">39</div><div class="low">36</div>
+      </div>
+      <div class="analysis-intel" style="margin-top:10px"><b>Compiled from Q3-Q8 and Q16-Q20.</b> Follow-up structure is the weakest point across cohorts, especially in low-volume clinics.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Intelligence Summary</div>
+      <div class="finding-list">
+        <div class="finding">Knowledge is not the limiting factor<span>Rome IV and alarm-feature recognition are reasonably strong. The drop appears when translating knowledge into documentation and monitoring.</span></div>
+        <div class="finding">Tier drives the operating model<span>Tier 1 doctors show higher confidence and therapy range; Tier 2/3 doctors need lightweight tools that work without specialist support.</span></div>
+        <div class="finding">Best next action<span>Create a one-page diagnostic checklist, baseline severity template, and 2-4 week follow-up reminder workflow.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-header" style="margin:0 0 .75rem">
+    <div><div class="page-title" style="font-size:16px">Question Intelligence</div><div class="page-sub">Every question rendered as an analysis tile with result, interpretation, and recommended action</div></div>
+  </div>
+  <div class="question-tile-grid" id="analysis-question-grid"></div>
+</div>
+
+<!-- =================== DOCTOR VIEW: MY STUDIES =================== -->
+<div class="page" id="page-my-studies">
+  <div class="page-header">
+    <div><div class="page-title">My Studies</div><div class="page-sub">Dr. Rajesh Kumar · AIIMS Delhi</div></div>
+  </div>
+  <div class="card">
+    <table><thead><tr><th>Study</th><th>Type</th><th>Status</th><th>Deadline</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><b style="font-weight:500">IBS-D KAP Survey 2025</b></td><td><span class="badge badge-info">KAP</span></td><td><span class="badge badge-success">Completed</span></td><td>30 Jun 2025</td><td><button class="btn btn-sm btn-primary" onclick="showToast('Response submitted — thank you','ti-check')"><i class="ti ti-eye"></i>View Response</button></td></tr>
+      <tr><td><b style="font-weight:500">IBS-D PRO — QoL Assessment</b></td><td><span class="badge badge-gray">PRO</span></td><td><span class="badge badge-info">Active</span></td><td>30 Jun 2025</td><td><button class="btn btn-sm btn-primary" onclick="showPage('my-patients',document.getElementById('nav-my-patients'))"><i class="ti ti-users"></i>Manage Patients</button></td></tr>
+      <tr><td><b style="font-weight:500">H. pylori Eradication Survey</b></td><td><span class="badge badge-info">KAP</span></td><td><span class="badge badge-warn">Pending</span></td><td>30 Sep 2025</td><td><button class="btn btn-sm btn-primary" onclick="openSurveyModal()"><i class="ti ti-edit"></i>Fill Survey</button></td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- =================== DOCTOR VIEW: MY PATIENTS =================== -->
+<div class="page" id="page-my-patients">
+  <div class="page-header">
+    <div><div class="page-title">My Patients — PRO Links</div><div class="page-sub">IBS-D QoL Assessment · Dr. Rajesh Kumar</div></div>
+    <button class="btn btn-primary" onclick="openAddPatientModal()"><i class="ti ti-user-plus"></i>Add Patients</button>
+  </div>
+  <div class="card" style="padding:.75rem 1.25rem">
+    <div style="font-size:13px;color:var(--color-text-secondary)"><i class="ti ti-info-circle" style="color:var(--info-txt)"></i> Each patient receives a unique link. You can optionally record their name. Patient responses are not visible to you — only aggregated data goes to the study team.</div>
+  </div>
+  <div class="card">
+    <div class="tbl-wrap"><table><thead><tr><th>Link ID</th><th>Patient Name</th><th>Link</th><th>Sent</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><span class="link-code">PRO-2025-0041</span></td><td>Amit Verma</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0041')">study.gastropulse.in/p/0041</button></td><td>3 Mar</td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm" onclick="showToast('Link copied','ti-copy')"><i class="ti ti-copy"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0042</span></td><td>Sunita Rao</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0042')">study.gastropulse.in/p/0042</button></td><td>3 Mar</td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-sm" onclick="showToast('Reminder sent','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0043</span></td><td><span style="color:var(--color-text-tertiary);font-style:italic">Unnamed</span></td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0043')">study.gastropulse.in/p/0043</button></td><td>4 Mar</td><td><span class="badge badge-warn">Not Opened</span></td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i>Name</button> <button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0044</span></td><td>Lakshmi Nair</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0044')">study.gastropulse.in/p/0044</button></td><td>5 Mar</td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<!-- =================== PATIENT VIEW =================== -->
+<div class="page" id="page-patient">
+  <div style="max-width:580px;margin:0 auto">
+    <div class="survey-header">
+      <div style="font-size:11px;opacity:.7;margin-bottom:8px">GastroPulse · IBS-D Quality of Life Assessment</div>
+      <h2>IBS-D Patient Questionnaire</h2>
+      <p>Your unique link: <b style="opacity:.9" id="patient-link-id">PRO-2025-0042</b> · Takes about 10 minutes</p>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem">
+      <span>Section 1 of 3 — Symptom Severity</span>
+      <span>Question 2 of 5</span>
+    </div>
+    <div class="progress-wrap" style="margin-bottom:1.25rem"><div class="progress-bar" style="width:35%"></div></div>
+    <div class="card">
+      <label class="form-label" style="font-size:15px">In the last 7 days, how often did your bowel symptoms affect your ability to work or do daily activities?</label>
+      <div class="radio-group" style="margin-top:12px" id="patientQ">
+        <div class="radio-opt" onclick="selectOpt(this,'#patientQ')">Not at all</div>
+        <div class="radio-opt" onclick="selectOpt(this,'#patientQ')">A little of the time</div>
+        <div class="radio-opt selected" onclick="selectOpt(this,'#patientQ')">Some of the time</div>
+        <div class="radio-opt" onclick="selectOpt(this,'#patientQ')">Most of the time</div>
+        <div class="radio-opt" onclick="selectOpt(this,'#patientQ')">All of the time</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:1rem">
+      <button class="btn"><i class="ti ti-arrow-left"></i>Previous</button>
+      <button class="btn btn-primary" onclick="showToast('Response saved · proceeding to next question','ti-check')">Next <i class="ti ti-arrow-right"></i></button>
+    </div>
+    <div style="margin-top:1.5rem;font-size:11px;color:var(--color-text-tertiary);text-align:center">Your responses are confidential and will be used only in aggregated form for medical research. Your doctor will not see individual answers.</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- =================== MODALS =================== -->
+
+<!-- PRO Add Patients Modal -->
+<div class="modal-backdrop" id="modal-pro">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Generate Patient Links</div><button class="modal-close" onclick="closeModal('modal-pro')">×</button></div>
+    <div class="form-group"><label class="form-label">Select study</label><select><option>IBS-D PRO — QoL Assessment</option></select></div>
+    <div class="form-group"><label class="form-label">Select doctor</label><select><option>Dr. Rajesh Kumar</option><option>Dr. Anita Sharma</option><option>Dr. Suresh Iyer</option></select></div>
+    <div style="border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:1rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr 80px;background:var(--color-background-secondary);padding:8px 12px;font-size:12px;font-weight:500;color:var(--color-text-secondary)"><span>Patient Name</span><span>Phone (optional)</span><span>Link ID</span></div>
+      <div style="padding:8px 12px;display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:center;border-top:.5px solid var(--color-border-tertiary)">
+        <input type="text" placeholder="Optional" value="Ramesh Gupta">
+        <input type="text" placeholder="+91 XXXXX">
+        <span class="link-code" style="font-size:10px">PRO-0058</span>
+      </div>
+      <div style="padding:8px 12px;display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:center;border-top:.5px solid var(--color-border-tertiary)">
+        <input type="text" placeholder="Optional">
+        <input type="text" placeholder="+91 XXXXX">
+        <span class="link-code" style="font-size:10px">PRO-0059</span>
+      </div>
+    </div>
+    <button class="btn" style="width:100%;justify-content:center;border-style:dashed;margin-bottom:1rem" onclick="showToast('Row added','ti-plus')"><i class="ti ti-plus"></i>Add another patient</button>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem"><i class="ti ti-info-circle"></i> You can also upload a patient list via Excel. Names are optional — for your reference only.</div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn" onclick="closeModal('modal-pro')">Cancel</button>
+      <button class="btn btn-primary" onclick="generateLinks()"><i class="ti ti-link"></i>Generate Links</button>
+    </div>
+  </div>
+</div>
+
+<!-- Name patient modal -->
+<div class="modal-backdrop" id="modal-name">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header"><div class="modal-title">Name Patient for PRO-2025-0043</div><button class="modal-close" onclick="closeModal('modal-name')">×</button></div>
+    <div class="form-group"><label class="form-label">Patient name (for your records only)</label><input type="text" placeholder="e.g. Priya Singh"><div class="form-hint">This name is stored only in your view. The study team sees only the link ID.</div></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem">
+      <button class="btn" onclick="closeModal('modal-name')">Cancel</button>
+      <button class="btn btn-primary" onclick="savePatientName()"><i class="ti ti-check"></i>Save Name</button>
+    </div>
+  </div>
+</div>
+
+<!-- Doctor Survey Modal -->
+<div class="modal-backdrop" id="modal-survey">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">H. pylori Eradication Survey</div><button class="modal-close" onclick="closeModal('modal-survey')">×</button></div>
+    <div class="progress-wrap" style="margin-bottom:1.25rem"><div class="progress-bar" style="width:20%"></div></div>
+    <div class="form-group"><label class="form-label" style="font-size:14px">Q1. How do you typically confirm H. pylori eradication in your patients?</label>
+    <div class="radio-group" style="margin-top:8px" id="surveyQ1">
+      <div class="radio-opt" onclick="selectOpt(this,'#surveyQ1')">Urea breath test (UBT)</div>
+      <div class="radio-opt selected" onclick="selectOpt(this,'#surveyQ1')">Stool antigen test</div>
+      <div class="radio-opt" onclick="selectOpt(this,'#surveyQ1')">Serology</div>
+      <div class="radio-opt" onclick="selectOpt(this,'#surveyQ1')">Repeat endoscopy with biopsy</div>
+      <div class="radio-opt" onclick="selectOpt(this,'#surveyQ1')">I do not routinely confirm eradication</div>
+    </div></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem">
+      <button class="btn" onclick="closeModal('modal-survey')">Save & Continue Later</button>
+      <button class="btn btn-primary" onclick="showToast('Response saved · Question 2 of 12','ti-arrow-right')">Next Question <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><i class="ti" id="toast-icon" style="font-size:18px;color:var(--brand)"></i><span id="toast-msg"></span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let currentRole = 'admin';
+
+function switchRole(role, el) {
+  currentRole = role;
+  document.getElementById('app').classList.remove('patient-link-mode');
+  document.querySelectorAll('.role-badge').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const users = {admin:'Demo Account', doctor:'Dr. Rajesh Kumar · AIIMS Delhi'};
+  document.getElementById('nav-user').textContent = users[role];
+
+  const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics'];
+  const doctorPages = ['my-studies','my-patients'];
+  const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics'];
+  const doctorNavs = ['nav-my-studies','nav-my-patients'];
+
+  if(role === 'admin') {
+    adminNavs.forEach(id => { let el = document.getElementById(id); if(el) el.style.display=''; });
+    doctorNavs.forEach(id => { let el = document.getElementById(id); if(el) el.style.display='none'; });
+    document.getElementById('nav-section-dr').style.display='none';
+    showPage('dashboard', document.getElementById('nav-dashboard'));
+  } else if(role === 'doctor') {
+    adminNavs.forEach(id => { let el = document.getElementById(id); if(el) el.style.display='none'; });
+    doctorNavs.forEach(id => { let el = document.getElementById(id); if(el) el.style.display=''; });
+    document.getElementById('nav-section-dr').style.display='';
+    showPage('my-studies', document.getElementById('nav-my-studies'));
+  }
+}
+
+function openPatientQuestionnaire(linkId) {
+  document.getElementById('app').classList.add('patient-link-mode');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('patient-link-id').textContent = linkId || 'PRO-2025-0042';
+  document.getElementById('page-patient').classList.add('active');
+  window.location.hash = 'patient';
+}
+
+if(window.location.hash === '#patient') {
+  openPatientQuestionnaire('PRO-2025-0042');
+}
+
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  if(navEl) navEl.classList.add('active');
+  if(id === 'analytics') renderAnalysisDashboard();
+}
+
+function goStep(n) {
+  for(let i=1;i<=4;i++) {
+    const s = document.getElementById('create-step-'+i);
+    if(s) s.style.display = (i===n)?'block':'none';
+    const si = document.getElementById('step'+i);
+    if(si) {
+      si.classList.remove('active','done');
+      if(i<n) si.classList.add('done');
+      else if(i===n) si.classList.add('active');
+    }
+  }
+}
+
+function switchFormTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('form-library').style.display = tab==='library'?'block':'none';
+  document.getElementById('form-builder').style.display = tab==='builder'?'block':'none';
+  document.getElementById('form-preview').style.display = tab==='preview'?'block':'none';
+}
+
+function toggleOpt(el) { el.classList.toggle('selected'); const cb = el.querySelector('input'); if(cb) cb.checked = el.classList.contains('selected'); }
+function selectOpt(el, parentSel) {
+  const parent = typeof parentSel === 'string' ? (document.querySelector(parentSel) || el.closest('.radio-group,.check-group')) : el.closest('.radio-group,.check-group');
+  if(parent) parent.querySelectorAll('.radio-opt,.check-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selLikert(el) { el.closest('.likert-row').querySelectorAll('.likert-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); }
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openPROModal() { openModal('modal-pro'); }
+function openNameModal() { openModal('modal-name'); }
+function openSurveyModal() { openModal('modal-survey'); }
+
+const studyDetails = {
+  'ibs-kap': {
+    title:'IBS-D KAP Survey 2025',
+    subtitle:'Knowledge, Attitudes & Practices survey for gastroenterologists across India',
+    type:'KAP Survey',
+    status:'Live',
+    condition:'IBS-D',
+    objective:'To assess gastroenterologist knowledge, attitudes and practices regarding IBS-D diagnosis and management across tier 1, 2 and 3 cities in India.',
+    created:'14 Jan 2025',
+    sent:'15 Jan 2025, 09:00',
+    closes:'30 Jun 2025',
+    questionnaire:'24 questions · 12 min',
+    target:'250',
+    sentCount:'248',
+    opened:'221',
+    completed:'180',
+    setupCreated:'14 Jan 2025 · Demo Account',
+    setupLocked:'24 KAP questions · mandatory consent',
+    setupVerified:'250 uploaded · 248 email IDs verified',
+    setupSent:'15 Jan 2025, 09:00 · email batch GP-IBS-001'
+  },
+  'ibs-pro': {
+    title:'IBS-D PRO — QoL Assessment',
+    subtitle:'Patient-reported outcome study managed through doctor-generated patient links',
+    type:'PRO Study',
+    status:'Live',
+    condition:'IBS-D',
+    objective:'To capture IBS-D quality-of-life outcomes directly from patients through unique questionnaire links generated by participating doctors.',
+    created:'18 Feb 2025',
+    sent:'3 Mar 2025, 10:30',
+    closes:'30 Jun 2025',
+    questionnaire:'34 questions · 10 min',
+    target:'200',
+    sentCount:'203',
+    opened:'164',
+    completed:'116',
+    setupCreated:'18 Feb 2025 · Demo Account',
+    setupLocked:'IBS-QoL + symptom severity instrument',
+    setupVerified:'72 doctors enabled · 203 patient links generated',
+    setupSent:'Patient links generated from 3 Mar 2025'
+  },
+  hpylori: {
+    title:'H. pylori Eradication Survey',
+    subtitle:'KAP survey on confirmation practices after eradication therapy',
+    type:'KAP Survey',
+    status:'Enrolling',
+    condition:'H. pylori',
+    objective:'To understand how physicians confirm H. pylori eradication and what barriers affect follow-up testing in routine practice.',
+    created:'1 Mar 2025',
+    sent:'Enrollment batch pending',
+    closes:'30 Sep 2025',
+    questionnaire:'18 questions · 8 min',
+    target:'150',
+    sentCount:'84',
+    opened:'41',
+    completed:'18',
+    setupCreated:'1 Mar 2025 · Demo Account',
+    setupLocked:'18 KAP questions · draft v3 locked',
+    setupVerified:'150 uploaded · 84 emails cleared for first batch',
+    setupSent:'First invite batch scheduled after enrollment QA'
+  }
+};
+
+const questionnaireLibrary = {
+  'ibs-kap': {
+    title:'IBS-D KAP Questionnaire Sent to Doctors',
+    instrument:'IBS-D KAP - Gastroenterologist Practice Instrument',
+    total:'24',
+    required:'22',
+    time:'12-15 minutes',
+    languages:'English',
+    channel:'Email invitation with unique doctor survey link',
+    questions:[
+      {domain:'Screening',type:'Single choice',text:'Approximately how many adult patients with chronic or recurrent diarrhea do you evaluate in a typical month?',options:['0-10','11-25','26-50','More than 50']},
+      {domain:'Screening',type:'Single choice',text:'Approximately how many patients do you diagnose or manage as IBS-D in a typical month?',options:['Less than 5','5-15','16-30','More than 30']},
+      {domain:'Knowledge',type:'Single choice',text:'Which symptom pattern best aligns with Rome IV IBS criteria?',options:['Recurrent abdominal pain associated with defecation or change in stool frequency/form','Diarrhea alone for 2 weeks','Bloating after meals without bowel change','Positive stool culture with cramping']},
+      {domain:'Knowledge',type:'Multi-select',text:'Which features would you consider alarm features before confirming IBS-D?',options:['Unintentional weight loss','Rectal bleeding','Iron deficiency anemia','Nocturnal symptoms','Family history of colorectal cancer or IBD','Symptoms relieved by defecation']},
+      {domain:'Knowledge',type:'Single choice',text:'In suspected IBS-D without alarm features, which diagnostic approach best reflects guideline-based practice?',options:['Positive symptom-based diagnosis with limited targeted testing','Routine colonoscopy for every patient','Empiric antibiotics before history','CT abdomen before making a diagnosis']},
+      {domain:'Knowledge',type:'Multi-select',text:'Which tests do you commonly use to exclude competing diagnoses when clinically indicated?',options:['CBC','CRP or fecal calprotectin','Celiac serology','Stool ova/parasite or culture','Thyroid profile','Routine CT for all patients']},
+      {domain:'Knowledge',type:'Single choice',text:'Which Bristol Stool Form Scale types are most consistent with diarrhea-predominant bowel pattern?',options:['Types 1-2','Types 3-4','Types 5-7','Any type if pain is present']},
+      {domain:'Knowledge',type:'Likert 1-5',text:'How confident are you in differentiating IBS-D from inflammatory bowel disease in routine outpatient practice?',options:['1 Not confident','2','3 Neutral','4','5 Very confident']},
+      {domain:'Attitude',type:'Likert 1-5',text:'A positive IBS-D diagnosis can reduce unnecessary testing when alarm features are absent.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+      {domain:'Attitude',type:'Likert 1-5',text:'Dietary counseling should be part of first-line IBS-D management.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+      {domain:'Attitude',type:'Likert 1-5',text:'Patient anxiety about serious disease is a major driver of repeat investigations in IBS-D.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+      {domain:'Attitude',type:'Rank order',text:'Rank the factors that most influence your IBS-D treatment choice.',options:['Symptom severity','Prior treatment failure','Patient preference','Cost/access','Comorbid anxiety or depression']},
+      {domain:'Attitude',type:'Likert 1-5',text:'How useful do you find structured symptom scores for monitoring IBS-D over time?',options:['1 Not useful','2','3 Neutral','4','5 Very useful']},
+      {domain:'Practice',type:'Multi-select',text:'Which non-pharmacological interventions do you routinely discuss with IBS-D patients?',options:['Low FODMAP guidance','Trigger-food diary','Stress/sleep counseling','Exercise advice','Probiotic discussion','None routinely']},
+      {domain:'Practice',type:'Multi-select',text:'Which pharmacological options do you use in IBS-D management?',options:['Antispasmodics','Loperamide','Rifaximin','Bile acid sequestrant','Neuromodulator','Probiotic']},
+      {domain:'Practice',type:'Single choice',text:'How often do you document baseline stool frequency and abdominal pain severity before starting therapy?',options:['Always','Often','Sometimes','Rarely','Never']},
+      {domain:'Practice',type:'Single choice',text:'How soon do you usually schedule follow-up after initiating IBS-D therapy?',options:['Within 2 weeks','2-4 weeks','1-3 months','Only if symptoms persist','No standard pattern']},
+      {domain:'Practice',type:'Multi-select',text:'Which outcomes do you track at follow-up?',options:['Abdominal pain','Stool frequency','Stool form','Urgency','Quality of life','Work/activity impairment']},
+      {domain:'Practice',type:'Single choice',text:'When symptoms persist despite initial treatment, what is your most common next step?',options:['Reassess diagnosis and alarm features','Escalate or switch therapy','Order broad imaging immediately','Refer all cases to tertiary center','Continue same treatment indefinitely']},
+      {domain:'Practice',type:'Multi-select',text:'Which patient education topics are included in your IBS-D counseling?',options:['Chronic relapsing course','Alarm symptoms requiring review','Diet and trigger monitoring','Medication expectations','Role of gut-brain interaction']},
+      {domain:'Barriers',type:'Rank order',text:'Rank the barriers that most affect IBS-D care in your setting.',options:['Limited consultation time','Cost of treatment','Patient adherence','Access to dietician','Diagnostic uncertainty','Stigma around bowel symptoms']},
+      {domain:'Barriers',type:'Multi-select',text:'What support would improve IBS-D care delivery?',options:['Patient handouts','Digital symptom tracker','Dietician referral pathway','Treatment algorithm','Follow-up reminders','Local language materials']},
+      {domain:'Outcomes',type:'Likert 1-5',text:'How satisfied are you with current IBS-D outcomes in your practice?',options:['1 Very dissatisfied','2','3 Neutral','4','5 Very satisfied']},
+      {domain:'Outcomes',type:'Free text',text:'What is the single biggest unmet need you observe in IBS-D management?',options:['Open text response']}
+    ]
+  },
+  'ibs-pro': {
+    title:'IBS-D Patient-Reported Outcome Questionnaire',
+    instrument:'IBS-D PRO - Symptoms, Function, and Quality of Life',
+    total:'18',
+    required:'18',
+    time:'8-10 minutes',
+    languages:'English',
+    channel:'Unique patient link generated by doctor',
+    questions:[
+      {domain:'Symptoms',type:'Single choice',text:'In the last 7 days, how often did you have abdominal pain?',options:['Never','1-2 days','3-4 days','5-6 days','Every day']},
+      {domain:'Symptoms',type:'Likert 0-10',text:'In the last 7 days, how severe was your abdominal pain on average?',options:['0 No pain','1-3 Mild','4-6 Moderate','7-10 Severe']},
+      {domain:'Symptoms',type:'Single choice',text:'In the last 7 days, how many bowel movements did you usually have per day?',options:['0-1','2-3','4-5','More than 5']},
+      {domain:'Symptoms',type:'Single choice',text:'Which stool form was most common in the last 7 days?',options:['Hard/lumpy','Normal formed','Soft blobs','Mushy','Watery']},
+      {domain:'Symptoms',type:'Single choice',text:'How often did you feel urgent need to pass stool?',options:['Never','Rarely','Sometimes','Often','Always']},
+      {domain:'Symptoms',type:'Single choice',text:'How often did bloating bother you?',options:['Never','Rarely','Sometimes','Often','Always']},
+      {domain:'Function',type:'Single choice',text:'How often did bowel symptoms interfere with work, school, or daily activities?',options:['Not at all','A little','Some of the time','Most of the time','All of the time']},
+      {domain:'Function',type:'Single choice',text:'How often did you avoid travel or social plans because of symptoms?',options:['Never','Rarely','Sometimes','Often','Always']},
+      {domain:'Function',type:'Single choice',text:'How often did symptoms affect sleep?',options:['Never','Rarely','Sometimes','Often','Always']},
+      {domain:'Quality of life',type:'Likert 1-5',text:'How worried were you about having sudden symptoms away from home?',options:['Not worried','Slightly','Moderately','Very','Extremely']},
+      {domain:'Quality of life',type:'Likert 1-5',text:'How much did symptoms affect your mood?',options:['Not at all','A little','Moderately','Very much','Extremely']},
+      {domain:'Treatment',type:'Single choice',text:'Did you take any medication for IBS-D symptoms in the last 7 days?',options:['No','Yes, occasionally','Yes, most days','Yes, every day']},
+      {domain:'Treatment',type:'Multi-select',text:'Which non-medicine approaches did you try?',options:['Diet changes','Food diary','Exercise','Stress management','Probiotics','None']},
+      {domain:'Treatment',type:'Single choice',text:'How easy was it to follow the treatment advice given by your doctor?',options:['Very easy','Easy','Neutral','Difficult','Very difficult']},
+      {domain:'Global assessment',type:'Single choice',text:'Compared with your usual symptoms, how are you today?',options:['Much better','Somewhat better','No change','Somewhat worse','Much worse']},
+      {domain:'Global assessment',type:'Likert 0-10',text:'Overall, how bothersome were your IBS-D symptoms this week?',options:['0 Not bothersome','1-3 Mild','4-6 Moderate','7-10 Severe']},
+      {domain:'Safety',type:'Multi-select',text:'Have you experienced any of these symptoms recently?',options:['Blood in stool','Unexplained weight loss','Fever','Night-time diarrhea','None of these']},
+      {domain:'Open feedback',type:'Free text',text:'What would most improve your day-to-day symptom control?',options:['Open text response']}
+    ]
+  },
+  hpylori: {
+    title:'H. pylori Eradication KAP Questionnaire',
+    instrument:'H. pylori Eradication Confirmation - Physician KAP',
+    total:'18',
+    required:'16',
+    time:'8-10 minutes',
+    languages:'English',
+    channel:'Email invitation with unique doctor survey link',
+    questions:[
+      {domain:'Knowledge',type:'Single choice',text:'Which test do you most prefer to confirm eradication after treatment?',options:['Urea breath test','Stool antigen test','Serology','Symptoms only','Repeat endoscopy for all']},
+      {domain:'Knowledge',type:'Single choice',text:'When should eradication testing usually be performed after completing therapy?',options:['Immediately','At least 4 weeks after antibiotics','After 3 days','Only after symptoms recur','No testing needed']},
+      {domain:'Knowledge',type:'Multi-select',text:'Which factors can reduce accuracy of post-treatment testing?',options:['Recent PPI use','Recent antibiotics','Recent bismuth','Testing too soon','Patient age alone']},
+      {domain:'Knowledge',type:'Single choice',text:'Which result is least useful for confirming eradication?',options:['Positive urea breath test','Positive stool antigen test','Serology remaining positive','Biopsy-based test when endoscopy indicated']},
+      {domain:'Attitude',type:'Likert 1-5',text:'Routine confirmation of eradication is important after treatment.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+      {domain:'Attitude',type:'Likert 1-5',text:'Patient adherence is the main determinant of eradication success in my practice.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+      {domain:'Attitude',type:'Rank order',text:'Rank the most important reasons patients miss eradication confirmation.',options:['Cost','Symptoms improved','Travel distance','Low perceived need','Test availability']},
+      {domain:'Practice',type:'Single choice',text:'How often do you advise patients to return for eradication confirmation?',options:['Always','Often','Sometimes','Rarely','Never']},
+      {domain:'Practice',type:'Single choice',text:'Which first-line regimen do you most commonly prescribe?',options:['Bismuth quadruple therapy','Concomitant therapy','Clarithromycin triple therapy','Sequential therapy','Other']},
+      {domain:'Practice',type:'Single choice',text:'How do you usually assess adherence after therapy?',options:['Direct questioning','Pill count','Pharmacy refill','I do not assess','Other']},
+      {domain:'Practice',type:'Multi-select',text:'What instructions do you give before confirmation testing?',options:['Stop PPI before test','Avoid antibiotics before test','Return even if symptoms improve','Bring prior prescription','No special instructions']},
+      {domain:'Practice',type:'Single choice',text:'If eradication fails, what is your usual next step?',options:['Use a different rescue regimen','Repeat same regimen','Refer immediately for endoscopy in all cases','No further treatment','Other']},
+      {domain:'Barriers',type:'Multi-select',text:'What limits your ability to confirm eradication?',options:['Test cost','Limited breath test access','Patient follow-up loss','PPI discontinuation difficulty','Time constraints']},
+      {domain:'Barriers',type:'Likert 1-5',text:'How confident are you selecting second-line therapy after failure?',options:['1 Not confident','2','3 Neutral','4','5 Very confident']},
+      {domain:'Systems',type:'Single choice',text:'Does your clinic use reminders for post-treatment testing?',options:['Yes, automated','Yes, manual call/message','Sometimes','No','Not applicable']},
+      {domain:'Systems',type:'Multi-select',text:'Which tools would improve eradication follow-up?',options:['SMS reminder','Printed instruction sheet','Test-order bundle','Patient education video','Nurse follow-up call']},
+      {domain:'Outcomes',type:'Single choice',text:'What proportion of your treated patients complete confirmation testing?',options:['Less than 25%','25-49%','50-74%','75% or more','Not tracked']},
+      {domain:'Open feedback',type:'Free text',text:'What is the biggest practical challenge in H. pylori eradication follow-up?',options:['Open text response']}
+    ]
+  }
+};
+
+questionnaireLibrary.constipation = {
+  title:'Constipation Management KAP Questionnaire',
+  instrument:'Constipation Management - Physician KAP Benchmark',
+  total:'20',
+  required:'18',
+  time:'10-12 minutes',
+  languages:'English',
+  channel:'Closed benchmark program',
+  questions:[
+    {domain:'Screening',type:'Single choice',text:'How many adult constipation patients do you manage in a typical month?',options:['Less than 10','10-25','26-50','More than 50']},
+    {domain:'Knowledge',type:'Single choice',text:'Which symptom duration best supports chronic constipation assessment?',options:['Less than 1 week','At least 3 months with symptom onset earlier','Only after 1 year','Only with abdominal pain']},
+    {domain:'Knowledge',type:'Multi-select',text:'Which alarm features prompt further evaluation?',options:['Weight loss','Rectal bleeding','Iron deficiency anemia','New onset in older adult','Family history of colorectal cancer']},
+    {domain:'Knowledge',type:'Single choice',text:'Which measure is most useful for stool form documentation?',options:['Bristol Stool Form Scale','Pain VAS only','Weight chart','Food frequency alone']},
+    {domain:'Attitude',type:'Likert 1-5',text:'Lifestyle and diet counseling should be documented before escalation.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+    {domain:'Attitude',type:'Likert 1-5',text:'Patients often under-report constipation severity unless specifically asked.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+    {domain:'Practice',type:'Multi-select',text:'Which first-line approaches do you routinely recommend?',options:['Fiber optimization','Hydration advice','Exercise','Osmotic laxative','Stimulant laxative','Biofeedback referral']},
+    {domain:'Practice',type:'Single choice',text:'How often do you assess medication-induced constipation?',options:['Always','Often','Sometimes','Rarely','Never']},
+    {domain:'Practice',type:'Single choice',text:'When do you usually reassess response after starting therapy?',options:['Within 2 weeks','2-4 weeks','1-3 months','Only if patient returns','No standard timing']},
+    {domain:'Practice',type:'Multi-select',text:'Which outcomes do you track?',options:['Stool frequency','Stool form','Straining','Incomplete evacuation','Bloating','QoL']},
+    {domain:'Barriers',type:'Rank order',text:'Rank common barriers to constipation management.',options:['Adherence','Dietary habits','Cost','Delayed follow-up','Patient embarrassment']},
+    {domain:'Barriers',type:'Multi-select',text:'Which supports would improve management?',options:['Patient diary','Diet handout','Treatment algorithm','Follow-up reminder','Referral pathway']},
+    {domain:'Outcomes',type:'Likert 1-5',text:'How satisfied are you with current outcomes?',options:['1 Very dissatisfied','2','3 Neutral','4','5 Very satisfied']},
+    {domain:'Open feedback',type:'Free text',text:'What is the biggest unmet need in constipation care?',options:['Open text response']},
+    {domain:'Practice',type:'Single choice',text:'How frequently do you document baseline stool frequency?',options:['Always','Often','Sometimes','Rarely','Never']},
+    {domain:'Practice',type:'Single choice',text:'How often do you screen for pelvic floor symptoms?',options:['Always','Often','Sometimes','Rarely','Never']},
+    {domain:'Knowledge',type:'Multi-select',text:'Which comorbidities commonly affect constipation care?',options:['Diabetes','Hypothyroidism','Neurologic disease','Depression','Medication burden']},
+    {domain:'Attitude',type:'Likert 1-5',text:'Digital reminders could improve follow-up adherence.',options:['Strongly disagree','Disagree','Neutral','Agree','Strongly agree']},
+    {domain:'Practice',type:'Multi-select',text:'Which escalation options do you use after inadequate response?',options:['Switch laxative class','Combination therapy','Secretagogue','Motility referral','Diagnostic testing']},
+    {domain:'Outcomes',type:'Single choice',text:'What proportion of patients improve after first-line management?',options:['Less than 25%','25-49%','50-74%','75% or more','Not tracked']}
+  ]
+};
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function renderQuestionnaire(id) {
+  const q = questionnaireLibrary[id] || questionnaireLibrary['ibs-kap'];
+  document.getElementById('questionnaire-title').textContent = q.title;
+  document.getElementById('summary-instrument').textContent = q.instrument;
+  document.getElementById('summary-total').textContent = q.total;
+  document.getElementById('summary-required').textContent = q.required;
+  document.getElementById('summary-time').textContent = q.time;
+  document.getElementById('summary-languages').textContent = q.languages;
+  document.getElementById('summary-channel').textContent = q.channel;
+  document.getElementById('questionnaire-list').innerHTML = q.questions.map((item, idx) => `
+    <div class="question-preview">
+      <div class="question-preview-head">
+        <span class="q-num">${idx + 1}</span>
+        <div>
+          <div class="question-preview-title">${escapeHtml(item.text)}</div>
+          <div class="question-meta"><span class="badge badge-gray">${escapeHtml(item.type)}</span><span class="badge badge-info">${escapeHtml(item.domain)}</span></div>
+        </div>
+      </div>
+      <div class="option-list">${item.options.map(opt => `<div class="option-pill">${escapeHtml(opt)}</div>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+const analysisInsights = [
+  {top:'42% selected 5-15',gap:'High-volume doctors over-index in Tier 1',intel:'Segment high-volume physicians for deeper treatment-pattern analysis.'},
+  {top:'54% manage 5-15 IBS-D patients/month',gap:'Tier 3 has more low-volume practices',intel:'Lower-volume cohorts may need practical diagnostic aids.'},
+  {top:'68% selected Rome IV pattern',gap:'21% chose incomplete symptom patterns',intel:'Knowledge is good but diagnostic criteria reinforcement is useful.'},
+  {top:'78% identify alarm features',gap:'Family history under-selected at 46%',intel:'Add red-flag checklist to educational follow-up.'},
+  {top:'61% prefer positive diagnosis',gap:'29% still favor routine colonoscopy',intel:'There is a clear testing-efficiency opportunity.'},
+  {top:'CBC and celiac serology lead',gap:'Fecal calprotectin lower in Tier 2/3',intel:'Access and awareness differ by city tier.'},
+  {top:'74% correctly selected types 5-7',gap:'12% selected any type if pain present',intel:'Stool-form education is strong but not universal.'},
+  {top:'Mean confidence 4.1/5',gap:'Tier 1 is +14 points vs Tier 2/3',intel:'Confidence gap aligns with lower test access.'},
+  {top:'72% agree with positive diagnosis',gap:'Senior doctors are more conservative',intel:'Use peer benchmark evidence in follow-up material.'},
+  {top:'81% agree diet belongs first-line',gap:'Only 34% have dietician access',intel:'Practical diet resources may outperform referral-only plans.'},
+  {top:'69% cite anxiety as a repeat-test driver',gap:'Tier 2 reports highest pressure',intel:'Patient education scripts may reduce repeat investigations.'},
+  {top:'Severity ranked #1 by 58%',gap:'Cost ranks #1 in Tier 3',intel:'Treatment pathways need affordability branches.'},
+  {top:'Mean usefulness 3.7/5',gap:'Structured scores under-used despite interest',intel:'Embed symptom score templates in the program toolkit.'},
+  {top:'Diet diary used by 62%',gap:'Low FODMAP counseling only 38%',intel:'Short, clinician-friendly diet handouts are needed.'},
+  {top:'Antispasmodics and loperamide lead',gap:'Rifaximin usage concentrated in Tier 1',intel:'Access and comfort vary; analyze formulary constraints.'},
+  {top:'43% always document baseline severity',gap:'27% rarely or never document',intel:'Baseline documentation is the biggest practice-quality gap.'},
+  {top:'2-4 week follow-up most common',gap:'18% use no standard pattern',intel:'Reminder workflows can standardize follow-up cadence.'},
+  {top:'Pain and stool frequency tracked most',gap:'QoL tracked by only 31%',intel:'Outcome tracking misses patient-impact domains.'},
+  {top:'52% reassess diagnosis after failure',gap:'22% escalate without reassessment',intel:'Add non-response decision tree to clinical toolkit.'},
+  {top:'Alarm symptoms discussed by 71%',gap:'Gut-brain explanation only 36%',intel:'Communication material should normalize gut-brain framing.'},
+  {top:'Cost and adherence top barriers',gap:'Access to dietician dominates metro clinics',intel:'Barrier strategy should be segmented by practice setting.'},
+  {top:'Patient handouts requested by 64%',gap:'Digital tracker requested by younger doctors',intel:'Offer both printable and digital support assets.'},
+  {top:'Mean satisfaction 3.2/5',gap:'Lower satisfaction where follow-up is unstructured',intel:'Program impact should target follow-up consistency.'},
+  {top:'Top unmet need: adherence support',gap:'Open text clusters around diet, cost, follow-up',intel:'Next wave should test adherence and diet-support interventions.'}
+];
+
+const analysisProgramMeta = {
+  'ibs-kap': {title:'IBS-D KAP Survey 2025', subtitle:'Question-level analysis for IBS-D KAP Survey 2025', responses:'n=180'},
+  'ibs-pro': {title:'IBS-D PRO - QoL Assessment', subtitle:'Patient-level symptom, function, and quality-of-life analysis', responses:'n=116'},
+  hpylori: {title:'H. pylori Eradication Survey', subtitle:'Physician KAP analysis for eradication confirmation practices', responses:'n=18'},
+  constipation: {title:'Constipation Management KAP', subtitle:'Closed benchmark analysis for constipation management practices', responses:'n=178'}
+};
+let activeAnalysisProgram = 'ibs-kap';
+
+function renderAnalysisDashboard(programId=activeAnalysisProgram) {
+  activeAnalysisProgram = questionnaireLibrary[programId] ? programId : 'ibs-kap';
+  const grid = document.getElementById('analysis-question-grid');
+  if(!grid) return;
+  const meta = analysisProgramMeta[activeAnalysisProgram] || analysisProgramMeta['ibs-kap'];
+  const subtitle = document.getElementById('analysis-subtitle');
+  if(subtitle) subtitle.textContent = meta.subtitle;
+  document.querySelectorAll('.dashboard-program-card').forEach(card => card.classList.toggle('active', card.dataset.analysisProgram === activeAnalysisProgram));
+  const items = questionnaireLibrary[activeAnalysisProgram].questions;
+  grid.innerHTML = items.map((item, idx) => {
+    const insight = analysisInsights[idx] || analysisInsights[analysisInsights.length - 1];
+    return `
+      <div class="analysis-question-tile">
+        <div class="analysis-question-head">
+          <span class="q-num">${idx + 1}</span>
+          <div>
+            <div class="analysis-question-title">${escapeHtml(item.text)}</div>
+            <div class="question-meta"><span class="badge badge-gray">${escapeHtml(item.type)}</span><span class="badge badge-info">${escapeHtml(item.domain)}</span></div>
+          </div>
+        </div>
+        <div class="analysis-stat-row">
+          <div class="analysis-stat"><b>${escapeHtml(insight.top.split(' ')[0])}</b><div>${escapeHtml(insight.top.replace(insight.top.split(' ')[0] + ' ', ''))}</div></div>
+          <div class="analysis-stat"><b>${idx % 3 === 0 ? 'p<0.05' : idx % 3 === 1 ? '+9 pts' : meta.responses}</b><div>${idx % 3 === 0 ? 'significant cohort difference' : idx % 3 === 1 ? 'tier spread' : 'valid responses'}</div></div>
+        </div>
+        <div class="mini-bar"><span style="width:${Math.max(28, 82 - idx * 2)}%"></span></div>
+        <div class="analysis-intel"><b>Insight:</b> ${escapeHtml(insight.gap)}<br><b>Action:</b> ${escapeHtml(insight.intel)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectAnalysisProgram(programId, card) {
+  renderAnalysisDashboard(programId);
+  if(card) card.classList.add('active');
+}
+
+function openStudyDetail(id='ibs-kap') {
+  const d = studyDetails[id] || studyDetails['ibs-kap'];
+  document.getElementById('detail-title').textContent = d.title;
+  document.getElementById('detail-subtitle').textContent = d.subtitle;
+  document.getElementById('detail-type-badge').textContent = d.type;
+  document.getElementById('detail-status-badge').textContent = d.status;
+  document.getElementById('detail-condition-badge').textContent = d.condition;
+  document.getElementById('detail-hero-title').textContent = d.title;
+  document.getElementById('detail-objective').textContent = d.objective;
+  document.getElementById('detail-created').textContent = d.created;
+  document.getElementById('detail-sent').textContent = d.sent;
+  document.getElementById('detail-closes').textContent = d.closes;
+  document.getElementById('detail-questionnaire').textContent = d.questionnaire;
+  document.getElementById('detail-target').textContent = d.target;
+  document.getElementById('detail-sent-count').textContent = d.sentCount;
+  document.getElementById('detail-opened').textContent = d.opened;
+  document.getElementById('detail-completed').textContent = d.completed;
+  document.getElementById('setup-created').textContent = d.setupCreated;
+  document.getElementById('setup-locked').textContent = d.setupLocked;
+  document.getElementById('setup-verified').textContent = d.setupVerified;
+  document.getElementById('setup-sent').textContent = d.setupSent;
+  document.getElementById('detail-kind').textContent = d.type;
+  renderQuestionnaire(id);
+  showPage('study-detail', document.getElementById('nav-studies'));
+  switchDetailTab('overview', document.getElementById('detail-tab-overview'));
+}
+
+function switchDetailTab(panel, el) {
+  ['overview','questions','audience'].forEach(id => {
+    document.getElementById('detail-panel-'+id).style.display = id === panel ? 'block' : 'none';
+    const tab = document.getElementById('detail-tab-'+id);
+    if(tab) tab.classList.toggle('active', id === panel);
+  });
+  if(el) el.classList.add('active');
+}
+
+window.openStudyDetail = openStudyDetail;
+window.switchDetailTab = switchDetailTab;
+window.renderQuestionnaire = renderQuestionnaire;
+window.renderAnalysisDashboard = renderAnalysisDashboard;
+window.selectAnalysisProgram = selectAnalysisProgram;
+
+function generateLinks() {
+  closeModal('modal-pro');
+  showToast('2 patient links generated & ready to send','ti-check');
+}
+function savePatientName() {
+  closeModal('modal-name');
+  showToast('Patient name saved — visible only to you','ti-check');
+}
+function launchStudy() {
+  showToast('Program launched! 248 email invitations sent','ti-rocket');
+  setTimeout(() => showPage('dashboard', document.getElementById('nav-dashboard')), 1200);
+}
+
+let toastTimer;
+function showToast(msg, icon) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  document.getElementById('toast-icon').className = 'ti ti-' + (icon||'check');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+document.querySelectorAll('.modal-backdrop').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); }));
+
+/* Charts */
+window.addEventListener('load', () => {
+  try {
+    const pal = { blue:'#0F766E', green:'#14A37F', gray:'#888780', amber:'#BA7517', red:'#E24B4A' };
+    const makeChart = (id, config) => {
+      const el = document.getElementById(id);
+      if(el) new Chart(el, config);
+    };
+    renderAnalysisDashboard();
+
+    makeChart('kapGapChart', {
+      type:'radar',
+      data:{labels:['Knowledge','Attitude','Practice','Follow-up','Patient education'],
+        datasets:[
+          {label:'Observed score',data:[82,76,61,54,58],borderColor:pal.blue,backgroundColor:'rgba(15,118,110,.14)',pointBackgroundColor:pal.blue},
+          {label:'Target',data:[85,80,80,75,75],borderColor:pal.green,backgroundColor:'rgba(29,158,117,.08)',pointBackgroundColor:pal.green}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{r:{beginAtZero:true,max:100,ticks:{display:false}}}}
+    });
+
+    makeChart('practiceArchetypeChart', {
+      type:'scatter',
+      data:{datasets:[
+        {label:'Tier 1 GI',data:[{x:84,y:72},{x:78,y:68},{x:90,y:77},{x:74,y:61}],backgroundColor:pal.blue},
+        {label:'Tier 2/3 GI',data:[{x:69,y:52},{x:64,y:48},{x:72,y:57},{x:58,y:43}],backgroundColor:pal.green},
+        {label:'Internal medicine',data:[{x:62,y:41},{x:70,y:46},{x:55,y:36},{x:66,y:44}],backgroundColor:pal.amber}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{x:{title:{display:true,text:'Diagnostic confidence index'},min:40,max:100,ticks:{color:'#888'}},y:{title:{display:true,text:'Structured practice index'},min:30,max:90,ticks:{color:'#888'}}}}
+    });
+
+    makeChart('barrierClusterChart', {
+      type:'bar',
+      data:{labels:['Cost barrier','Diet access','Adherence','Follow-up gap','Diagnostic uncertainty'],
+        datasets:[
+          {label:'Conservative therapy pattern',data:[44,32,38,29,21],backgroundColor:pal.gray,stack:'cluster'},
+          {label:'Guideline-forward pattern',data:[26,41,31,35,18],backgroundColor:pal.blue,stack:'cluster'},
+          {label:'Escalation-ready pattern',data:[18,22,24,19,11],backgroundColor:pal.green,stack:'cluster'}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{x:{stacked:true,ticks:{color:'#888'}},y:{stacked:true,ticks:{color:'#888',callback:v=>v+'%'}}}}
+    });
+
+    makeChart('trendChart', {
+      type:'line',
+      data:{labels:['Feb 10','12','14','16','18','20','22','24','26','28','Mar 2','4','6','8'],
+        datasets:[{label:'Responses',data:[80,88,82,95,102,91,110,108,118,112,124,119,130,134],
+          borderColor:pal.blue,backgroundColor:'rgba(15,118,110,.1)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:pal.blue,borderDashOffset:0}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,min:60,ticks:{color:'#888'}}  ,x:{ticks:{color:'#888',maxRotation:35,autoSkip:true}}}}
+    });
+
+    makeChart('deliveryFunnelChart', {
+      type:'bar',
+      data:{labels:['Targeted','Sent','Opened','Started','Completed'],
+        datasets:[{label:'Doctors',data:[250,248,221,197,180],backgroundColor:[pal.gray,pal.blue,pal.green,pal.amber,pal.blue],borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#888'}},y:{beginAtZero:true,ticks:{color:'#888'}}}}
+    });
+
+    makeChart('detailCityChart', {
+      type:'bar',
+      data:{labels:['Tier 1','Tier 2','Tier 3'],
+        datasets:[
+          {label:'Completed',data:[88,63,29],backgroundColor:pal.blue,stack:'s'},
+          {label:'Pending',data:[24,31,15],backgroundColor:pal.gray,stack:'s'}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{color:'#888'}},y:{stacked:true,ticks:{color:'#888'}}}}
+    });
+
+    makeChart('questionMixChart', {
+      type:'doughnut',
+      data:{labels:['Single choice','Multi-select','Likert','Rank order','Free text'],
+        datasets:[{data:[9,6,5,2,2],backgroundColor:[pal.blue,pal.green,pal.amber,pal.gray,pal.red],borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}}}
+    });
+
+    makeChart('detailRegionChart', {
+      type:'bar',
+      data:{labels:['North','West','South','East','Central'],
+        datasets:[{label:'Doctors',data:[72,58,64,31,25],backgroundColor:[pal.blue,pal.green,pal.amber,pal.gray,pal.red],borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#888'}},y:{beginAtZero:true,ticks:{color:'#888'}}}}
+    });
+
+    makeChart('q1Chart', {
+      type:'bar',
+      data:{labels:['<5/mo','5–15','16–30','>30'],
+        datasets:[
+          {label:'Tier 1',data:[8,42,31,19],backgroundColor:pal.blue},
+          {label:'Tier 2',data:[22,48,21,9],backgroundColor:pal.green}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#888'}},y:{ticks:{color:'#888',callback:v=>v+'%'}}}}
+    });
+
+    makeChart('q3Chart', {
+      type:'bar',
+      data:{labels:['Rome IV','Clinical\njudgment','Rome III','BSS type','Colonoscopy'],
+        datasets:[{label:'%',data:[68,52,31,24,12],backgroundColor:[pal.blue,pal.blue,pal.gray,pal.gray,pal.gray],borderRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#888',callback:v=>v+'%'}},y:{ticks:{color:'#888'}}}}
+    });
+
+    makeChart('likertChart', {
+      type:'doughnut',
+      data:{labels:['1 — Not confident','2','3 — Neutral','4','5 — Very confident'],
+        datasets:[{data:[4,11,22,38,25],backgroundColor:[pal.red,pal.amber,pal.gray,pal.blue,pal.green],borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false}}}
+    });
+
+    makeChart('regionChart', {
+      type:'bar',
+      data:{labels:['Delhi','Mumbai','Bangalore','Chennai','Hyderabad','Pune'],
+        datasets:[
+          {label:'Completed',data:[52,48,38,22,12,8],backgroundColor:pal.blue,stack:'a'},
+          {label:'Pending',data:[8,12,14,18,22,16],backgroundColor:pal.gray,stack:'a'}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{color:'#888'}},y:{stacked:true,ticks:{color:'#888'}}}}
+    });
+  } catch(e) { console.warn('Chart init error',e); }
+});
+</script>
