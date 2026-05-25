@@ -774,17 +774,17 @@ button.link-code:hover{color:var(--brand)}
 
   <div class="card">
     <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
-      <input type="text" placeholder="Search patient name or link ID..." style="max-width:260px">
+      <input type="text" placeholder="Search patient initials or link ID..." style="max-width:260px">
       <select style="max-width:180px"><option>All Doctors</option><option>Dr. Rajesh Kumar</option><option>Dr. Anita Sharma</option><option>Dr. Suresh Iyer</option></select>
       <select style="max-width:140px"><option>All Status</option><option>Completed</option><option>In Progress</option><option>Not Opened</option></select>
     </div>
-    <div class="tbl-wrap"><table><thead><tr><th>Link ID</th><th>Doctor</th><th>Patient Name</th><th>Generated</th><th>Link Sent</th><th>Status</th><th>Completed</th><th>Actions</th></tr></thead>
+    <div class="tbl-wrap"><table><thead><tr><th>Link ID</th><th>Doctor</th><th>Patient Initials</th><th>Generated</th><th>Link Sent</th><th>Status</th><th>Completed</th><th>Actions</th></tr></thead>
     <tbody>
-      <tr><td><span class="link-code">PRO-2025-0041</span></td><td>Dr. Rajesh Kumar</td><td>Amit Verma</td><td>3 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-success">Completed</span></td><td>5 Mar, 11:14</td><td><button class="btn btn-sm" onclick="showToast('Response detail opened','ti-eye')"><i class="ti ti-eye"></i></button></td></tr>
-      <tr><td><span class="link-code">PRO-2025-0042</span></td><td>Dr. Rajesh Kumar</td><td>Sunita Rao</td><td>3 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-info">In Progress</span></td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Reminder sent to patient','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
-      <tr><td><span class="link-code">PRO-2025-0043</span></td><td>Dr. Anita Sharma</td><td><span style="color:var(--color-text-tertiary);font-style:italic">Not named</span></td><td>4 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-warn">Not Opened</span></td><td>—</td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i></button> <button class="btn btn-sm"><i class="ti ti-mail"></i></button></td></tr>
-      <tr><td><span class="link-code">PRO-2025-0044</span></td><td>Dr. Suresh Iyer</td><td>Lakshmi Nair</td><td>5 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-success">Completed</span></td><td>6 Mar, 09:32</td><td><button class="btn btn-sm"><i class="ti ti-eye"></i></button></td></tr>
-      <tr><td><span class="link-code">PRO-2025-0045</span></td><td>Dr. Suresh Iyer</td><td>Ravi Krishnamurthy</td><td>5 Mar</td><td><span class="badge badge-gray">Not Sent</span></td><td><span class="badge badge-gray">Pending</span></td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Link copied to clipboard','ti-copy')"><i class="ti ti-copy"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0041</span></td><td>Dr. Rajesh Kumar</td><td>A.V.</td><td>3 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-success">Completed</span></td><td>5 Mar, 11:14</td><td><button class="btn btn-sm" onclick="showToast('Response detail opened','ti-eye')"><i class="ti ti-eye"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0042</span></td><td>Dr. Rajesh Kumar</td><td>S.R.</td><td>3 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-info">In Progress</span></td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Reminder sent to patient','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0043</span></td><td>Dr. Anita Sharma</td><td><span style="color:var(--color-text-tertiary);font-style:italic">Not added</span></td><td>4 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-warn">Not Opened</span></td><td>—</td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i></button> <button class="btn btn-sm"><i class="ti ti-mail"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0044</span></td><td>Dr. Suresh Iyer</td><td>L.N.</td><td>5 Mar</td><td><span class="badge badge-success">Sent</span></td><td><span class="badge badge-success">Completed</span></td><td>6 Mar, 09:32</td><td><button class="btn btn-sm"><i class="ti ti-eye"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0045</span></td><td>Dr. Suresh Iyer</td><td>R.K.</td><td>5 Mar</td><td><span class="badge badge-gray">Not Sent</span></td><td><span class="badge badge-gray">Pending</span></td><td>—</td><td><button class="btn btn-sm" onclick="showToast('Link copied to clipboard','ti-copy')"><i class="ti ti-copy"></i></button></td></tr>
     </tbody></table></div>
   </div>
 </div>
@@ -1009,11 +1009,11 @@ button.link-code:hover{color:var(--brand)}
           <div class="card">
             <div class="card-title">Patient Link Queue</div>
             <table>
-              <thead><tr><th>Patient</th><th>Status</th><th>Action</th></tr></thead>
+              <thead><tr><th>Initials</th><th>Status</th><th>Action</th></tr></thead>
               <tbody>
-                <tr><td>Amit Verma<br><span class="program-name-sub">PRO-2025-0041</span></td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
-                <tr><td>Sunita Rao<br><span class="program-name-sub">PRO-2025-0042</span></td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-sm" onclick="showToast('Reminder sent','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
-                <tr><td>Unnamed<br><span class="program-name-sub">PRO-2025-0043</span></td><td><span class="badge badge-warn">Not Opened</span></td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i></button></td></tr>
+                <tr><td>A.V.<br><span class="program-name-sub">PRO-2025-0041</span></td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
+                <tr><td>S.R.<br><span class="program-name-sub">PRO-2025-0042</span></td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-sm" onclick="showToast('Reminder sent','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
+                <tr><td>Not added<br><span class="program-name-sub">PRO-2025-0043</span></td><td><span class="badge badge-warn">Not Opened</span></td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i></button></td></tr>
               </tbody>
             </table>
           </div>
@@ -1072,15 +1072,15 @@ button.link-code:hover{color:var(--brand)}
     <button class="btn btn-primary" onclick="openAddPatientModal()"><i class="ti ti-user-plus"></i>Add Patients</button>
   </div>
   <div class="card" style="padding:.75rem 1.25rem">
-    <div style="font-size:13px;color:var(--color-text-secondary)"><i class="ti ti-info-circle" style="color:var(--info-txt)"></i> Each patient receives a unique link. You can optionally record their name. Patient responses are not visible to you — only aggregated data goes to the study team.</div>
+    <div style="font-size:13px;color:var(--color-text-secondary)"><i class="ti ti-info-circle" style="color:var(--info-txt)"></i> Each patient receives a unique link. You can optionally record initials for your reference. Patient responses are not visible to you — only aggregated data goes to the study team.</div>
   </div>
   <div class="card">
-    <div class="tbl-wrap"><table><thead><tr><th>Link ID</th><th>Patient Name</th><th>Link</th><th>Sent</th><th>Status</th><th>Actions</th></tr></thead>
+    <div class="tbl-wrap"><table><thead><tr><th>Link ID</th><th>Patient Initials</th><th>Link</th><th>Sent</th><th>Status</th><th>Actions</th></tr></thead>
     <tbody>
-      <tr><td><span class="link-code">PRO-2025-0041</span></td><td>Amit Verma</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0041')">study.gastropulse.in/p/0041</button></td><td>3 Mar</td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm" onclick="showToast('Link copied','ti-copy')"><i class="ti ti-copy"></i></button></td></tr>
-      <tr><td><span class="link-code">PRO-2025-0042</span></td><td>Sunita Rao</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0042')">study.gastropulse.in/p/0042</button></td><td>3 Mar</td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-sm" onclick="showToast('Reminder sent','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
-      <tr><td><span class="link-code">PRO-2025-0043</span></td><td><span style="color:var(--color-text-tertiary);font-style:italic">Unnamed</span></td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0043')">study.gastropulse.in/p/0043</button></td><td>4 Mar</td><td><span class="badge badge-warn">Not Opened</span></td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i>Name</button> <button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
-      <tr><td><span class="link-code">PRO-2025-0044</span></td><td>Lakshmi Nair</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0044')">study.gastropulse.in/p/0044</button></td><td>5 Mar</td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0041</span></td><td>A.V.</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0041')">study.gastropulse.in/p/0041</button></td><td>3 Mar</td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm" onclick="showToast('Link copied','ti-copy')"><i class="ti ti-copy"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0042</span></td><td>S.R.</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0042')">study.gastropulse.in/p/0042</button></td><td>3 Mar</td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-sm" onclick="showToast('Reminder sent','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0043</span></td><td><span style="color:var(--color-text-tertiary);font-style:italic">Not added</span></td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0043')">study.gastropulse.in/p/0043</button></td><td>4 Mar</td><td><span class="badge badge-warn">Not Opened</span></td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i>Initials</button> <button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
+      <tr><td><span class="link-code">PRO-2025-0044</span></td><td>L.N.</td><td><button class="link-code" onclick="openPatientQuestionnaire('PRO-2025-0044')">study.gastropulse.in/p/0044</button></td><td>5 Mar</td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
     </tbody></table></div>
   </div>
 </div>
@@ -1129,9 +1129,9 @@ button.link-code:hover{color:var(--brand)}
     <div class="form-group"><label class="form-label">Select study</label><select><option>IBS-D PRO — QoL Assessment</option></select></div>
     <div class="form-group"><label class="form-label">Select doctor</label><select><option>Dr. Rajesh Kumar</option><option>Dr. Anita Sharma</option><option>Dr. Suresh Iyer</option></select></div>
     <div style="border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:1rem">
-      <div style="display:grid;grid-template-columns:1fr 1fr 80px;background:var(--color-background-secondary);padding:8px 12px;font-size:12px;font-weight:500;color:var(--color-text-secondary)"><span>Patient Name</span><span>Phone (optional)</span><span>Link ID</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 80px;background:var(--color-background-secondary);padding:8px 12px;font-size:12px;font-weight:500;color:var(--color-text-secondary)"><span>Patient Initials</span><span>Phone (optional)</span><span>Link ID</span></div>
       <div style="padding:8px 12px;display:grid;grid-template-columns:1fr 1fr 80px;gap:8px;align-items:center;border-top:.5px solid var(--color-border-tertiary)">
-        <input type="text" placeholder="Optional" value="Ramesh Gupta">
+        <input type="text" placeholder="Optional" value="R.G.">
         <input type="text" placeholder="+91 XXXXX">
         <span class="link-code" style="font-size:10px">PRO-0058</span>
       </div>
@@ -1142,7 +1142,7 @@ button.link-code:hover{color:var(--brand)}
       </div>
     </div>
     <button class="btn" style="width:100%;justify-content:center;border-style:dashed;margin-bottom:1rem" onclick="showToast('Row added','ti-plus')"><i class="ti ti-plus"></i>Add another patient</button>
-    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem"><i class="ti ti-info-circle"></i> You can also upload a patient list via Excel. Names are optional — for your reference only.</div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem"><i class="ti ti-info-circle"></i> You can also upload a patient list via Excel. Initials are optional — for your reference only.</div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn" onclick="closeModal('modal-pro')">Cancel</button>
       <button class="btn btn-primary" onclick="generateLinks()"><i class="ti ti-link"></i>Generate Links</button>
@@ -1153,11 +1153,11 @@ button.link-code:hover{color:var(--brand)}
 <!-- Name patient modal -->
 <div class="modal-backdrop" id="modal-name">
   <div class="modal" style="max-width:380px">
-    <div class="modal-header"><div class="modal-title">Name Patient for PRO-2025-0043</div><button class="modal-close" onclick="closeModal('modal-name')">×</button></div>
-    <div class="form-group"><label class="form-label">Patient name (for your records only)</label><input type="text" placeholder="e.g. Priya Singh"><div class="form-hint">This name is stored only in your view. The study team sees only the link ID.</div></div>
+    <div class="modal-header"><div class="modal-title">Add Patient Initials for PRO-2025-0043</div><button class="modal-close" onclick="closeModal('modal-name')">×</button></div>
+    <div class="form-group"><label class="form-label">Patient initials (for your records only)</label><input type="text" placeholder="e.g. P.S."><div class="form-hint">Only initials are stored in your view. The study team sees only the link ID.</div></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem">
       <button class="btn" onclick="closeModal('modal-name')">Cancel</button>
-      <button class="btn btn-primary" onclick="savePatientName()"><i class="ti ti-check"></i>Save Name</button>
+      <button class="btn btn-primary" onclick="savePatientName()"><i class="ti ti-check"></i>Save Initials</button>
     </div>
   </div>
 </div>
@@ -1697,7 +1697,7 @@ function generateLinks() {
 }
 function savePatientName() {
   closeModal('modal-name');
-  showToast('Patient name saved — visible only to you','ti-check');
+  showToast('Patient initials saved — visible only to you','ti-check');
 }
 function launchStudy() {
   showToast('Program launched! 248 email invitations sent','ti-rocket');
