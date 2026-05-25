@@ -105,7 +105,7 @@ body{font-family:var(--font-sans,'system-ui');background:#F3F7FB;min-height:100v
 .bg-orbits span:nth-child(2){right:23%;top:42%;width:110px;height:110px;animation-delay:1.4s}
 .bg-orbits span:nth-child(3){left:8%;bottom:18%;width:90px;height:90px;animation-delay:2.1s}
 .bg-grid{position:absolute;inset:0;z-index:1;opacity:.23;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at 68% 40%,black,transparent 62%);animation:gridSlide 14s linear infinite;pointer-events:none}
-.home-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;grid-column:1 / -1;position:relative;z-index:2;margin-top:.4rem;padding:0 0 .2rem}
+.home-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.9rem;grid-column:1 / -1;position:relative;z-index:2;margin-top:.4rem;padding:0 0 .2rem}
 .home-card{background:#fff;border:1px solid rgba(213,227,235,.95);border-radius:12px;padding:1rem;cursor:pointer;transition:all .16s;min-height:132px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 10px 24px rgba(3,59,58,.12)}
 .home-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(3,59,58,.18);border-color:#5EEAD4}
 .home-card .ti{font-size:24px;color:var(--brand)}
@@ -262,6 +262,68 @@ button.link-code:hover{color:var(--brand)}
 .toast.show{display:flex}
 .toast-icon{font-size:18px}
 
+/* Demo screens */
+.demo-shell{display:grid;grid-template-columns:320px 1fr;gap:1rem;align-items:start}
+.demo-menu{background:#fff;border:1px solid #E1EAF3;border-radius:14px;padding:1rem;box-shadow:0 10px 26px rgba(13,58,108,.055);position:sticky;top:0}
+.demo-menu-title{font-size:13px;font-weight:800;color:#10283E;margin-bottom:4px}
+.demo-menu-sub{font-size:12px;color:#60768B;line-height:1.45;margin-bottom:12px}
+.demo-option{width:100%;display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;border:1px solid #DCE8F2;background:#fff;border-radius:12px;padding:10px;margin-top:8px;text-align:left;cursor:pointer;color:#18344E;font-family:inherit;transition:all .14s}
+.demo-option:hover{border-color:#0F766E;background:#F3FBF9;transform:translateY(-1px)}
+.demo-option.active{background:#E6F4F1;border-color:#0F766E;box-shadow:inset 3px 0 0 #064E4A}
+.demo-option i{width:34px;height:34px;border-radius:10px;background:#E6F4F1;color:#064E4A;display:flex;align-items:center;justify-content:center;font-size:18px}
+.demo-option b{display:block;font-size:13px}
+.demo-option span{display:block;font-size:11px;color:#60768B;margin-top:2px}
+.demo-stage{min-height:620px;background:linear-gradient(135deg,#F8FBFE,#EEF6F4);border:1px solid #DDE8F4;border-radius:16px;padding:1.1rem;position:relative;overflow:hidden}
+.demo-stage::before{content:'';position:absolute;inset:auto -120px -170px auto;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(20,163,127,.16),transparent 66%);pointer-events:none}
+.demo-panel{display:none;position:relative;z-index:1}
+.demo-panel.active{display:block}
+.demo-panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+.demo-kicker{font-size:11px;color:#0F766E;text-transform:uppercase;letter-spacing:.08em;font-weight:800;margin-bottom:4px}
+.demo-title{font-size:22px;font-weight:800;color:#10283E;letter-spacing:-.01em}
+.demo-sub{font-size:13px;color:#60768B;line-height:1.5;margin-top:4px;max-width:760px}
+.phone-wrap{display:grid;grid-template-columns:380px 1fr;gap:1.2rem;align-items:center}
+.phone{width:330px;min-height:650px;margin:0 auto;background:#101820;border-radius:34px;padding:12px;box-shadow:0 24px 50px rgba(16,40,62,.25)}
+.phone-screen{min-height:626px;background:#F8FBFE;border-radius:24px;overflow:hidden;display:flex;flex-direction:column}
+.phone-top{background:#064E4A;color:#fff;padding:18px 18px 14px}
+.phone-brand{display:flex;align-items:center;justify-content:space-between;font-size:12px;opacity:.9}
+.phone-brand span:last-child{font-size:10px;background:rgba(255,255,255,.16);padding:3px 7px;border-radius:999px}
+.phone-title{font-size:19px;font-weight:800;margin-top:14px;line-height:1.18}
+.phone-meta{font-size:11px;color:rgba(255,255,255,.74);margin-top:6px}
+.phone-body{padding:16px;display:flex;flex-direction:column;gap:12px;flex:1}
+.phone-progress{height:7px;background:#DDE8F4;border-radius:999px;overflow:hidden}
+.phone-progress span{display:block;height:100%;background:#14A37F;border-radius:999px;transition:width .25s}
+.phone-question-meta{font-size:11px;color:#60768B;display:flex;justify-content:space-between}
+.phone-question{font-size:16px;font-weight:760;color:#10283E;line-height:1.35}
+.phone-options{display:grid;gap:8px}
+.phone-choice{border:1px solid #D7E4EF;background:#fff;border-radius:12px;padding:11px 12px;font-size:13px;color:#18344E;cursor:pointer;transition:all .12s;text-align:left}
+.phone-choice:hover,.phone-choice.selected{border-color:#0F766E;background:#E6F4F1;color:#064E4A}
+.phone-actions{margin-top:auto;display:flex;gap:8px}
+.phone-actions .btn{flex:1;justify-content:center}
+.phone-complete{display:none;text-align:center;margin:auto 0}
+.phone-complete i{font-size:46px;color:#14A37F;margin-bottom:12px}
+.demo-note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.demo-note{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:1rem;box-shadow:0 10px 24px rgba(13,58,108,.05)}
+.demo-note i{font-size:20px;color:#064E4A;margin-bottom:8px}
+.demo-note b{font-size:14px;color:#10283E}
+.demo-note p{font-size:12px;color:#60768B;line-height:1.45;margin-top:5px}
+.doctor-preview{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem}
+.doctor-inbox{display:grid;gap:10px}
+.doctor-task{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:13px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.doctor-task-title{font-size:14px;font-weight:800;color:#10283E}
+.doctor-task-sub{font-size:12px;color:#60768B;margin-top:3px}
+.doctor-card-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.doctor-card-metrics .program-stat{background:#F8FBFE}
+.response-stream{display:grid;gap:10px}
+.response-card{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:13px;display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:start}
+.response-avatar{width:42px;height:42px;border-radius:12px;background:#E6F4F1;color:#064E4A;display:flex;align-items:center;justify-content:center;font-weight:800}
+.response-title{font-size:13px;font-weight:800;color:#10283E}
+.response-sub{font-size:12px;color:#60768B;margin-top:3px;line-height:1.4}
+.response-pill{font-size:11px;font-weight:700;border-radius:999px;padding:4px 8px;background:#E6F4F1;color:#064E4A}
+.response-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:1rem}
+.response-insight{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:1rem}
+.response-insight b{display:block;font-size:20px;color:#10283E}
+.response-insight span{display:block;font-size:12px;color:#60768B;margin-top:3px;line-height:1.4}
+
 /* Form builder */
 .question-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;margin-bottom:.75rem;border:.5px solid var(--color-border-tertiary)}
 .q-num{width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
@@ -277,6 +339,12 @@ button.link-code:hover{color:var(--brand)}
 
 /* Role switcher highlight */
 .role-label{font-size:11px;color:#fff;opacity:.55;margin-right:4px}
+@media (max-width:1100px){
+  .home-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .demo-shell,.phone-wrap,.doctor-preview{grid-template-columns:1fr}
+  .demo-menu{position:relative}
+  .response-grid,.demo-note-grid{grid-template-columns:1fr}
+}
 </style>
 
 <!-- Top Nav -->
@@ -292,6 +360,7 @@ button.link-code:hover{color:var(--brand)}
   <div class="nav-item active" onclick="showPage('dashboard',this)" id="nav-dashboard"><i class="ti ti-home"></i>Home</div>
   <div class="nav-item" onclick="showPage('studies',this)" id="nav-studies"><i class="ti ti-folders"></i>All Programs</div>
   <div class="nav-item" onclick="showPage('analytics',this)" id="nav-analytics"><i class="ti ti-chart-infographic"></i>Dashboard</div>
+  <div class="nav-item" onclick="showPage('demo',this)" id="nav-demo"><i class="ti ti-device-mobile"></i>Demo Screens</div>
   <div class="nav-item" onclick="showPage('create',this)" id="nav-create"><i class="ti ti-plus"></i>Create Program</div>
   <div class="sidebar-section">Participants</div>
   <div class="nav-item" onclick="showPage('doctors',this)" id="nav-doctors"><i class="ti ti-stethoscope"></i>Doctor List</div>
@@ -331,6 +400,10 @@ button.link-code:hover{color:var(--brand)}
       <div class="home-card" onclick="showPage('analytics',document.getElementById('nav-analytics'))">
         <div><i class="ti ti-chart-infographic"></i><div class="home-card-title">Dashboard</div><div class="home-card-sub">Analyze every questionnaire item with insights, patterns, and actions.</div></div>
         <span class="badge badge-success">180 responses</span>
+      </div>
+      <div class="home-card" onclick="showPage('demo',document.getElementById('nav-demo'))">
+        <div><i class="ti ti-device-mobile"></i><div class="home-card-title">Demo Screens</div><div class="home-card-sub">Preview the patient mobile journey, doctor workspace, and response flow.</div></div>
+        <span class="badge badge-info">Patient View</span>
       </div>
       <div class="home-card" onclick="showPage('create',document.getElementById('nav-create'))">
         <div><i class="ti ti-plus"></i><div class="home-card-title">Create a New Program</div><div class="home-card-sub">Set up a new KAP, PRO, or registry workflow with audience and instruments.</div></div>
@@ -820,6 +893,163 @@ button.link-code:hover{color:var(--brand)}
   <div class="question-tile-grid" id="analysis-question-grid"></div>
 </div>
 
+<!-- =================== DEMO SCREENS =================== -->
+<div class="page" id="page-demo">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Demo Screens</div>
+      <div class="page-sub">Clickable previews for the patient link, doctor workspace, and incoming response workflow</div>
+    </div>
+    <button class="btn btn-primary" onclick="openDemoPanel('patient')"><i class="ti ti-device-mobile"></i>Patient View</button>
+  </div>
+
+  <div class="demo-shell">
+    <div class="demo-menu">
+      <div class="demo-menu-title">Choose a live experience</div>
+      <div class="demo-menu-sub">Use these screens to show exactly how a doctor or patient would interact with GastroPulse after a program goes live.</div>
+      <button class="demo-option active" id="demo-tab-patient" onclick="openDemoPanel('patient')">
+        <i class="ti ti-device-mobile"></i>
+        <div><b>Patient View</b><span>Mobile link questionnaire</span></div>
+        <span class="badge badge-info">Click</span>
+      </button>
+      <button class="demo-option" id="demo-tab-doctor" onclick="openDemoPanel('doctor')">
+        <i class="ti ti-stethoscope"></i>
+        <div><b>Doctor View</b><span>Study tasks and patient links</span></div>
+        <span class="badge badge-success">Live</span>
+      </button>
+      <button class="demo-option" id="demo-tab-responses" onclick="openDemoPanel('responses')">
+        <i class="ti ti-inbox"></i>
+        <div><b>Responses View</b><span>How submissions arrive</span></div>
+        <span class="badge badge-gray">n=116</span>
+      </button>
+    </div>
+
+    <div class="demo-stage">
+      <div class="demo-panel active" id="demo-panel-patient">
+        <div class="demo-panel-header">
+          <div>
+            <div class="demo-kicker">Patient link experience</div>
+            <div class="demo-title">Patient opens a unique mobile link and answers one screen at a time</div>
+            <div class="demo-sub">No login. The patient receives a link, sees a consent note, answers the PRO questionnaire, and submits. Try the mobile screen below.</div>
+          </div>
+          <button class="btn" onclick="openPatientQuestionnaire('PRO-2025-0042')"><i class="ti ti-external-link"></i>Open full page</button>
+        </div>
+
+        <div class="phone-wrap">
+          <div class="phone" aria-label="Patient mobile preview">
+            <div class="phone-screen">
+              <div class="phone-top">
+                <div class="phone-brand"><span>GastroPulse</span><span>Secure link</span></div>
+                <div class="phone-title">IBS-D Quality of Life Assessment</div>
+                <div class="phone-meta">PRO-2025-0042 · No login required</div>
+              </div>
+              <div class="phone-body">
+                <div class="phone-question-meta"><span id="demo-phone-section">Symptom Severity</span><span id="demo-phone-count">1 of 5</span></div>
+                <div class="phone-progress"><span id="demo-phone-progress" style="width:20%"></span></div>
+                <div id="demo-phone-question-wrap">
+                  <div class="phone-question" id="demo-phone-question"></div>
+                  <div class="phone-options" id="demo-phone-options"></div>
+                </div>
+                <div class="phone-complete" id="demo-phone-complete">
+                  <i class="ti ti-circle-check"></i>
+                  <div class="phone-question">Thank you. Your response has been submitted.</div>
+                  <p class="demo-sub" style="margin:8px auto 0;max-width:260px">The study team receives this as an anonymized patient response linked to PRO-2025-0042.</p>
+                </div>
+                <div class="phone-actions">
+                  <button class="btn" onclick="prevDemoQuestion()"><i class="ti ti-arrow-left"></i>Back</button>
+                  <button class="btn btn-primary" id="demo-phone-next" onclick="nextDemoQuestion()">Next <i class="ti ti-arrow-right"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-note-grid">
+            <div class="demo-note"><i class="ti ti-link"></i><b>Link received</b><p>Patient clicks a unique SMS, WhatsApp, or email link generated by the doctor. There is no patient login step.</p></div>
+            <div class="demo-note"><i class="ti ti-shield-lock"></i><b>Consent first</b><p>The opening screen explains confidentiality, estimated time, and that individual answers are not shown back to the doctor.</p></div>
+            <div class="demo-note"><i class="ti ti-forms"></i><b>Question-by-question UI</b><p>One question appears per screen with large tap targets, progress indication, and autosave behavior.</p></div>
+            <div class="demo-note"><i class="ti ti-chart-infographic"></i><b>Aggregated analytics</b><p>Completed responses feed the admin dashboard as question-level tiles, trends, and cohort insights.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-panel" id="demo-panel-doctor">
+        <div class="demo-panel-header">
+          <div>
+            <div class="demo-kicker">Doctor workspace</div>
+            <div class="demo-title">Doctor sees assigned studies and manages patient links</div>
+            <div class="demo-sub">Doctors do not see patient answers. They can generate patient links, copy/send reminders, and complete any doctor-facing KAP surveys assigned to them.</div>
+          </div>
+          <button class="btn btn-primary" onclick="switchRole('doctor',{classList:{add:function(){}}})"><i class="ti ti-login"></i>Open Doctor Workspace</button>
+        </div>
+
+        <div class="doctor-preview">
+          <div class="card">
+            <div class="card-title">Assigned Studies</div>
+            <div class="doctor-inbox">
+              <div class="doctor-task">
+                <div><div class="doctor-task-title">IBS-D PRO - QoL Assessment</div><div class="doctor-task-sub">72 doctors enabled · patient links open until 30 Jun 2025</div></div>
+                <button class="btn btn-sm btn-primary" onclick="openDemoPanel('patient')"><i class="ti ti-link"></i>Preview Link</button>
+              </div>
+              <div class="doctor-task">
+                <div><div class="doctor-task-title">H. pylori Eradication Survey</div><div class="doctor-task-sub">12 questions · pending doctor response</div></div>
+                <button class="btn btn-sm" onclick="openSurveyModal()"><i class="ti ti-edit"></i>Fill Survey</button>
+              </div>
+              <div class="doctor-task">
+                <div><div class="doctor-task-title">IBS-D KAP Survey 2025</div><div class="doctor-task-sub">Submitted 22 Jan 2025 · response locked</div></div>
+                <button class="btn btn-sm" onclick="showToast('Submitted response opened','ti-eye')"><i class="ti ti-eye"></i>View</button>
+              </div>
+            </div>
+            <div class="doctor-card-metrics">
+              <div class="program-stat"><b>18</b><div>Links generated</div></div>
+              <div class="program-stat"><b>11</b><div>Completed</div></div>
+              <div class="program-stat"><b>3</b><div>Need reminder</div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Patient Link Queue</div>
+            <table>
+              <thead><tr><th>Patient</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td>Amit Verma<br><span class="program-name-sub">PRO-2025-0041</span></td><td><span class="badge badge-success">Completed</span></td><td><button class="btn btn-sm"><i class="ti ti-copy"></i></button></td></tr>
+                <tr><td>Sunita Rao<br><span class="program-name-sub">PRO-2025-0042</span></td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-sm" onclick="showToast('Reminder sent','ti-mail')"><i class="ti ti-mail"></i></button></td></tr>
+                <tr><td>Unnamed<br><span class="program-name-sub">PRO-2025-0043</span></td><td><span class="badge badge-warn">Not Opened</span></td><td><button class="btn btn-sm" onclick="openNameModal()"><i class="ti ti-user"></i></button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-panel" id="demo-panel-responses">
+        <div class="demo-panel-header">
+          <div>
+            <div class="demo-kicker">Incoming responses</div>
+            <div class="demo-title">Submissions become response records and analytics signals</div>
+            <div class="demo-sub">Admins see response arrival, completion quality, and aggregate signals without exposing identifiable patient answers to doctors.</div>
+          </div>
+          <button class="btn btn-primary" onclick="showPage('analytics',document.getElementById('nav-analytics'))"><i class="ti ti-chart-infographic"></i>Open Dashboard</button>
+        </div>
+
+        <div class="response-grid">
+          <div class="response-insight"><b>116</b><span>Completed patient PRO submissions from 203 generated links</span></div>
+          <div class="response-insight"><b>92%</b><span>Responses pass completion quality checks with no missing critical items</span></div>
+          <div class="response-insight"><b>31%</b><span>Report daily activity disruption on 4 or more days per week</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Response Stream</div>
+          <div class="response-stream">
+            <div class="response-card"><div class="response-avatar">AV</div><div><div class="response-title">PRO-2025-0041 completed</div><div class="response-sub">IBS-D QoL Assessment · 7 min 42 sec · all required questions answered</div></div><span class="response-pill">Just now</span></div>
+            <div class="response-card"><div class="response-avatar">SR</div><div><div class="response-title">PRO-2025-0042 saved progress</div><div class="response-sub">Question 4 of 5 · symptom severity selected as “Most of the time”</div></div><span class="response-pill">4 min</span></div>
+            <div class="response-card"><div class="response-avatar">RK</div><div><div class="response-title">Doctor KAP response submitted</div><div class="response-sub">Dr. Rajesh Kumar · H. pylori Eradication Survey · included one free-text barrier note</div></div><span class="response-pill">18 min</span></div>
+            <div class="response-card"><div class="response-avatar"><i class="ti ti-chart-bar"></i></div><div><div class="response-title">Insight generated</div><div class="response-sub">Patients with high urgency scores are 2.1x more likely to report work disruption. Added to Dashboard tile Q3.</div></div><span class="response-pill">Auto</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- =================== DOCTOR VIEW: MY STUDIES =================== -->
 <div class="page" id="page-my-studies">
   <div class="page-header">
@@ -958,6 +1188,93 @@ button.link-code:hover{color:var(--brand)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 let currentRole = 'admin';
+let demoQuestionIndex = 0;
+let patientQuestionIndex = 0;
+
+const patientDemoQuestions = [
+  {
+    section:'Consent',
+    question:'Before you begin, do you consent to share your responses for aggregated medical research analysis?',
+    options:['Yes, I consent','I need more information']
+  },
+  {
+    section:'Symptom Severity',
+    question:'In the last 7 days, how often did your bowel symptoms affect your ability to work or do daily activities?',
+    options:['Not at all','A little of the time','Some of the time','Most of the time','All of the time']
+  },
+  {
+    section:'Symptom Severity',
+    question:'How would you rate your abdominal pain or discomfort in the last 7 days?',
+    options:['None','Mild','Moderate','Severe','Very severe']
+  },
+  {
+    section:'Quality of Life',
+    question:'Which areas were affected by your symptoms this week?',
+    options:['Work or study','Travel outside home','Sleep','Social plans','Meals or diet choices']
+  },
+  {
+    section:'Care Experience',
+    question:'What support would help you manage symptoms better before your next visit?',
+    options:['Diet guidance','Medication reminder','Symptom tracker','Doctor follow-up','Educational material']
+  }
+];
+
+function openDemoPanel(panel) {
+  ['patient','doctor','responses'].forEach(id => {
+    const p = document.getElementById('demo-panel-'+id);
+    const t = document.getElementById('demo-tab-'+id);
+    if(p) p.classList.toggle('active', id === panel);
+    if(t) t.classList.toggle('active', id === panel);
+  });
+  if(panel === 'patient') renderDemoQuestion();
+}
+
+function renderDemoQuestion() {
+  const wrap = document.getElementById('demo-phone-question-wrap');
+  const complete = document.getElementById('demo-phone-complete');
+  const next = document.getElementById('demo-phone-next');
+  const q = patientDemoQuestions[demoQuestionIndex];
+  if(!q || !wrap) return;
+  wrap.style.display = 'block';
+  complete.style.display = 'none';
+  document.getElementById('demo-phone-section').textContent = q.section;
+  document.getElementById('demo-phone-count').textContent = `${demoQuestionIndex + 1} of ${patientDemoQuestions.length}`;
+  document.getElementById('demo-phone-progress').style.width = `${((demoQuestionIndex + 1) / patientDemoQuestions.length) * 100}%`;
+  document.getElementById('demo-phone-question').textContent = q.question;
+  document.getElementById('demo-phone-options').innerHTML = q.options.map((opt, idx) => `<button class="phone-choice ${idx === 0 ? 'selected' : ''}" onclick="selectPhoneChoice(this)">${escapeHtml(opt)}</button>`).join('');
+  next.innerHTML = demoQuestionIndex === patientDemoQuestions.length - 1 ? 'Submit <i class="ti ti-send"></i>' : 'Next <i class="ti ti-arrow-right"></i>';
+}
+
+function selectPhoneChoice(el) {
+  el.parentElement.querySelectorAll('.phone-choice').forEach(btn => btn.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function nextDemoQuestion() {
+  if(demoQuestionIndex < patientDemoQuestions.length - 1) {
+    demoQuestionIndex += 1;
+    renderDemoQuestion();
+    return;
+  }
+  const wrap = document.getElementById('demo-phone-question-wrap');
+  const complete = document.getElementById('demo-phone-complete');
+  const next = document.getElementById('demo-phone-next');
+  if(wrap) wrap.style.display = 'none';
+  if(complete) complete.style.display = 'block';
+  if(next) next.innerHTML = 'Restart <i class="ti ti-refresh"></i>';
+  demoQuestionIndex = -1;
+  showToast('Patient response submitted to response stream','check');
+}
+
+function prevDemoQuestion() {
+  if(demoQuestionIndex < 0) {
+    demoQuestionIndex = 0;
+    renderDemoQuestion();
+    return;
+  }
+  demoQuestionIndex = Math.max(0, demoQuestionIndex - 1);
+  renderDemoQuestion();
+}
 
 function switchRole(role, el) {
   currentRole = role;
@@ -969,7 +1286,7 @@ function switchRole(role, el) {
 
   const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics'];
   const doctorPages = ['my-studies','my-patients'];
-  const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics'];
+  const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics','nav-demo'];
   const doctorNavs = ['nav-my-studies','nav-my-patients'];
 
   if(role === 'admin') {
@@ -1005,6 +1322,7 @@ function showPage(id, navEl) {
   if(pg) pg.classList.add('active');
   if(navEl) navEl.classList.add('active');
   if(id === 'analytics') renderAnalysisDashboard();
+  if(id === 'demo') openDemoPanel('patient');
 }
 
 function goStep(n) {
