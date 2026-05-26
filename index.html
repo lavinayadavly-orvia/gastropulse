@@ -444,6 +444,7 @@ button.link-code:hover{color:var(--brand)}
   <div class="nav-item" onclick="showPage('pro-links',this)" id="nav-pro-links"><i class="ti ti-link"></i>PRO Links</div>
   <div class="sidebar-section" id="nav-section-dr" style="display:none">Doctor</div>
   <div class="nav-item" onclick="showPage('my-studies',this)" id="nav-my-studies" style="display:none"><i class="ti ti-clipboard-list"></i>My Studies</div>
+  <div class="nav-item" onclick="showPage('my-vignettes',this)" id="nav-my-vignettes" style="display:none"><i class="ti ti-clipboard-pulse"></i>My Vignettes</div>
   <div class="nav-item" onclick="showPage('my-patients',this)" id="nav-my-patients" style="display:none"><i class="ti ti-users"></i>My Patients</div>
 </div>
 
@@ -1229,6 +1230,10 @@ button.link-code:hover{color:var(--brand)}
                 <button class="btn btn-sm" onclick="openSurveyModal()"><i class="ti ti-edit"></i>Fill Survey</button>
               </div>
               <div class="doctor-task">
+                <div><div class="doctor-task-title">HCP Vignette Survey</div><div class="doctor-task-sub">NAFLD, GERD, and IBS clinical decision vignettes · 36 questions</div></div>
+                <button class="btn btn-sm btn-primary" onclick="switchRole('doctor',{classList:{add:function(){}}});showPage('my-vignettes',document.getElementById('nav-my-vignettes'))"><i class="ti ti-clipboard-pulse"></i>Open Vignettes</button>
+              </div>
+              <div class="doctor-task">
                 <div><div class="doctor-task-title">IBS-D KAP Survey 2025</div><div class="doctor-task-sub">Submitted 22 Jan 2025 · response locked</div></div>
                 <button class="btn btn-sm" onclick="showToast('Submitted response opened','ti-eye')"><i class="ti ti-eye"></i>View</button>
               </div>
@@ -1356,8 +1361,48 @@ button.link-code:hover{color:var(--brand)}
     <tbody>
       <tr><td><b style="font-weight:500">IBS-D KAP Survey 2025</b></td><td><span class="badge badge-info">KAP</span></td><td><span class="badge badge-success">Completed</span></td><td>30 Jun 2025</td><td><button class="btn btn-sm btn-primary" onclick="showToast('Response submitted — thank you','ti-check')"><i class="ti ti-eye"></i>View Response</button></td></tr>
       <tr><td><b style="font-weight:500">IBS-D PRO — QoL Assessment</b></td><td><span class="badge badge-gray">PRO</span></td><td><span class="badge badge-info">Active</span></td><td>30 Jun 2025</td><td><button class="btn btn-sm btn-primary" onclick="showPage('my-patients',document.getElementById('nav-my-patients'))"><i class="ti ti-users"></i>Manage Patients</button></td></tr>
+      <tr><td><b style="font-weight:500">HCP Vignette Survey</b><div class="program-name-sub">Vignette NAFLD · Vignette GERD · Vignette IBS</div></td><td><span class="badge badge-info">Vignette</span></td><td><span class="badge badge-warn">In Progress</span></td><td>30 Sep 2025</td><td><button class="btn btn-sm btn-primary" onclick="showPage('my-vignettes',document.getElementById('nav-my-vignettes'))"><i class="ti ti-clipboard-pulse"></i>Open Vignettes</button></td></tr>
       <tr><td><b style="font-weight:500">H. pylori Eradication Survey</b></td><td><span class="badge badge-info">KAP</span></td><td><span class="badge badge-warn">Pending</span></td><td>30 Sep 2025</td><td><button class="btn btn-sm btn-primary" onclick="openSurveyModal()"><i class="ti ti-edit"></i>Fill Survey</button></td></tr>
     </tbody></table>
+  </div>
+</div>
+
+<!-- =================== DOCTOR VIEW: MY VIGNETTES =================== -->
+<div class="page" id="page-my-vignettes">
+  <div class="page-header">
+    <div>
+      <div class="page-title">My Vignette Surveys</div>
+      <div class="page-sub">Dr. Rajesh Kumar · Specialist HCP response workspace</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn" onclick="resetDoctorHcpSurvey()"><i class="ti ti-refresh"></i>Reset Selected</button>
+      <button class="btn" onclick="submitDoctorHcpSurvey()"><i class="ti ti-circle-check"></i>Submit Summary</button>
+      <button class="btn btn-primary" onclick="exportHcpPDF()"><i class="ti ti-file-type-pdf"></i>Export PDF</button>
+    </div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric"><div class="metric-val" id="doctor-hcp-active">NAFLD</div><div class="metric-lbl">Selected Vignette</div><div class="metric-delta delta-up">Click a card below to switch</div></div>
+    <div class="metric"><div class="metric-val" id="doctor-hcp-progress">0%</div><div class="metric-lbl">Selected Completion</div><div class="metric-delta">Answers autosave in this prototype</div></div>
+    <div class="metric"><div class="metric-val" id="doctor-hcp-overall">0/36</div><div class="metric-lbl">Overall Response</div><div class="metric-delta">All three vignettes assigned</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Assigned Vignettes</div>
+    <div class="vignette-selector-grid" id="doctor-hcp-selector"></div>
+  </div>
+
+  <div id="doctor-hcp-body"></div>
+
+  <div class="card vignette-summary" id="doctor-hcp-summary">
+    <div class="card-title">Doctor Vignette Submission Summary</div>
+    <div id="doctor-hcp-summary-copy" style="font-size:13px;color:#60768B;line-height:1.55"></div>
+    <div class="summary-score-grid" id="doctor-hcp-summary-grid"></div>
+    <div class="finding-list" id="doctor-hcp-summary-actions"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;flex-wrap:wrap">
+      <button class="btn" onclick="resetDoctorHcpSurvey()"><i class="ti ti-refresh"></i>Reset Selected</button>
+      <button class="btn btn-primary" onclick="exportHcpPDF()"><i class="ti ti-file-type-pdf"></i>Export PDF</button>
+    </div>
   </div>
 </div>
 
@@ -1647,6 +1692,7 @@ const hcpVignettes = [
 ];
 let hcpAnswers = {};
 let activeHcpVignette = 'nafld';
+let activeDoctorHcpVignette = 'nafld';
 
 function renderHcpSurvey() {
   const body = document.getElementById('hcp-vignette-body');
@@ -1767,6 +1813,114 @@ function resetHcpSurvey() {
 function exportHcpPDF() {
   showToast('Opening print dialog for PDF export','file-type-pdf');
   setTimeout(() => window.print(), 250);
+}
+
+function isHcpAnswered(q) {
+  const a = hcpAnswers[q[0]];
+  if(q[2] === 'matrix') return a && Object.keys(a).length > 0;
+  if(Array.isArray(a)) return a.length > 0;
+  return a !== undefined && a !== '';
+}
+
+function answeredHcpQuestionsForVignette(vignette) {
+  return vignette.qs.filter(isHcpAnswered).length;
+}
+
+function renderDoctorHcpSurvey() {
+  const selector = document.getElementById('doctor-hcp-selector');
+  const body = document.getElementById('doctor-hcp-body');
+  if(!body) return;
+  const selected = hcpVignettes.find(v => v.key === activeDoctorHcpVignette) || hcpVignettes[0];
+
+  if(selector) {
+    selector.innerHTML = hcpVignettes.map(v => {
+      const answered = answeredHcpQuestionsForVignette(v);
+      return `<button class="vignette-select-card ${v.key === activeDoctorHcpVignette ? 'active' : ''}" onclick="selectDoctorHcpVignette('${v.key}')">
+        <i class="ti ${v.key === 'nafld' ? 'ti-liver' : v.key === 'gerd' ? 'ti-stomach' : 'ti-brain'}"></i>
+        <b>${escapeHtml(v.title)}</b>
+        <span>${answered}/${v.qs.length} answered · ${v.short} specialist scenario</span>
+      </button>`;
+    }).join('');
+  }
+
+  body.innerHTML = `
+    <div class="qual-question-section" id="doctor-hcp-vig-${selected.key}">
+      <h3>${escapeHtml(selected.title)}</h3>
+      <p>This is the doctor-facing response screen for the assigned HCP Vignette Survey. Select the answer that best reflects current real-world practice.</p>
+      <div class="vignette-case"><b>Clinical profile</b>${selected.caseLines.map(line => `<p>${escapeHtml(line)}</p>`).join('')}</div>
+      ${selected.qs.map((q, idx) => {
+        const key = q[0];
+        if(q[2] === 'open') {
+          return `<div class="vignette-question"><div class="questionnaire-item-head"><span class="q-num">${idx + 1}</span><div><div class="questionnaire-text">${escapeHtml(q[1])}</div><div class="question-meta"><span class="badge badge-info">${escapeHtml(selected.short)}</span><span class="badge badge-gray">Open text</span></div></div></div><textarea class="vignette-open" oninput="setDoctorHcpOpen('${key}',this.value)" placeholder="Type response...">${escapeHtml(hcpAnswers[key] || '')}</textarea></div>`;
+        }
+        const options = q[2] === 'matrix' ? ['Very important','Important','Not important','N/A'] : q[3];
+        return `<div class="vignette-question"><div class="questionnaire-item-head"><span class="q-num">${idx + 1}</span><div><div class="questionnaire-text">${escapeHtml(q[1])}</div><div class="question-meta"><span class="badge badge-info">${escapeHtml(selected.short)}</span><span class="badge badge-gray">${q[2] === 'multi' ? 'Multi-select' : q[2] === 'matrix' ? 'Factor rating' : q[2] === 'scale' ? 'Scale' : 'Single choice'}</span></div></div></div>
+          ${q[2] === 'matrix' ? `<div style="margin-left:34px">${q[3].map(f => `<div class="link-preview-row"><div><b>${escapeHtml(f)}</b><span>Rate importance</span></div><select style="max-width:170px" onchange="setDoctorHcpMatrix('${key}','${escapeHtml(f)}',this.value)"><option></option>${options.map(o => `<option ${hcpAnswers[key]?.[f] === o ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('')}</select></div>`).join('')}</div>` : `<div class="vignette-answer-row">${options.map((opt, optIdx) => `<button class="vignette-answer ${isHcpSelected(key, optIdx) ? 'selected' : ''}" onclick="selectDoctorHcpAnswer('${key}',${optIdx},'${q[2]}',this)">${escapeHtml(opt)}</button>`).join('')}</div>`}
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+  updateDoctorHcpProgress();
+}
+
+function updateDoctorHcpProgress() {
+  const selected = hcpVignettes.find(v => v.key === activeDoctorHcpVignette) || hcpVignettes[0];
+  const selectedAnswered = answeredHcpQuestionsForVignette(selected);
+  const overallAnswered = answeredHcpQuestions();
+  const active = document.getElementById('doctor-hcp-active');
+  const progress = document.getElementById('doctor-hcp-progress');
+  const overall = document.getElementById('doctor-hcp-overall');
+  if(active) active.textContent = selected.short;
+  if(progress) progress.textContent = Math.round((selectedAnswered / selected.qs.length) * 100) + '%';
+  if(overall) overall.textContent = `${overallAnswered}/${totalHcpQuestions()}`;
+  const summary = document.getElementById('doctor-hcp-summary');
+  if(summary) summary.classList.remove('show');
+}
+
+function selectDoctorHcpVignette(key) {
+  activeDoctorHcpVignette = key;
+  renderDoctorHcpSurvey();
+  const body = document.getElementById('doctor-hcp-body');
+  if(body) body.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function selectDoctorHcpAnswer(key, idx, type, el) {
+  selectHcpAnswer(key, idx, type, el);
+  renderDoctorHcpSurvey();
+}
+
+function setDoctorHcpOpen(key, value) {
+  setHcpOpen(key, value);
+  updateDoctorHcpProgress();
+}
+
+function setDoctorHcpMatrix(key, factor, value) {
+  setHcpMatrix(key, factor, value);
+  renderDoctorHcpSurvey();
+}
+
+function submitDoctorHcpSurvey() {
+  const selected = hcpVignettes.find(v => v.key === activeDoctorHcpVignette) || hcpVignettes[0];
+  const selectedAnswered = answeredHcpQuestionsForVignette(selected);
+  const overallAnswered = answeredHcpQuestions();
+  const summary = document.getElementById('doctor-hcp-summary');
+  document.getElementById('doctor-hcp-summary-copy').innerHTML = `<b>${selectedAnswered}/${selected.qs.length}</b> questions answered for ${escapeHtml(selected.title)}. Overall HCP survey progress is <b>${overallAnswered}/${totalHcpQuestions()}</b> across assigned vignette screens.`;
+  document.getElementById('doctor-hcp-summary-grid').innerHTML = hcpVignettes.map(v => `<div class="summary-score"><b>${answeredHcpQuestionsForVignette(v)}/${v.qs.length}</b><span>${escapeHtml(v.title)}</span></div>`).join('');
+  document.getElementById('doctor-hcp-summary-actions').innerHTML = `
+    <div class="finding">Submission status<span>${selectedAnswered === selected.qs.length ? 'The selected vignette is complete and ready to submit.' : 'The selected vignette is partially complete. Missing questions remain available above.'}</span></div>
+    <div class="finding">Doctor visibility<span>Your response is treated as an HCP survey response. Patient information is not part of this screen.</span></div>
+    <div class="finding">Next action<span>Switch indication cards to complete the remaining vignette screens, or export the current response as PDF.</span></div>
+  `;
+  summary.classList.add('show');
+  summary.scrollIntoView({behavior:'smooth',block:'start'});
+  showToast('Doctor vignette summary generated','check');
+}
+
+function resetDoctorHcpSurvey() {
+  const selected = hcpVignettes.find(v => v.key === activeDoctorHcpVignette) || hcpVignettes[0];
+  selected.qs.forEach(q => delete hcpAnswers[q[0]]);
+  renderDoctorHcpSurvey();
+  showToast(`${selected.title} reset`,'refresh');
 }
 
 function openQualSurvey(linkId) {
@@ -1941,9 +2095,9 @@ function switchRole(role, el) {
   document.getElementById('nav-user').textContent = users[role];
 
   const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics','qual-life','qual-survey','hcp-vignette'];
-  const doctorPages = ['my-studies','my-patients'];
+  const doctorPages = ['my-studies','my-vignettes','my-patients'];
   const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics','nav-demo','nav-qual-life','nav-hcp-vignette'];
-  const doctorNavs = ['nav-my-studies','nav-my-patients'];
+  const doctorNavs = ['nav-my-studies','nav-my-vignettes','nav-my-patients'];
 
   if(role === 'admin') {
     adminNavs.forEach(id => { let el = document.getElementById(id); if(el) el.style.display=''; });
@@ -2012,6 +2166,7 @@ function showPage(id, navEl, skipHash) {
   if(id === 'demo') openDemoPanel('patient');
   if(id === 'qual-survey') renderQualSurvey();
   if(id === 'hcp-vignette') renderHcpSurvey();
+  if(id === 'my-vignettes') renderDoctorHcpSurvey();
   if(!skipHash) setRouteHash(id);
 }
 
