@@ -510,20 +510,20 @@ button.link-code:hover{color:var(--brand)}
         <div class="questionnaire-options"><span>Never</span><span>Rarely</span><span>Several days</span><span>Most days</span><span>Every day</span></div>
       </div>
       <div class="questionnaire-item">
-        <div class="questionnaire-item-head"><span class="q-num">2</span><div><div class="questionnaire-text">Over the past 2 weeks, how often have you felt anxious, nervous, or on edge?</div><div class="question-meta"><span class="badge badge-info">Mental Wellbeing</span><span class="badge badge-gray">PHQ/GAD proxy</span></div></div></div>
+        <div class="questionnaire-item-head"><span class="q-num">2</span><div><div class="questionnaire-text">Over the past 2 weeks, how often have you felt worried, tense, or unsettled?</div><div class="question-meta"><span class="badge badge-info">Mental Wellbeing</span><span class="badge badge-gray">PHQ/GAD proxy</span></div></div></div>
         <div class="questionnaire-options"><span>Not at all</span><span>A few days</span><span>About half the days</span><span>More than half</span><span>Nearly every day</span></div>
       </div>
       <div class="questionnaire-item">
-        <div class="questionnaire-item-head"><span class="q-num">3</span><div><div class="questionnaire-text">How much has your GI condition affected your ability to work or study in the past month?</div><div class="question-meta"><span class="badge badge-info">Functional QoL</span><span class="badge badge-gray">Scale</span></div></div></div>
-        <div class="questionnaire-options"><span>No impact</span><span>Slight</span><span>Moderate</span><span>Considerable</span><span>Unable</span></div>
+        <div class="questionnaire-item-head"><span class="q-num">3</span><div><div class="questionnaire-text">How much has your GI condition affected your work or study routine in the past month?</div><div class="question-meta"><span class="badge badge-info">Functional QoL</span><span class="badge badge-gray">Scale</span></div></div></div>
+        <div class="questionnaire-options"><span>No impact</span><span>Slight</span><span>Moderate</span><span>Considerable</span><span>Not able</span></div>
       </div>
       <div class="questionnaire-item">
         <div class="questionnaire-item-head"><span class="q-num">4</span><div><div class="questionnaire-text">Have you ever skipped, reduced, or stopped taking prescribed medication because of financial burden?</div><div class="question-meta"><span class="badge badge-warn">Financial Stress</span><span class="badge badge-gray">Yes/No</span></div></div></div>
         <div class="questionnaire-options"><span>Yes</span><span>No</span></div>
       </div>
       <div class="questionnaire-item">
-        <div class="questionnaire-item-head"><span class="q-num">5</span><div><div class="questionnaire-text">How satisfied are you with how well your current treatment controls your GI symptoms?</div><div class="question-meta"><span class="badge badge-success">Treatment Experience</span><span class="badge badge-gray">Scale</span></div></div></div>
-        <div class="questionnaire-options"><span>Very satisfied</span><span>Satisfied</span><span>Neutral</span><span>Dissatisfied</span><span>Very dissatisfied</span></div>
+        <div class="questionnaire-item-head"><span class="q-num">5</span><div><div class="questionnaire-text">How would you rate how well your current treatment supports control of your GI symptoms?</div><div class="question-meta"><span class="badge badge-success">Treatment Experience</span><span class="badge badge-gray">Scale</span></div></div></div>
+        <div class="questionnaire-options"><span>Very well</span><span>Well</span><span>Neutral</span><span>Not very well</span><span>Not well</span></div>
       </div>
       <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="showToast('Full 30-question instrument loaded from Gastro QualLife survey','ti-clipboard-list')"><i class="ti ti-clipboard-list"></i>Full instrument: 30 questions across 5 domains</button>
     </div>
@@ -1321,7 +1321,7 @@ const patientDemoQuestions = [
   {
     section:'Symptom Severity',
     question:'How would you rate your abdominal pain or discomfort in the last 7 days?',
-    options:['None','Mild','Moderate','Severe','Very severe']
+    options:['None','Mild','Moderate','High','Very high']
   },
   {
     section:'Quality of Life',
