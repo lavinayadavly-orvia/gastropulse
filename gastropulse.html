@@ -558,7 +558,7 @@ button.link-code:hover{color:var(--brand)}
       <div>
         <div class="lab-eyebrow">National diagnostic network · Real-world evidence · Gastroenterology vertical</div>
         <div class="lab-title">The GI lab landscape, <span>at a glance</span></div>
-        <div class="lab-copy">A clinician-facing view of how India tests for gastrointestinal disease: what is ordered, what comes back abnormal, where guideline-concordant workup is happening, and where the care gaps quietly sit.</div>
+        <div class="lab-copy">A clinician-facing view of GI diagnostic ordering and result patterns: test volume, abnormality rates among tested patients, guideline-concordant workup signals, and potential gaps requiring validation.</div>
       </div>
       <div class="lab-updated">
         Last updated
@@ -623,9 +623,9 @@ button.link-code:hover{color:var(--brand)}
         </div>
         <div class="lab-card deep" style="grid-column:span 12">
           <div class="lab-insights">
-            <div><div class="lab-insight-rule"></div><div class="lab-eyebrow">Headline finding · 01</div><h3>Liver dominates, but the growth story is inflammation.</h3><p>LFT remains the workhorse at 27.8% mix, while fecal calprotectin volume shows the steepest curve in GI lab demand.</p></div>
-            <div><div class="lab-insight-rule" style="background:#C9A23B"></div><div class="lab-eyebrow">Headline finding · 02</div><h3>H. pylori positivity stays stubbornly high.</h3><p>Five of six Indian zones report stool-antigen positivity above 60%, with East and North-East crossing 74%.</p></div>
-            <div><div class="lab-insight-rule" style="background:#6B8E4E"></div><div class="lab-eyebrow">Headline finding · 03</div><h3>Molecular testing in GI cancers is the quietest gap.</h3><p>MSI in stage II-III CRC sits at 47% of guideline-eligible cases. HER2 in gastric is 58%.</p></div>
+            <div><div class="lab-insight-rule"></div><div class="lab-eyebrow">Observed pattern · 01</div><h3>Liver function testing represents the largest share of GI-related lab volume.</h3><p>In this illustrative diagnostic-network cohort, LFTs account for 27.8% of GI-relevant orders. Fecal calprotectin shows a higher relative month-on-month increase, but this reflects ordering growth among tested patients, not disease incidence.</p></div>
+            <div><div class="lab-insight-rule" style="background:#C9A23B"></div><div class="lab-eyebrow">Observed pattern · 02</div><h3>H. pylori stool-antigen positivity varies materially by region.</h3><p>Among patients who were tested, regional positivity ranges from 56% to 78% in the simulated dataset. These values should be interpreted as denominator-of-tested rates and may be affected by referral, symptom, and access bias.</p></div>
+            <div><div class="lab-insight-rule" style="background:#6B8E4E"></div><div class="lab-eyebrow">Observed pattern · 03</div><h3>GI oncology biomarker testing appears below guideline-eligible targets.</h3><p>Modelled uptake is 47% for MSI/MMR testing in stage II-III CRC and 58% for HER2 testing in gastric/GEJ cancer. The appropriate interpretation is a potential testing-completeness gap, not a confirmed treatment gap.</p></div>
           </div>
         </div>
       </div>
@@ -636,13 +636,13 @@ button.link-code:hover{color:var(--brand)}
         <div class="lab-card" style="grid-column:span 7"><div class="lab-eyebrow">LFT abnormality patterns</div><h3>When liver enzymes are abnormal, what shape do they take?</h3><p>Distribution of abnormal LFT panels by canonical biochemical pattern.</p><div class="lab-chart"><canvas id="labLftPatternChart"></canvas></div></div>
         <div class="lab-card" style="grid-column:span 5"><div class="lab-eyebrow">Viral hepatitis seroprevalence</div><h3>HBsAg and anti-HCV positivity climbs with age</h3><p>% of tested patients positive, by age band.</p><div class="lab-chart"><canvas id="labHepatitisAgeChart"></canvas></div></div>
         <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">MASLD / NAFLD signal</div><h3>The steady upward drift of metabolic liver disease</h3><p>ALT >2x ULN rate, fatty liver index proxies, and GGT elevation are rising annually.</p><div class="lab-chart-sm"><canvas id="labNafldSignalChart"></canvas></div></div>
-        <div class="lab-card deep" style="grid-column:span 12"><div class="lab-insights"><div><div class="lab-insight-rule"></div><div class="lab-eyebrow">Hepatology · so what</div><h3>The metabolic liver story is now the dominant one.</h3><p>The hepatocellular pattern accounts for nearly 58% of abnormal LFTs.</p></div><div><div class="lab-insight-rule" style="background:#C9A23B"></div><div class="lab-eyebrow">Workflow implication</div><h3>Reflex panels for incidental ALT elevation are likely under-utilized.</h3><p>Only about one-third proceed to structured workup with fibrosis and viral markers.</p></div><div><div class="lab-insight-rule" style="background:#6B8E4E"></div><div class="lab-eyebrow">Commercial use</div><h3>MASLD education can be regionally targeted.</h3><p>Signals can shape HCP education around fibrosis screening and metabolic comorbidity evaluation.</p></div></div></div>
+        <div class="lab-card deep" style="grid-column:span 12"><div class="lab-insights"><div><div class="lab-insight-rule"></div><div class="lab-eyebrow">Hepatology · interpretation</div><h3>Hepatocellular LFT patterns are the largest subgroup in abnormal LFT panels.</h3><p>In this illustrative cohort, isolated or combined ALT elevation accounts for approximately 58% of abnormal LFT panels. Etiology cannot be inferred from enzymes alone.</p></div><div><div class="lab-insight-rule" style="background:#C9A23B"></div><div class="lab-eyebrow">Workflow signal</div><h3>Structured follow-up after incidental ALT elevation may be incomplete.</h3><p>Approximately one-third of modelled ALT-elevation episodes proceed to fibrosis or viral marker workup. This should be treated as a hypothesis for audit, not a confirmed care-quality measure.</p></div><div><div class="lab-insight-rule" style="background:#6B8E4E"></div><div class="lab-eyebrow">Education signal</div><h3>Regional variation can inform HCP education planning.</h3><p>Filtered lab patterns can identify where fibrosis-risk assessment and metabolic comorbidity evaluation may need clearer clinical education.</p></div></div></div>
       </div>
     </div>
 
     <div class="lab-tab-panel" id="lab-panel-uppergi" style="display:none">
       <div class="lab-grid">
-        <div class="lab-card" style="grid-column:span 6"><div class="lab-eyebrow">H. pylori positivity · regional</div><h3>A north-south gradient that does not go away</h3><p>Stool antigen positivity by Indian zone among tested adults.</p><div class="lab-chart"><canvas id="labHpyloriRegionChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 6"><div class="lab-eyebrow">H. pylori positivity · regional</div><h3>Regional variation in stool-antigen positivity among tested patients</h3><p>Rates are calculated only among patients who received testing; they should not be interpreted as population prevalence.</p><div class="lab-chart"><canvas id="labHpyloriRegionChart"></canvas></div></div>
         <div class="lab-card" style="grid-column:span 6"><div class="lab-eyebrow">Dyspepsia workup</div><h3>The de-facto dyspepsia panel in practice</h3><p>Share of dyspepsia-coded encounters where each test is ordered within 30 days.</p><div class="lab-chart"><canvas id="labDyspepsiaChart"></canvas></div></div>
         <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">Celiac serology · detection trajectory</div><h3>Testing is up sharply, positivity rate is steady</h3><p>Volume of tTG-IgA orders versus % positive over five years.</p><div class="lab-chart-sm"><canvas id="labCeliacChart"></canvas></div></div>
       </div>
@@ -660,7 +660,7 @@ button.link-code:hover{color:var(--brand)}
       <div class="lab-grid">
         <div class="lab-card" style="grid-column:span 5"><div class="lab-eyebrow">Tumor marker activity</div><h3>Volume x abnormality across GI markers</h3><p>Order share and abnormality rate across the five GI markers.</p><div class="lab-chart"><canvas id="labTumorMarkerChart"></canvas></div></div>
         <div class="lab-card" style="grid-column:span 7"><div class="lab-eyebrow">CRC CEA testing</div><h3>CEA testing is rising, but surveillance is rising faster</h3><p>% of guideline-eligible CRC cases receiving CEA, by indication.</p><div class="lab-chart"><canvas id="labCeaTrendChart"></canvas></div></div>
-        <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">Molecular & biomarker uptake</div><h3>Where GI oncology is leaving therapy decisions on the table</h3><div id="lab-molecular-bars"></div></div>
+        <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">Molecular & biomarker uptake</div><h3>Observed testing uptake versus guideline-eligible benchmark</h3><div id="lab-molecular-bars"></div></div>
       </div>
     </div>
 
