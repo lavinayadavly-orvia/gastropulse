@@ -1424,14 +1424,40 @@ function openPatientQuestionnaire(linkId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('patient-link-id').textContent = linkId || 'PRO-2025-0042';
   document.getElementById('page-patient').classList.add('active');
-  window.location.hash = 'patient';
+  setRouteHash(`patient:${linkId || 'PRO-2025-0042'}`);
 }
 
-if(window.location.hash === '#patient') {
-  openPatientQuestionnaire('PRO-2025-0042');
+function setRouteHash(route) {
+  const nextHash = '#' + encodeURIComponent(route);
+  if(window.location.hash !== nextHash) {
+    history.replaceState(null, '', nextHash);
+  }
 }
 
-function showPage(id, navEl) {
+function pageRouteNav(id) {
+  return document.getElementById('nav-' + id) || document.getElementById('nav-studies');
+}
+
+function initRouteFromHash() {
+  const route = decodeURIComponent((window.location.hash || '').replace(/^#/, ''));
+  if(!route) return;
+  if(route.startsWith('patient')) {
+    const linkId = route.split(':')[1] || 'PRO-2025-0042';
+    openPatientQuestionnaire(linkId);
+    return;
+  }
+  if(route.startsWith('study-detail')) {
+    const studyId = route.split(':')[1] || 'ibs-kap';
+    openStudyDetail(studyId);
+    return;
+  }
+  if(document.getElementById('page-' + route)) {
+    showPage(route, pageRouteNav(route), true);
+  }
+}
+
+function showPage(id, navEl, skipHash) {
+  document.getElementById('app').classList.remove('patient-link-mode');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const pg = document.getElementById('page-'+id);
@@ -1439,6 +1465,7 @@ function showPage(id, navEl) {
   if(navEl) navEl.classList.add('active');
   if(id === 'analytics') renderAnalysisDashboard();
   if(id === 'demo') openDemoPanel('patient');
+  if(!skipHash) setRouteHash(id);
 }
 
 function goStep(n) {
@@ -1789,6 +1816,7 @@ function openStudyDetail(id='ibs-kap') {
   document.getElementById('detail-kind').textContent = d.type;
   renderQuestionnaire(id);
   showPage('study-detail', document.getElementById('nav-studies'));
+  setRouteHash(`study-detail:${id}`);
   switchDetailTab('overview', document.getElementById('detail-tab-overview'));
 }
 
@@ -1806,6 +1834,7 @@ window.switchDetailTab = switchDetailTab;
 window.renderQuestionnaire = renderQuestionnaire;
 window.renderAnalysisDashboard = renderAnalysisDashboard;
 window.selectAnalysisProgram = selectAnalysisProgram;
+window.addEventListener('DOMContentLoaded', initRouteFromHash);
 
 function generateLinks() {
   closeModal('modal-pro');
