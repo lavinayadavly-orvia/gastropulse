@@ -111,43 +111,6 @@ body{font-family:var(--font-sans,'system-ui');background:#F3F7FB;min-height:100v
 .home-card .ti{font-size:24px;color:var(--brand)}
 .home-card-title{font-size:16px;font-weight:720;color:#10283E;margin-top:12px}
 .home-card-sub{font-size:13px;color:#486176;margin-top:6px;line-height:1.42}
-.home-visual{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:1rem;margin:1.2rem 1.8rem 1.7rem;min-height:300px}
-.home-visual-panel{position:relative;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:1rem;backdrop-filter:blur(10px);box-shadow:0 18px 44px rgba(0,0,0,.13);overflow:hidden}
-.home-visual-panel::after{content:'';position:absolute;right:-70px;bottom:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(153,246,228,.28),transparent 68%);pointer-events:none}
-.visual-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;color:#fff}
-.visual-panel-head b{font-size:14px}
-.visual-panel-head span{font-size:11px;color:rgba(255,255,255,.72)}
-.visual-chart{height:150px;display:flex;align-items:flex-end;gap:11px;padding:12px 10px 6px;border-radius:12px;background:rgba(3,59,58,.24);border:1px solid rgba(255,255,255,.08)}
-.visual-bar{flex:1;min-width:22px;border-radius:9px 9px 4px 4px;background:linear-gradient(180deg,#CCFBF1,#14A37F);box-shadow:0 8px 18px rgba(20,163,127,.23);animation:barPulse 4s ease-in-out infinite alternate;position:relative}
-.visual-bar:nth-child(2){animation-delay:.3s;background:linear-gradient(180deg,#E0F2FE,#38BDF8)}
-.visual-bar:nth-child(3){animation-delay:.7s}
-.visual-bar:nth-child(4){animation-delay:1s;background:linear-gradient(180deg,#FEF3C7,#F59E0B)}
-.visual-bar:nth-child(5){animation-delay:1.3s}
-.visual-bar:nth-child(6){animation-delay:1.6s;background:linear-gradient(180deg,#E0F2FE,#38BDF8)}
-.visual-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-.flow-card{background:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.86);border-radius:12px;padding:10px;color:#10283E;min-height:82px}
-.flow-card i{font-size:19px;color:#064E4A;margin-bottom:6px}
-.flow-card b{display:block;font-size:12px}
-.flow-card span{display:block;font-size:11px;color:#60768B;margin-top:3px;line-height:1.35}
-.home-illustration{position:relative;min-height:300px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.15));border:1px solid rgba(255,255,255,.16);overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.10)}
-.pulse-orb{position:absolute;width:210px;height:210px;border-radius:50%;left:50%;top:34%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 30%,#D9FFF7,#6EE7D8 46%,#0F766E 72%);box-shadow:0 0 0 18px rgba(204,251,241,.08),0 0 0 42px rgba(204,251,241,.05);animation:pulseOrb 4.6s ease-in-out infinite}
-.pulse-ring{position:absolute;left:50%;top:34%;width:260px;height:260px;border:2px solid rgba(204,251,241,.32);border-radius:50%;transform:translate(-50%,-50%);animation:ringSpin 11s linear infinite}
-.pulse-ring::before,.pulse-ring::after{content:'';position:absolute;width:13px;height:13px;border-radius:50%;background:#CCFBF1;box-shadow:0 0 18px rgba(204,251,241,.75)}
-.pulse-ring::before{left:26px;top:36px}
-.pulse-ring::after{right:28px;bottom:42px}
-.floating-widget{position:absolute;background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.85);border-radius:12px;padding:10px 12px;box-shadow:0 14px 28px rgba(3,59,58,.18);color:#10283E;animation:widgetFloat 5.8s ease-in-out infinite alternate}
-.floating-widget i{color:#064E4A;font-size:18px}
-.floating-widget b{display:block;font-size:12px;margin-top:5px}
-.floating-widget span{display:block;font-size:10px;color:#60768B;margin-top:2px}
-.floating-widget.one{left:8%;top:18%}
-.floating-widget.two{right:7%;top:20%;animation-delay:.8s}
-.floating-widget.three{left:14%;bottom:18%;animation-delay:1.4s}
-.floating-widget.four{right:11%;bottom:16%;animation-delay:2s}
-.connection-line{position:absolute;height:2px;background:linear-gradient(90deg,transparent,rgba(204,251,241,.7),transparent);transform-origin:left center;opacity:.72;animation:lineGlow 3s ease-in-out infinite alternate}
-.connection-line.a{width:190px;left:23%;top:27%;transform:rotate(12deg)}
-.connection-line.b{width:170px;right:22%;top:31%;transform:rotate(-16deg)}
-.connection-line.c{width:160px;left:24%;bottom:29%;transform:rotate(-18deg)}
-.connection-line.d{width:160px;right:23%;bottom:28%;transform:rotate(19deg)}
 .signal-panel{position:absolute;right:1.8rem;top:1.6rem;width:260px;z-index:2;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);border-radius:14px;padding:14px;backdrop-filter:blur(10px);box-shadow:0 16px 38px rgba(0,0,0,.12)}
 .signal-row{display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.86);font-size:12px;margin-bottom:10px}
 .signal-line{height:7px;border-radius:999px;background:rgba(255,255,255,.14);overflow:hidden}
@@ -158,11 +121,6 @@ body{font-family:var(--font-sans,'system-ui');background:#F3F7FB;min-height:100v
 @keyframes gridSlide{0%{background-position:0 0}100%{background-position:84px 42px}}
 @keyframes orbitDrift{0%{transform:translate3d(0,0,0) scale(1);opacity:.55}100%{transform:translate3d(-24px,18px,0) scale(1.08);opacity:.9}}
 @keyframes floatGlow{0%{transform:translate3d(-1%,0,0) rotate(0deg)}100%{transform:translate3d(2%,1%,0) rotate(4deg)}}
-@keyframes barPulse{0%{transform:scaleY(.84);filter:saturate(.9)}100%{transform:scaleY(1);filter:saturate(1.12)}}
-@keyframes pulseOrb{0%,100%{transform:translate(-50%,-50%) scale(.96)}50%{transform:translate(-50%,-50%) scale(1.05)}}
-@keyframes ringSpin{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
-@keyframes widgetFloat{0%{transform:translateY(0)}100%{transform:translateY(-12px)}}
-@keyframes lineGlow{0%{opacity:.28}100%{opacity:.9}}
 .program-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-bottom:1rem}
 .program-card{background:#fff;border:1px solid #E1EAF3;border-radius:14px;padding:1rem;cursor:pointer;box-shadow:0 12px 28px rgba(13,58,108,.065);transition:all .16s}
 .program-card:hover{border-color:#5EEAD4;transform:translateY(-2px);box-shadow:0 18px 34px rgba(13,58,108,.11)}
@@ -383,7 +341,6 @@ button.link-code:hover{color:var(--brand)}
 .role-label{font-size:11px;color:#fff;opacity:.55;margin-right:4px}
 @media (max-width:1100px){
   .home-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .home-visual{grid-template-columns:1fr;margin:1rem 1.2rem 1.3rem}
   .demo-shell,.phone-wrap,.doctor-preview{grid-template-columns:1fr}
   .demo-menu{position:relative}
   .response-grid,.demo-note-grid{grid-template-columns:1fr}
@@ -452,39 +409,6 @@ button.link-code:hover{color:var(--brand)}
         <div><i class="ti ti-plus"></i><div class="home-card-title">Create a New Program</div><div class="home-card-sub">Set up a new KAP, PRO, or registry workflow with audience and instruments.</div></div>
         <span class="badge badge-gray">Start</span>
       </div>
-    </div>
-  </div>
-  <div class="home-visual" aria-hidden="true">
-    <div class="home-visual-panel">
-      <div class="visual-panel-head">
-        <div><b>Live Research Intelligence</b><span>Questionnaire signals converting into evidence</span></div>
-        <span class="badge badge-success">Streaming</span>
-      </div>
-      <div class="visual-chart">
-        <div class="visual-bar" style="height:42%"></div>
-        <div class="visual-bar" style="height:68%"></div>
-        <div class="visual-bar" style="height:54%"></div>
-        <div class="visual-bar" style="height:78%"></div>
-        <div class="visual-bar" style="height:62%"></div>
-        <div class="visual-bar" style="height:88%"></div>
-      </div>
-      <div class="visual-flow">
-        <div class="flow-card"><i class="ti ti-clipboard-list"></i><b>Survey sent</b><span>Doctor KAP and PRO instruments go live.</span></div>
-        <div class="flow-card"><i class="ti ti-device-mobile"></i><b>Patient link</b><span>No login, initials-only tracking.</span></div>
-        <div class="flow-card"><i class="ti ti-chart-dots"></i><b>Insights</b><span>Every response feeds question tiles.</span></div>
-      </div>
-    </div>
-    <div class="home-illustration">
-      <div class="connection-line a"></div>
-      <div class="connection-line b"></div>
-      <div class="connection-line c"></div>
-      <div class="connection-line d"></div>
-      <div class="pulse-ring"></div>
-      <div class="pulse-orb"></div>
-      <div class="floating-widget one"><i class="ti ti-stethoscope"></i><b>Doctors</b><span>580 verified</span></div>
-      <div class="floating-widget two"><i class="ti ti-users"></i><b>Patients</b><span>116 completed</span></div>
-      <div class="floating-widget three"><i class="ti ti-forms"></i><b>Questions</b><span>18 analyzed</span></div>
-      <div class="floating-widget four"><i class="ti ti-bulb"></i><b>Actions</b><span>7 insights</span></div>
     </div>
   </div>
   </div>
