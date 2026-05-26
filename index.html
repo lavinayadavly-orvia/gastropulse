@@ -366,6 +366,16 @@ button.link-code:hover{color:var(--brand)}
 .summary-score{background:#F8FBFE;border:1px solid #E1EAF3;border-radius:12px;padding:12px}
 .summary-score b{display:block;font-size:22px;color:#10283E}
 .summary-score span{font-size:12px;color:#60768B}
+.vignette-case{background:#EAF4F4;border:1px solid #9BCFD0;border-left:7px solid #0D7680;border-radius:12px;padding:1rem;margin-bottom:1rem}
+.vignette-case b{display:block;color:#064E4A;font-size:13px;margin-bottom:6px}
+.vignette-case p{font-size:13px;color:#18344E;line-height:1.55;margin-top:5px}
+.vignette-question{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:12px;margin-bottom:10px}
+.vignette-answer-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:7px;margin-top:10px}
+.vignette-answer{border:1px solid #DCE8F2;background:#F8FBFE;border-radius:9px;padding:9px 10px;font-size:12px;color:#39556F;cursor:pointer;text-align:left;transition:all .12s;font-family:inherit;line-height:1.35}
+.vignette-answer:hover,.vignette-answer.selected{border-color:#0D7680;background:#EAF4F4;color:#064E4A}
+.vignette-open{width:100%;min-height:72px;margin-top:10px;resize:vertical}
+.vignette-summary{display:none}
+.vignette-summary.show{display:block}
 @media print{
   .topnav,.sidebar,.qual-survey-hero .btn,.page-header .btn,.toast{display:none!important}
   .layout,.main{display:block;padding:0;background:#fff}
@@ -415,6 +425,7 @@ button.link-code:hover{color:var(--brand)}
   <div class="nav-item" onclick="showPage('analytics',this)" id="nav-analytics"><i class="ti ti-chart-infographic"></i>Dashboard</div>
   <div class="nav-item" onclick="showPage('demo',this)" id="nav-demo"><i class="ti ti-device-mobile"></i>Demo Screens</div>
   <div class="nav-item" onclick="showPage('qual-life',this)" id="nav-qual-life"><i class="ti ti-heart-pulse"></i>Gastro QualLife</div>
+  <div class="nav-item" onclick="showPage('hcp-vignette',this)" id="nav-hcp-vignette"><i class="ti ti-clipboard-pulse"></i>HCP Vignette Survey</div>
   <div class="nav-item" onclick="showPage('create',this)" id="nav-create"><i class="ti ti-plus"></i>Create Program</div>
   <div class="sidebar-section">Participants</div>
   <div class="nav-item" onclick="showPage('doctors',this)" id="nav-doctors"><i class="ti ti-stethoscope"></i>Doctor List</div>
@@ -462,6 +473,10 @@ button.link-code:hover{color:var(--brand)}
       <div class="home-card" onclick="showPage('qual-life',document.getElementById('nav-qual-life'))">
         <div><i class="ti ti-heart-pulse"></i><div class="home-card-title">Gastro QualLife</div><div class="home-card-sub">Open a GI quality-of-life questionnaire for physicians or direct patient links.</div></div>
         <span class="badge badge-success">Questionnaire</span>
+      </div>
+      <div class="home-card" onclick="showPage('hcp-vignette',document.getElementById('nav-hcp-vignette'))">
+        <div><i class="ti ti-clipboard-pulse"></i><div class="home-card-title">HCP Vignette Survey</div><div class="home-card-sub">Run specialist clinical vignettes across NAFLD, GERD, and IBS decisions.</div></div>
+        <span class="badge badge-info">36 questions</span>
       </div>
       <div class="home-card" onclick="showPage('create',document.getElementById('nav-create'))">
         <div><i class="ti ti-plus"></i><div class="home-card-title">Create a New Program</div><div class="home-card-sub">Set up a new KAP, PRO, or registry workflow with audience and instruments.</div></div>
@@ -1248,6 +1263,66 @@ button.link-code:hover{color:var(--brand)}
   </div>
 </div>
 
+<!-- =================== HCP VIGNETTE SURVEY =================== -->
+<div class="page" id="page-hcp-vignette">
+  <div class="page-header">
+    <div>
+      <div class="page-title">HCP Vignette Survey</div>
+      <div class="page-sub">Vignette-style clinical decision-making questionnaire for gastroenterology specialists</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn" onclick="resetHcpSurvey()"><i class="ti ti-refresh"></i>Reset</button>
+      <button class="btn" onclick="submitHcpSurvey()"><i class="ti ti-circle-check"></i>Submit Summary</button>
+      <button class="btn btn-primary" onclick="exportHcpPDF()"><i class="ti ti-file-type-pdf"></i>Export PDF</button>
+    </div>
+  </div>
+
+  <div class="qual-hero">
+    <div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-info">Specialist edition</span>
+        <span class="badge badge-success">India</span>
+        <span class="badge badge-gray">25-35 minutes</span>
+      </div>
+      <h2>Gastroenterology HCP Survey</h2>
+      <p>Clinical vignettes covering NAFLD/MASLD, GERD, and IBS. Physicians answer based on real-world practice patterns, treatment preferences, evidence gaps, and decision drivers.</p>
+    </div>
+    <div class="qual-actions">
+      <button class="btn" onclick="document.getElementById('hcp-vig-nafld').scrollIntoView({behavior:'smooth'})"><i class="ti ti-liver"></i>NAFLD</button>
+      <button class="btn" onclick="document.getElementById('hcp-vig-gerd').scrollIntoView({behavior:'smooth'})"><i class="ti ti-stomach"></i>GERD</button>
+      <button class="btn" onclick="document.getElementById('hcp-vig-ibs').scrollIntoView({behavior:'smooth'})"><i class="ti ti-brain"></i>IBS</button>
+    </div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric"><div class="metric-val">3</div><div class="metric-lbl">Clinical Vignettes</div><div class="metric-delta delta-up">NAFLD · GERD · IBS</div></div>
+    <div class="metric"><div class="metric-val">36</div><div class="metric-lbl">Decision Questions</div><div class="metric-delta delta-up">12 per vignette</div></div>
+    <div class="metric"><div class="metric-val" id="hcp-progress-val">0%</div><div class="metric-lbl">Completion</div><div class="metric-delta">Answers saved locally</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Survey Instructions</div>
+    <div class="finding-list">
+      <div class="finding">Respondent profile<span>Gastroenterologist or specialist managing GI/hepatology cases in India.</span></div>
+      <div class="finding">Response mode<span>Select the option that best reflects your current practice. Open text boxes capture rationale and unmet needs.</span></div>
+      <div class="finding">Confidentiality<span>Responses are shown in aggregate for Medical Affairs, Commercial Strategy, and Academic research purposes.</span></div>
+    </div>
+  </div>
+
+  <div id="hcp-vignette-body"></div>
+
+  <div class="card vignette-summary" id="hcp-summary">
+    <div class="card-title">HCP Survey Submission Summary</div>
+    <div id="hcp-summary-copy" style="font-size:13px;color:#60768B;line-height:1.55"></div>
+    <div class="summary-score-grid" id="hcp-summary-grid"></div>
+    <div class="finding-list" id="hcp-summary-actions"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;flex-wrap:wrap">
+      <button class="btn" onclick="resetHcpSurvey()"><i class="ti ti-refresh"></i>Reset</button>
+      <button class="btn btn-primary" onclick="exportHcpPDF()"><i class="ti ti-file-type-pdf"></i>Export PDF</button>
+    </div>
+  </div>
+</div>
+
 <!-- =================== DOCTOR VIEW: MY STUDIES =================== -->
 <div class="page" id="page-my-studies">
   <div class="page-header">
@@ -1476,6 +1551,176 @@ const qualSections = [
 ];
 let qualAnswers = {};
 
+const hcpVignettes = [
+  {
+    key:'nafld', title:'Vignette 1 - NAFLD / MASLD', short:'NAFLD', color:'#1B3A6B',
+    caseLines:[
+      'Rajan M., 52-year-old male software professional, BMI 29.4 kg/m2, waist 98 cm, BP 142/88 mmHg.',
+      'Fatigue, vague right upper quadrant discomfort, ALT 92 U/L on annual health check. HbA1c 6.4%, triglycerides 218 mg/dL, HDL 36 mg/dL.',
+      'Ultrasound: Grade II hepatic steatosis. Viral and autoimmune markers negative. Month 6 FibroScan: CAP 298 dB/m, liver stiffness 8.9 kPa, AST 74, ALT 88, GGT 62.',
+      'He reports limited exercise adherence and asks about long-term liver cancer risk.'
+    ],
+    qs:[
+      ['n1','At initial presentation, which investigations would you order to complete your workup?','multi',['Liver biopsy','FibroScan / transient elastography','FAST score','FIB-4 Index calculation','MRI-PDFF','Full liver function tests','HOMA-IR','TSH','Ferritin and transferrin saturation','ELF test','Other']],
+      ['n2','Based on Month 6 FibroScan findings, how would you stage this patient and what is your primary concern?','single',['MASH with F1-F2; concern: progression','MASLD without significant fibrosis; watchful waiting','Significant fibrosis cannot be excluded; biopsy warranted','Indeterminate; repeat elastography in 6 months','Refer to hepatology']],
+      ['n3','At this stage, which pharmacological treatment(s) would you initiate or recommend?','multi',['Vitamin E','Pioglitazone','GLP-1 receptor agonist','Silymarin / liver protective agents','UDCA','Optimize statin','Metformin','No pharmacological treatment; intensify lifestyle first','Clinical trial referral','Other']],
+      ['n4','How important are these factors in prescribing?','matrix',['Degree of fibrosis','Metabolic comorbidities','Indian RCT evidence','Availability / affordability','Safety profile','Adherence history','Cardiovascular risk reduction','DCGI approval status']],
+      ['n5','How confident are you in counselling patients on fibrosis trajectory using non-invasive tools alone?','scale',['1 Not at all confident','2','3','4','5 Very confident']],
+      ['n6','What is the single greatest unmet clinical need in managing NAFLD/MASLD in India?','open',[]],
+      ['n7','If LSM increases to 11.2 kPa after 12 months, how does this change management?','multi',['Proceed to liver biopsy','Initiate pharmacological therapy','Intensify pharmacotherapy and review in 3 months','Refer to hepatologist','Evaluate bariatric surgery','Initiate HCC surveillance','Combination / other']],
+      ['n8','How frequently do you screen first-degree relatives of NAFLD patients?','single',['Always','Often','Sometimes','Rarely','Never']],
+      ['n9','Which best describes multidisciplinary collaboration in NAFLD/MASLD management?','single',['Formal MDT','Informal collaboration','Endocrinologist only','Dietitian / lifestyle counsellor only','Manage independently']],
+      ['n10','How satisfied are you with pharmacological options in India for MASH with significant fibrosis?','scale',['1 Very dissatisfied','2','3','4','5 Very satisfied']],
+      ['n11','What barriers do you most frequently encounter? Select up to 3.','multi',['Lifestyle adherence','Limited FibroScan access','High investigation cost','Lack of approved pharmacotherapy','Late presentation','Low GP awareness','Limited reimbursement','Limited regional-language education materials']],
+      ['n12','Which clinical outcome do you prioritise most over the next 2 years?','single',['Fibrosis regression/stabilisation','ALT/AST normalisation','Reduction in steatosis','Cardiovascular risk reduction','Prevent cirrhosis / HCC','Improve patient-reported QoL']]
+    ]
+  },
+  {
+    key:'gerd', title:'Vignette 2 - GERD / Acid-Related Disorders', short:'GERD', color:'#0D7680',
+    caseLines:[
+      'Sunita K., 44-year-old female school teacher, BMI 26.8 kg/m2, non-smoker.',
+      'Heartburn 4-5 days/week, regurgitation, nocturnal cough, hoarseness for 8 months. Partial relief with OTC omeprazole.',
+      'Endoscopy after incomplete response: LA Grade B oesophagitis, short-segment Barretts C0M2, 2 cm hiatus hernia. H. pylori positive.',
+      'Three months after eradication, nocturnal symptoms persist on omeprazole 40 mg OD. She asks about long-term PPI use.'
+    ],
+    qs:[
+      ['g1','At initial presentation, was empirical PPI trial without endoscopy appropriate?','single',['Yes, first-line without alarm features','Yes, only for 4-8 weeks then endoscopy','No, duration and partial OTC response warrant endoscopy','No, dyspeptic overlap mandates endoscopy','Depends on age; endoscope over 40']],
+      ['g2','Endoscopy reveals short-segment Barretts. How does this change management?','multi',['High-dose PPI and surveillance','Refer for ablation regardless of dysplasia','Biopsy and manage by dysplasia grade','Continue standard-dose PPI','Refer to tertiary Barretts programme','Other']],
+      ['g3','For H. pylori eradication, which regimen would you prefer?','single',['Standard triple therapy','Bismuth quadruple therapy','Concomitant therapy','Sequential therapy','Vonoprazan-based triple therapy','Based on local antibiogram']],
+      ['g4','Persistent nocturnal symptoms on omeprazole 40 mg OD: how do you re-evaluate?','multi',['Switch/increase PPI','Add alginates/antacid','24-hour pH-impedance off PPI','Bravo pH study on PPI','Switch to P-CAB','Rule out EoE','ENT/pulmonology referral','Assess functional component']],
+      ['g5','Patient is concerned about long-term PPI safety. How do you address this?','multi',['Reassure benefit outweighs risk','Review indication and step down if possible','Discuss risks explicitly','On-demand/intermittent PPI','Lifestyle and positional therapy','Anti-reflux surgical referral']],
+      ['g6','How important are these factors when choosing between PPIs in India?','matrix',['Acid suppression efficacy','Onset of action','Drug-drug interactions','Affordability','Generic availability','Barretts evidence','Nocturnal acid control','Patient preference/tolerability']],
+      ['g7','What proportion of GERD patients have coexisting functional dyspepsia?','single',['Less than 10%','10-25%','26-40%','41-60%','More than 60%','Do not formally screen']],
+      ['g8','Preferred strategy beyond PPI in overlap GERD + Functional Dyspepsia?','single',['Prokinetics','Low-dose TCA','Buspirone','Sucralfate/mucosal protectants','Rome IV-guided neuromodulator','GI motility referral','No additional treatment']],
+      ['g9','What is the greatest gap in GERD management in India? Rank/comment top challenges.','open',[]],
+      ['g10','Ideal follow-up interval for LA Grade B oesophagitis + Barretts on maintenance PPI?','single',['Endoscopy in 3 months','Endoscopy in 12 months','Endoscopy in 3-5 years if no dysplasia','Refer to surveillance programme','Symptom-guided follow-up']],
+      ['g11','Rate confidence in following international Barretts surveillance guidelines.','scale',['1 Not at all confident','2','3','4','5 Fully confident']],
+      ['g12','Single most important improvement to GERD management pathways in India?','open',[]]
+    ]
+  },
+  {
+    key:'ibs', title:'Vignette 3 - IBS / Functional GI Disorder', short:'IBS', color:'#1A6B45',
+    caseLines:[
+      'Priya N., 34-year-old female IT professional, BMI 22.1 kg/m2.',
+      'Recurrent abdominal pain, bloating, alternating bowel habits for 2+ years. IBS-SSS 285.',
+      'CBC, CRP, ESR, TSH, coeliac serology normal. Colonoscopy 6 months ago normal. No alarm symptoms.',
+      'After low-FODMAP and mebeverine with partial relief, she asks for stronger treatment and reports increasing worry and poor sleep.'
+    ],
+    qs:[
+      ['i1','Which criteria do you use to diagnose IBS and communicate it?','single',['Rome IV formally','Rome IV as a guide','Clinical judgment','Manning criteria','Diagnosis by exclusion','Prefer functional bowel disorder label']],
+      ['i2','Given normal colonoscopy 6 months ago, which additional investigations would you perform?','multi',['No further investigations','Stool calprotectin','Hydrogen breath test','Coeliac screening if not done','Food sensitivity panel','Stool microscopy/culture','Abdominal ultrasound','Repeat colonoscopy not appropriate','Reassurance and psychosocial assessment']],
+      ['i3','Mebeverine and low-FODMAP have partial relief. Next pharmacological step? Select up to 2.','multi',['Switch/add antispasmodic','Soluble fibre','Low-dose TCA','SSRI/SNRI','Rifaximin','Linaclotide','Dietitian referral','Probiotics','Psychological intervention first']],
+      ['i4','Comorbid worry and poor sleep: does this change your IBS algorithm?','single',['Refer to psychologist/psychiatrist','Initiate gut-brain neuromodulator myself','Recommend CBT/gut-directed hypnotherapy','Acknowledge link but focus GI first','Manage separately']],
+      ['i5','How do you address concerns about colon cancer and gut infections?','multi',['Gut-brain axis education','Explain normal colonoscopy and IBS as real condition','Brief reassurance','Explore health anxiety/CBT','Order stool microscopy for concern','Avoid excessive reassurance']],
+      ['i6','What proportion of IBS patients have diagnosable anxiety/depression?','single',['Less than 20%','20-40%','41-60%','More than 60%','Do not formally screen']],
+      ['i7','How do you manage dietary guidance for IBS?','single',['Low-FODMAP + GI dietitian','Low-FODMAP guide myself','General dietary advice','No specific dietary advice','Gluten-free trial','Personalised elimination diet']],
+      ['i8','How important are these factors in IBS treatment decisions in India?','matrix',['IBS subtype','Severity score','Psychiatric comorbidity','Prior treatment history','Microbiome/SIBO suspicion','Affordability','Asian/Indian evidence','Preference for non-pharmacological care']],
+      ['i9','Greatest challenge in managing IBS in India? Select top 3.','multi',['Patients resist functional label','No GI psychologist access','Low GP awareness of Rome IV','Unclear probiotic evidence','SIBO overlap burden','Differentiating early IBD','Limited IBS-M options','Affordability of neuromodulators']],
+      ['i10','Would you recommend a probiotic? If yes, which type?','single',['Lactobacillus-based','Bifidobacterium-based','Multi-strain combination','Yes, no strain differentiation','No, insufficient evidence','Depends on subtype/context']],
+      ['i11','After 3 months, IBS-SSS improves 30% but symptoms remain. Next step?','single',['Continue current regimen','Escalate pharmacotherapy','Psychological intervention first','Re-evaluate diagnosis','Consider rifaximin retreatment','Motility evaluation referral']],
+      ['i12','What single change would most improve IBS outcomes in India?','open',[]]
+    ]
+  }
+];
+let hcpAnswers = {};
+
+function renderHcpSurvey() {
+  const body = document.getElementById('hcp-vignette-body');
+  if(!body) return;
+  let n = 0;
+  body.innerHTML = hcpVignettes.map(v => `
+    <div class="qual-question-section" id="hcp-vig-${v.key}">
+      <h3>${escapeHtml(v.title)}</h3>
+      <p>Answer based on current real-world practice. There are no right or wrong answers.</p>
+      <div class="vignette-case"><b>Patient profile</b>${v.caseLines.map(line => `<p>${escapeHtml(line)}</p>`).join('')}</div>
+      ${v.qs.map(q => {
+        n += 1;
+        const key = q[0];
+        if(q[2] === 'open') {
+          return `<div class="vignette-question"><div class="questionnaire-item-head"><span class="q-num">${n}</span><div><div class="questionnaire-text">${escapeHtml(q[1])}</div><div class="question-meta"><span class="badge badge-info">${escapeHtml(v.short)}</span><span class="badge badge-gray">Open text</span></div></div></div><textarea class="vignette-open" oninput="setHcpOpen('${key}',this.value)" placeholder="Type response...">${escapeHtml(hcpAnswers[key] || '')}</textarea></div>`;
+        }
+        const options = q[2] === 'matrix' ? ['Very important','Important','Not important','N/A'] : q[3];
+        return `<div class="vignette-question"><div class="questionnaire-item-head"><span class="q-num">${n}</span><div><div class="questionnaire-text">${escapeHtml(q[1])}</div><div class="question-meta"><span class="badge badge-info">${escapeHtml(v.short)}</span><span class="badge badge-gray">${q[2] === 'multi' ? 'Multi-select' : q[2] === 'matrix' ? 'Factor rating' : q[2] === 'scale' ? 'Scale' : 'Single choice'}</span></div></div></div>
+          ${q[2] === 'matrix' ? `<div style="margin-left:34px">${q[3].map(f => `<div class="link-preview-row"><div><b>${escapeHtml(f)}</b><span>Rate importance</span></div><select style="max-width:170px" onchange="setHcpMatrix('${key}','${escapeHtml(f)}',this.value)"><option></option>${options.map(o => `<option ${hcpAnswers[key]?.[f] === o ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('')}</select></div>`).join('')}</div>` : `<div class="vignette-answer-row">${options.map((opt, idx) => `<button class="vignette-answer ${isHcpSelected(key, idx) ? 'selected' : ''}" onclick="selectHcpAnswer('${key}',${idx},'${q[2]}',this)">${escapeHtml(opt)}</button>`).join('')}</div>`}
+        </div>`;
+      }).join('')}
+    </div>
+  `).join('');
+  updateHcpProgress();
+}
+
+function isHcpSelected(key, idx) {
+  return Array.isArray(hcpAnswers[key]) ? hcpAnswers[key].includes(idx) : hcpAnswers[key] === idx;
+}
+
+function selectHcpAnswer(key, idx, type, el) {
+  if(type === 'multi') {
+    hcpAnswers[key] = Array.isArray(hcpAnswers[key]) ? hcpAnswers[key] : [];
+    if(hcpAnswers[key].includes(idx)) hcpAnswers[key] = hcpAnswers[key].filter(v => v !== idx);
+    else hcpAnswers[key].push(idx);
+    el.classList.toggle('selected');
+  } else {
+    hcpAnswers[key] = idx;
+    el.parentElement.querySelectorAll('.vignette-answer').forEach(btn => btn.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  updateHcpProgress();
+}
+
+function setHcpOpen(key, value) {
+  hcpAnswers[key] = value.trim();
+  updateHcpProgress();
+}
+
+function setHcpMatrix(key, factor, value) {
+  hcpAnswers[key] = hcpAnswers[key] && typeof hcpAnswers[key] === 'object' && !Array.isArray(hcpAnswers[key]) ? hcpAnswers[key] : {};
+  if(value) hcpAnswers[key][factor] = value;
+  updateHcpProgress();
+}
+
+function totalHcpQuestions() { return hcpVignettes.reduce((s,v) => s + v.qs.length, 0); }
+function answeredHcpQuestions() {
+  return hcpVignettes.reduce((sum, v) => sum + v.qs.filter(q => {
+    const a = hcpAnswers[q[0]];
+    if(q[2] === 'matrix') return a && Object.keys(a).length > 0;
+    if(Array.isArray(a)) return a.length > 0;
+    return a !== undefined && a !== '';
+  }).length, 0);
+}
+function updateHcpProgress() {
+  const pct = Math.round((answeredHcpQuestions() / totalHcpQuestions()) * 100);
+  const el = document.getElementById('hcp-progress-val');
+  if(el) el.textContent = pct + '%';
+}
+function submitHcpSurvey() {
+  const answered = answeredHcpQuestions();
+  const total = totalHcpQuestions();
+  const summary = document.getElementById('hcp-summary');
+  document.getElementById('hcp-summary-copy').innerHTML = `<b>${answered}/${total}</b> vignette questions answered. This summary is ready for aggregate Medical Affairs or Commercial Strategy review.`;
+  document.getElementById('hcp-summary-grid').innerHTML = hcpVignettes.map(v => {
+    const count = v.qs.filter(q => hcpAnswers[q[0]] !== undefined && hcpAnswers[q[0]] !== '').length;
+    return `<div class="summary-score"><b>${count}/${v.qs.length}</b><span>${escapeHtml(v.title)}</span></div>`;
+  }).join('');
+  document.getElementById('hcp-summary-actions').innerHTML = `
+    <div class="finding">Completion check<span>${answered === total ? 'All vignette questions have responses.' : 'Some questions are incomplete. You can still export this partial response for review.'}</span></div>
+    <div class="finding">Next action<span>Export PDF for review, or keep the page open and continue answering incomplete sections.</span></div>
+  `;
+  summary.classList.add('show');
+  summary.scrollIntoView({behavior:'smooth',block:'start'});
+  showToast('HCP vignette summary generated','check');
+}
+function resetHcpSurvey() {
+  hcpAnswers = {};
+  renderHcpSurvey();
+  const summary = document.getElementById('hcp-summary');
+  if(summary) summary.classList.remove('show');
+  showToast('HCP vignette survey reset','refresh');
+}
+function exportHcpPDF() {
+  showToast('Opening print dialog for PDF export','file-type-pdf');
+  setTimeout(() => window.print(), 250);
+}
+
 function openQualSurvey(linkId) {
   showPage('qual-survey', document.getElementById('nav-qual-life'));
   const badge = document.getElementById('qual-link-id');
@@ -1647,9 +1892,9 @@ function switchRole(role, el) {
   const users = {admin:'Demo Account', doctor:'Dr. Rajesh Kumar · AIIMS Delhi'};
   document.getElementById('nav-user').textContent = users[role];
 
-  const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics','qual-life','qual-survey'];
+  const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics','qual-life','qual-survey','hcp-vignette'];
   const doctorPages = ['my-studies','my-patients'];
-  const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics','nav-demo','nav-qual-life'];
+  const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics','nav-demo','nav-qual-life','nav-hcp-vignette'];
   const doctorNavs = ['nav-my-studies','nav-my-patients'];
 
   if(role === 'admin') {
@@ -1718,6 +1963,7 @@ function showPage(id, navEl, skipHash) {
   if(id === 'analytics') renderAnalysisDashboard();
   if(id === 'demo') openDemoPanel('patient');
   if(id === 'qual-survey') renderQualSurvey();
+  if(id === 'hcp-vignette') renderHcpSurvey();
   if(!skipHash) setRouteHash(id);
 }
 
