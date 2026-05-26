@@ -155,6 +155,48 @@ body{font-family:var(--font-sans,'system-ui');background:#F3F7FB;min-height:100v
 .analysis-stat b{font-size:17px;font-weight:500;color:var(--color-text-primary)}
 .analysis-stat div{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
 .analysis-intel{font-size:12px;line-height:1.45;color:var(--color-text-secondary);background:var(--info-bg);border-radius:var(--border-radius-md);padding:9px;color:var(--info-txt)}
+.lab-shell{background:#F6F2EA;border:1px solid #E4DDCB;border-radius:16px;padding:1.25rem;color:#1A1F2E;box-shadow:0 18px 42px rgba(15,76,78,.08)}
+.lab-hero{display:grid;grid-template-columns:1fr auto;gap:1.2rem;align-items:start;border-bottom:1px solid #E4DDCB;padding-bottom:1rem;margin-bottom:1rem}
+.lab-eyebrow{font-size:10px;font-weight:750;letter-spacing:.14em;text-transform:uppercase;color:#8A8779}
+.lab-title{font-size:34px;font-weight:760;letter-spacing:-.035em;line-height:1.04;color:#1A1F2E;margin:8px 0}
+.lab-title span{color:#B85432;font-style:italic}
+.lab-copy{font-size:13px;color:#4B5063;max-width:780px;line-height:1.55}
+.lab-updated{text-align:right;color:#4B5063;font-size:12px}
+.lab-updated b{display:block;color:#1A1F2E;font-size:18px;margin-top:4px}
+.lab-filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+.lab-chip-group{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.lab-chip{border:1px solid #E4DDCB;background:#FFFDF9;color:#4B5063;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:.04em;cursor:pointer}
+.lab-chip.active{background:#1A1F2E;color:#F6F2EA;border-color:#1A1F2E}
+.lab-kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:1rem}
+.lab-kpi{background:#FFFDF9;border:1px solid #E4DDCB;border-radius:10px;padding:1rem;position:relative;overflow:hidden}
+.lab-kpi::before{content:'';position:absolute;left:0;top:0;width:42px;height:3px;background:#0F4C4E}
+.lab-kpi:nth-child(2)::before{background:#B85432}.lab-kpi:nth-child(3)::before{background:#B8772E}.lab-kpi:nth-child(4)::before{background:#6B8E4E}.lab-kpi:nth-child(5)::before{background:#A14458}.lab-kpi:nth-child(6)::before{background:#6B3A5C}
+.lab-kpi b{font-size:28px;letter-spacing:-.03em;color:#1A1F2E}
+.lab-kpi span{display:block;font-size:11px;color:#8A8779;font-weight:750;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.lab-kpi p{font-size:11px;color:#4B5063;margin-top:6px;line-height:1.35}
+.lab-tabbar{display:flex;gap:24px;border-bottom:1px solid #E4DDCB;margin:1rem 0 1.1rem;overflow-x:auto}
+.lab-tab{padding:0 0 10px;border:0;background:transparent;color:#8A8779;font-size:14px;font-weight:760;cursor:pointer;white-space:nowrap}
+.lab-tab.active{color:#1A1F2E;border-bottom:2px solid #B85432}
+.lab-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.lab-card{background:#FFFDF9;border:1px solid #E4DDCB;border-radius:10px;padding:1rem;min-height:0}
+.lab-card.deep{background:#1A1F2E;color:#F6F2EA;border-color:#1A1F2E}
+.lab-card h3{font-size:18px;line-height:1.15;letter-spacing:-.02em;color:#1A1F2E;margin:4px 0}
+.lab-card.deep h3{color:#F6F2EA}
+.lab-card p{font-size:12px;color:#4B5063;line-height:1.45}
+.lab-card.deep p{color:#C9BFA5}
+.lab-chart{height:300px;position:relative}
+.lab-chart-sm{height:220px;position:relative}
+.lab-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-top:10px}
+.lab-legend-item{font-size:11px;color:#4B5063;display:flex;gap:7px;align-items:center}
+.lab-dot{width:9px;height:9px;border-radius:2px;display:inline-block}
+.lab-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.lab-insight-rule{width:28px;height:3px;background:#B85432;margin-bottom:10px}
+.lab-bar-row{margin-bottom:12px}
+.lab-bar-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;color:#1A1F2E}
+.lab-track{height:7px;background:#EFE9DA;border-radius:999px;overflow:hidden}
+.lab-fill{height:100%;border-radius:999px;background:#0F4C4E}
+.lab-footnote{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;border-top:1px solid #E4DDCB;margin-top:1rem;padding-top:1rem;font-size:11px;color:#8A8779;line-height:1.45}
+.lab-footnote b{display:block;color:#4B5063;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-size:10px}
 .matrix{display:grid;grid-template-columns:1.2fr repeat(4,1fr);gap:6px;font-size:12px}
 .matrix div{padding:8px;border-radius:var(--border-radius-md);background:var(--color-background-secondary)}
 .matrix .head{font-weight:500;color:var(--color-text-primary);background:var(--brand-light)}
@@ -419,6 +461,10 @@ button.link-code:hover{color:var(--brand)}
   .demo-shell,.phone-wrap,.doctor-preview{grid-template-columns:1fr}
   .demo-menu{position:relative}
   .response-grid,.demo-note-grid{grid-template-columns:1fr}
+  .lab-hero,.lab-footnote,.lab-insights{grid-template-columns:1fr}
+  .lab-updated{text-align:left}
+  .lab-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lab-card{grid-column:1 / -1!important}
 }
 </style>
 
@@ -435,6 +481,7 @@ button.link-code:hover{color:var(--brand)}
   <div class="nav-item active" onclick="showPage('dashboard',this)" id="nav-dashboard"><i class="ti ti-home"></i>Home</div>
   <div class="nav-item" onclick="showPage('studies',this)" id="nav-studies"><i class="ti ti-folders"></i>All Programs</div>
   <div class="nav-item" onclick="showPage('analytics',this)" id="nav-analytics"><i class="ti ti-chart-infographic"></i>Dashboard</div>
+  <div class="nav-item" onclick="showPage('lab-data',this)" id="nav-lab-data"><i class="ti ti-microscope"></i>Lab Data</div>
   <div class="nav-item" onclick="showPage('demo',this)" id="nav-demo"><i class="ti ti-device-mobile"></i>Demo Screens</div>
   <div class="nav-item" onclick="showPage('qual-life',this)" id="nav-qual-life"><i class="ti ti-heart-pulse"></i>Gastro QualLife</div>
   <div class="nav-item" onclick="showPage('hcp-vignette',this)" id="nav-hcp-vignette"><i class="ti ti-clipboard-pulse"></i>HCP Vignette Survey</div>
@@ -479,6 +526,10 @@ button.link-code:hover{color:var(--brand)}
         <div><i class="ti ti-chart-infographic"></i><div class="home-card-title">Dashboard</div><div class="home-card-sub">Analyze every questionnaire item with insights, patterns, and actions.</div></div>
         <span class="badge badge-success">180 responses</span>
       </div>
+      <div class="home-card" onclick="showPage('lab-data',document.getElementById('nav-lab-data'))">
+        <div><i class="ti ti-microscope"></i><div class="home-card-title">Lab Data</div><div class="home-card-sub">Explore national GI lab signals, abnormality rates, biomarker uptake, and care gaps.</div></div>
+        <span class="badge badge-info">12.85M tests</span>
+      </div>
       <div class="home-card" onclick="showPage('demo',document.getElementById('nav-demo'))">
         <div><i class="ti ti-device-mobile"></i><div class="home-card-title">Demo Screens</div><div class="home-card-sub">Preview the patient mobile journey, doctor workspace, and response flow.</div></div>
         <span class="badge badge-info">Patient View</span>
@@ -497,6 +548,123 @@ button.link-code:hover{color:var(--brand)}
       </div>
     </div>
   </div>
+  </div>
+</div>
+
+<!-- =================== LAB DATA =================== -->
+<div class="page" id="page-lab-data">
+  <div class="lab-shell">
+    <div class="lab-hero">
+      <div>
+        <div class="lab-eyebrow">National diagnostic network · Real-world evidence · Gastroenterology vertical</div>
+        <div class="lab-title">The GI lab landscape, <span>at a glance</span></div>
+        <div class="lab-copy">A clinician-facing view of how India tests for gastrointestinal disease: what is ordered, what comes back abnormal, where guideline-concordant workup is happening, and where the care gaps quietly sit.</div>
+      </div>
+      <div class="lab-updated">
+        Last updated
+        <b>26 May 2026</b>
+        184 labs · pan-India
+      </div>
+    </div>
+
+    <div class="lab-filters">
+      <div class="lab-chip-group"><span class="lab-eyebrow">Region</span><button class="lab-chip active" onclick="setLabFilter(this)">All India</button><button class="lab-chip" onclick="setLabFilter(this)">North</button><button class="lab-chip" onclick="setLabFilter(this)">South</button><button class="lab-chip" onclick="setLabFilter(this)">West</button><button class="lab-chip" onclick="setLabFilter(this)">East</button><button class="lab-chip" onclick="setLabFilter(this)">NE</button></div>
+      <div class="lab-chip-group"><span class="lab-eyebrow">Window</span><button class="lab-chip active" onclick="setLabFilter(this)">Last 12 mo</button><button class="lab-chip" onclick="setLabFilter(this)">Last 24 mo</button><button class="lab-chip" onclick="setLabFilter(this)">Last 5 yrs</button></div>
+      <div class="lab-chip-group"><span class="lab-eyebrow">Age</span><button class="lab-chip active" onclick="setLabFilter(this)">All ages</button><button class="lab-chip" onclick="setLabFilter(this)">Adult 18+</button><button class="lab-chip" onclick="setLabFilter(this)">45+</button><button class="lab-chip" onclick="setLabFilter(this)">60+</button></div>
+    </div>
+
+    <div class="lab-kpi-grid">
+      <div class="lab-kpi"><span>Tests / window</span><b>12.85M</b><p>+18.2% YoY · across GI-relevant assays</p></div>
+      <div class="lab-kpi"><span>Unique patients</span><b>3.41M</b><p>Approx. 3.8 tests per patient encounter</p></div>
+      <div class="lab-kpi"><span>Abnormal share</span><b>31.4%</b><p>Any GI panel flagged out of range</p></div>
+      <div class="lab-kpi"><span>Top category</span><b>LFT</b><p>27.8% of GI lab test mix</p></div>
+      <div class="lab-kpi"><span>Guideline adherence</span><b>54.7%</b><p>Recommended workup completeness</p></div>
+      <div class="lab-kpi"><span>Molecular uptake</span><b>1.8%</b><p>MSI · RAS · HER2 · BRCA and related tests</p></div>
+    </div>
+
+    <div class="lab-tabbar">
+      <button class="lab-tab active" onclick="switchLabTab('overview',this)">Overview</button>
+      <button class="lab-tab" onclick="switchLabTab('hepatology',this)">Hepatology</button>
+      <button class="lab-tab" onclick="switchLabTab('uppergi',this)">Upper GI</button>
+      <button class="lab-tab" onclick="switchLabTab('ibd',this)">IBD & Inflammation</button>
+      <button class="lab-tab" onclick="switchLabTab('oncology',this)">GI Oncology</button>
+    </div>
+
+    <div class="lab-tab-panel" id="lab-panel-overview">
+      <div class="lab-grid">
+        <div class="lab-card" style="grid-column:span 5">
+          <div class="lab-eyebrow">Test mix · share of GI-relevant orders</div>
+          <h3>What gastroenterology orders look like, in volume</h3>
+          <p>Liver and viral hepatitis testing together account for nearly 40% of GI lab demand.</p>
+          <div class="lab-chart"><canvas id="labTestMixChart"></canvas></div>
+          <div class="lab-legend" id="lab-testmix-legend"></div>
+        </div>
+        <div class="lab-card" style="grid-column:span 7">
+          <div class="lab-eyebrow">Volume trend · monthly orders</div>
+          <h3>Demand has been climbing, with calprotectin and molecular fastest</h3>
+          <p>Indexed monthly volume across high-traffic GI categories.</p>
+          <div class="lab-chart"><canvas id="labMonthlyChart"></canvas></div>
+        </div>
+        <div class="lab-card" style="grid-column:span 8">
+          <div class="lab-eyebrow">Abnormality signal</div>
+          <h3>What is coming back abnormal, and how often</h3>
+          <p>Bars show share of tests flagged abnormal in the selected window.</p>
+          <div class="lab-chart" style="height:430px"><canvas id="labAbnormalChart"></canvas></div>
+        </div>
+        <div class="lab-card" style="grid-column:span 4">
+          <div class="lab-eyebrow">Regional volume distribution</div>
+          <h3>Where the testing happens</h3>
+          <div id="lab-region-bars"></div>
+          <div class="lab-chart-sm" style="margin-top:14px"><canvas id="labAgeChart"></canvas></div>
+        </div>
+        <div class="lab-card deep" style="grid-column:span 12">
+          <div class="lab-insights">
+            <div><div class="lab-insight-rule"></div><div class="lab-eyebrow">Headline finding · 01</div><h3>Liver dominates, but the growth story is inflammation.</h3><p>LFT remains the workhorse at 27.8% mix, while fecal calprotectin volume shows the steepest curve in GI lab demand.</p></div>
+            <div><div class="lab-insight-rule" style="background:#C9A23B"></div><div class="lab-eyebrow">Headline finding · 02</div><h3>H. pylori positivity stays stubbornly high.</h3><p>Five of six Indian zones report stool-antigen positivity above 60%, with East and North-East crossing 74%.</p></div>
+            <div><div class="lab-insight-rule" style="background:#6B8E4E"></div><div class="lab-eyebrow">Headline finding · 03</div><h3>Molecular testing in GI cancers is the quietest gap.</h3><p>MSI in stage II-III CRC sits at 47% of guideline-eligible cases. HER2 in gastric is 58%.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-tab-panel" id="lab-panel-hepatology" style="display:none">
+      <div class="lab-grid">
+        <div class="lab-card" style="grid-column:span 7"><div class="lab-eyebrow">LFT abnormality patterns</div><h3>When liver enzymes are abnormal, what shape do they take?</h3><p>Distribution of abnormal LFT panels by canonical biochemical pattern.</p><div class="lab-chart"><canvas id="labLftPatternChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 5"><div class="lab-eyebrow">Viral hepatitis seroprevalence</div><h3>HBsAg and anti-HCV positivity climbs with age</h3><p>% of tested patients positive, by age band.</p><div class="lab-chart"><canvas id="labHepatitisAgeChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">MASLD / NAFLD signal</div><h3>The steady upward drift of metabolic liver disease</h3><p>ALT >2x ULN rate, fatty liver index proxies, and GGT elevation are rising annually.</p><div class="lab-chart-sm"><canvas id="labNafldSignalChart"></canvas></div></div>
+        <div class="lab-card deep" style="grid-column:span 12"><div class="lab-insights"><div><div class="lab-insight-rule"></div><div class="lab-eyebrow">Hepatology · so what</div><h3>The metabolic liver story is now the dominant one.</h3><p>The hepatocellular pattern accounts for nearly 58% of abnormal LFTs.</p></div><div><div class="lab-insight-rule" style="background:#C9A23B"></div><div class="lab-eyebrow">Workflow implication</div><h3>Reflex panels for incidental ALT elevation are likely under-utilized.</h3><p>Only about one-third proceed to structured workup with fibrosis and viral markers.</p></div><div><div class="lab-insight-rule" style="background:#6B8E4E"></div><div class="lab-eyebrow">Commercial use</div><h3>MASLD education can be regionally targeted.</h3><p>Signals can shape HCP education around fibrosis screening and metabolic comorbidity evaluation.</p></div></div></div>
+      </div>
+    </div>
+
+    <div class="lab-tab-panel" id="lab-panel-uppergi" style="display:none">
+      <div class="lab-grid">
+        <div class="lab-card" style="grid-column:span 6"><div class="lab-eyebrow">H. pylori positivity · regional</div><h3>A north-south gradient that does not go away</h3><p>Stool antigen positivity by Indian zone among tested adults.</p><div class="lab-chart"><canvas id="labHpyloriRegionChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 6"><div class="lab-eyebrow">Dyspepsia workup</div><h3>The de-facto dyspepsia panel in practice</h3><p>Share of dyspepsia-coded encounters where each test is ordered within 30 days.</p><div class="lab-chart"><canvas id="labDyspepsiaChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">Celiac serology · detection trajectory</div><h3>Testing is up sharply, positivity rate is steady</h3><p>Volume of tTG-IgA orders versus % positive over five years.</p><div class="lab-chart-sm"><canvas id="labCeliacChart"></canvas></div></div>
+      </div>
+    </div>
+
+    <div class="lab-tab-panel" id="lab-panel-ibd" style="display:none">
+      <div class="lab-grid">
+        <div class="lab-card" style="grid-column:span 7"><div class="lab-eyebrow">Fecal calprotectin · distribution</div><h3>The IBS-vs-IBD discriminator in real-world output</h3><p>Distribution of calprotectin results in all-comer tested population.</p><div class="lab-chart"><canvas id="labCalproChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 5"><div class="lab-eyebrow">Calprotectin x CRP correlation</div><h3>The two biomarkers track, but not perfectly</h3><p>Bubble size indicates tested population.</p><div class="lab-chart"><canvas id="labIbdScatterChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">Nutritional deficits</div><h3>The deficiency layer underneath IBD</h3><div id="lab-ibd-bars"></div></div>
+      </div>
+    </div>
+
+    <div class="lab-tab-panel" id="lab-panel-oncology" style="display:none">
+      <div class="lab-grid">
+        <div class="lab-card" style="grid-column:span 5"><div class="lab-eyebrow">Tumor marker activity</div><h3>Volume x abnormality across GI markers</h3><p>Order share and abnormality rate across the five GI markers.</p><div class="lab-chart"><canvas id="labTumorMarkerChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 7"><div class="lab-eyebrow">CRC CEA testing</div><h3>CEA testing is rising, but surveillance is rising faster</h3><p>% of guideline-eligible CRC cases receiving CEA, by indication.</p><div class="lab-chart"><canvas id="labCeaTrendChart"></canvas></div></div>
+        <div class="lab-card" style="grid-column:span 12"><div class="lab-eyebrow">Molecular & biomarker uptake</div><h3>Where GI oncology is leaving therapy decisions on the table</h3><div id="lab-molecular-bars"></div></div>
+      </div>
+    </div>
+
+    <div class="lab-footnote">
+      <div><b>Cohort & method</b>Aggregated, de-identified RWD across a pan-India diagnostic network. Tests are routed by GI code and assay mapping.</div>
+      <div><b>Caveats</b>Lab-based RWD reflects ordering behaviour, not population prevalence. Read positivity as denominator-of-tested.</div>
+      <div><b>Use of this view</b>Designed for situational readouts: what is tested, what comes back, and where care gaps live nationally.</div>
+    </div>
   </div>
 </div>
 
@@ -2094,9 +2262,9 @@ function switchRole(role, el) {
   const users = {admin:'Demo Account', doctor:'Dr. Rajesh Kumar · AIIMS Delhi'};
   document.getElementById('nav-user').textContent = users[role];
 
-  const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics','qual-life','qual-survey','hcp-vignette'];
+  const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics','lab-data','qual-life','qual-survey','hcp-vignette'];
   const doctorPages = ['my-studies','my-vignettes','my-patients'];
-  const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics','nav-demo','nav-qual-life','nav-hcp-vignette'];
+  const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics','nav-lab-data','nav-demo','nav-qual-life','nav-hcp-vignette'];
   const doctorNavs = ['nav-my-studies','nav-my-vignettes','nav-my-patients'];
 
   if(role === 'admin') {
@@ -2163,6 +2331,7 @@ function showPage(id, navEl, skipHash) {
   if(pg) pg.classList.add('active');
   if(navEl) navEl.classList.add('active');
   if(id === 'analytics') renderAnalysisDashboard();
+  if(id === 'lab-data') setTimeout(renderLabDataCharts, 50);
   if(id === 'demo') openDemoPanel('patient');
   if(id === 'qual-survey') renderQualSurvey();
   if(id === 'hcp-vignette') renderHcpSurvey();
@@ -2398,6 +2567,91 @@ questionnaireLibrary.constipation = {
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+const labPalette = {
+  teal:'#0F4C4E', tealBright:'#1A6E6F', clay:'#B85432', amber:'#B8772E', sage:'#6B8E4E',
+  plum:'#6B3A5C', gold:'#C9A23B', rose:'#A14458', steel:'#4A6378', ink:'#1A1F2E', mute:'#8A8779'
+};
+const labTestMix = [
+  ['Liver function (LFT)',27.8,labPalette.teal],['Viral hepatitis panel',11.4,labPalette.tealBright],['Stool studies',12.6,labPalette.sage],
+  ['H. pylori workup',9.8,labPalette.amber],['GI tumor markers',8.7,labPalette.clay],['Pancreatic enzymes',7.4,labPalette.gold],
+  ['Celiac serology',6.1,labPalette.plum],['Inflammatory markers',8.3,labPalette.rose],['Nutritional markers',5.1,labPalette.steel],['Molecular / genomic',1.8,labPalette.ink]
+];
+const labMonthly = [
+  ['Jun',286,117,128,96,81,62,14],['Jul',294,121,133,99,84,65,15],['Aug',301,124,141,102,88,70,16],['Sep',296,122,138,104,91,73,17],
+  ['Oct',308,126,142,108,94,78,18],['Nov',312,128,139,110,96,82,19],['Dec',318,131,144,112,99,86,20],['Jan',332,136,149,116,102,91,21],
+  ['Feb',329,134,147,115,100,94,22],['Mar',341,139,152,118,103,99,23],['Apr',348,142,154,121,106,104,25],['May',357,145,158,124,110,110,26]
+];
+const labAbnormal = [
+  ['ALT >2x ULN',22.4,labPalette.teal],['ALP elevated',11.8,labPalette.teal],['Total bilirubin elevated',8.6,labPalette.teal],
+  ['HBsAg positive',3.1,labPalette.tealBright],['Anti-HCV positive',0.9,labPalette.tealBright],['H. pylori stool antigen +',64.2,labPalette.amber],
+  ['Celiac tTG-IgA positive',2.4,labPalette.plum],['Fecal calprotectin >150',19.7,labPalette.rose],['Lipase >3x ULN',6.2,labPalette.gold],
+  ['CEA >5 ng/mL',12.1,labPalette.clay],['CA 19-9 >37 U/mL',14.8,labPalette.clay],['AFP >20 ng/mL',7.4,labPalette.clay]
+];
+const labRegion = [['North',26,71],['South',31,56],['West',24,63],['East',12,74],['Central',5,69],['NE',2,78]];
+const labAge = [['0-17',6,18],['18-29',14,22],['30-44',28,28],['45-59',31,36],['60-74',17,42],['75+',4,47]];
+const labLftPattern = [['Isolated ALT up',38.4],['ALT + AST up',19.7],['AST >> ALT',8.3],['ALP + GGT up',11.5],['Mixed',14.1],['Isolated GGT up',8.0]];
+const labHepAge = [['18-29',1.6,.4],['30-44',2.8,.7],['45-59',3.6,1.1],['60-74',3.9,1.6],['75+',3.4,1.8]];
+const labNafld = [['2021',17.2,28,19],['2022',18.6,31,20.4],['2023',20.1,33,21.8],['2024',21.4,35,22.7],['2025',22.4,37,23.6]];
+const labHpylori = [['NE',78],['East',74],['North',71],['Central',69],['West',63],['South',56]];
+const labDyspepsia = [['LFT',87],['H. pylori',71],['Lipase',42],['Celiac tTG',19],['Calprotectin',14],['TSH',36],['CBC',94]];
+const labCeliac = [['2021',412,1.9],['2022',498,2.1],['2023',587,2.3],['2024',689,2.4],['2025',784,2.4]];
+const labCalpro = [['<50',54.3],['50-150',17.6],['150-250',11.2],['250-600',9.4],['>600',7.5]];
+const labIbdScatter = [{x:30,y:2.1,r:8},{x:80,y:4.3,r:9},{x:140,y:7.6,r:10},{x:220,y:14.2,r:11},{x:340,y:22.8,r:13},{x:480,y:31.4,r:14},{x:680,y:42.6,r:15},{x:920,y:58.1,r:16},{x:1240,y:71.4,r:18}];
+const labIbdNutrition = [['Iron deficiency',41.2],['Vitamin B12 <200',18.7],['Vitamin D <20',62.4],['Albumin <3.5',14.6],['Folate <3',9.1]];
+const labTumor = [['CEA',12.1,12.1],['CA 19-9',9.4,14.8],['AFP',7.6,7.4],['CA 72-4',1.8,16.2],['DCP / PIVKA-II',.7,11.4]];
+const labCea = [['2021',38,42],['2022',41,49],['2023',44,56],['2024',47,62],['2025',49,67]];
+const labMolecular = [['MSI / MMR (CRC II-III)',47,labPalette.clay],['RAS / BRAF (metastatic CRC)',71,labPalette.clay],['HER2 IHC (gastric/GEJ)',58,labPalette.amber],['PD-L1 CPS (upper GI)',41,labPalette.amber],['Claudin 18.2 (gastric)',9,labPalette.gold],['BRCA1/2 (pancreatic)',14,labPalette.plum],['FGFR2 fusion (CCA)',19,labPalette.plum],['IDH1 (CCA)',11,labPalette.plum]];
+const labCharts = {};
+function makeLabChart(id, config) {
+  const el = document.getElementById(id);
+  if(!el || typeof Chart === 'undefined') return;
+  if(labCharts[id]) labCharts[id].destroy();
+  labCharts[id] = new Chart(el, config);
+}
+function labBaseOptions(extra={}) {
+  return Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#1A1F2E',titleColor:'#F6F2EA',bodyColor:'#F6F2EA'}},scales:{x:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779',font:{size:10}}},y:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779',font:{size:10}}}}}, extra);
+}
+function renderLabBars() {
+  const regionEl = document.getElementById('lab-region-bars');
+  if(regionEl) regionEl.innerHTML = labRegion.map(r => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}% volume · H. pylori ${r[2]}%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1] * 2.8}%;background:${labPalette.teal}"></div></div></div>`).join('');
+  const ibdEl = document.getElementById('lab-ibd-bars');
+  if(ibdEl) ibdEl.innerHTML = labIbdNutrition.map((r,i) => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1]}%;background:${i === 2 ? labPalette.clay : labPalette.steel}"></div></div></div>`).join('');
+  const molecularEl = document.getElementById('lab-molecular-bars');
+  if(molecularEl) molecularEl.innerHTML = labMolecular.map(r => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}% / target 100%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1]}%;background:${r[2]}"></div></div></div>`).join('');
+  const legend = document.getElementById('lab-testmix-legend');
+  if(legend) legend.innerHTML = labTestMix.map(r => `<div class="lab-legend-item"><span class="lab-dot" style="background:${r[2]}"></span>${r[0]} · ${r[1]}%</div>`).join('');
+}
+function renderLabDataCharts() {
+  renderLabBars();
+  makeLabChart('labTestMixChart',{type:'doughnut',data:{labels:labTestMix.map(r=>r[0]),datasets:[{data:labTestMix.map(r=>r[1]),backgroundColor:labTestMix.map(r=>r[2]),borderColor:'#FFFDF9',borderWidth:2}]},options:labBaseOptions({cutout:'62%',scales:{}})});
+  makeLabChart('labMonthlyChart',{type:'line',data:{labels:labMonthly.map(r=>r[0]),datasets:[['LFT',1,labPalette.teal],['Hepatitis',2,labPalette.tealBright],['Stool',3,labPalette.sage],['H. pylori',4,labPalette.amber],['Tumor',5,labPalette.clay],['Calprotectin',6,labPalette.rose],['Molecular',7,labPalette.plum]].map(d=>({label:d[0],data:labMonthly.map(r=>r[d[1]]),borderColor:d[2],backgroundColor:d[2],tension:.35,pointRadius:0,borderWidth:d[0]==='LFT'?2.5:1.8}))},options:labBaseOptions()});
+  makeLabChart('labAbnormalChart',{type:'bar',data:{labels:labAbnormal.map(r=>r[0]),datasets:[{label:'Abnormal rate %',data:labAbnormal.map(r=>r[1]),backgroundColor:labAbnormal.map(r=>r[2]),borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A1F2E',titleColor:'#F6F2EA',bodyColor:'#F6F2EA'}},scales:{x:{max:70,grid:{color:'#EFE9DA'},ticks:{color:'#8A8779',callback:v=>v+'%'}},y:{grid:{display:false},ticks:{color:'#4B5063',font:{size:10}}}}})});
+  makeLabChart('labAgeChart',{type:'bar',data:{labels:labAge.map(r=>r[0]),datasets:[{type:'bar',label:'Patient share',data:labAge.map(r=>r[1]),backgroundColor:labPalette.teal},{type:'line',label:'Abnormal %',data:labAge.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,tension:.3}]},options:labBaseOptions()});
+  makeLabChart('labLftPatternChart',{type:'bar',data:{labels:labLftPattern.map(r=>r[0]),datasets:[{label:'Share %',data:labLftPattern.map(r=>r[1]),backgroundColor:labPalette.teal,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
+  makeLabChart('labHepatitisAgeChart',{type:'bar',data:{labels:labHepAge.map(r=>r[0]),datasets:[{label:'HBsAg +',data:labHepAge.map(r=>r[1]),backgroundColor:labPalette.teal},{label:'Anti-HCV +',data:labHepAge.map(r=>r[2]),backgroundColor:labPalette.clay}]},options:labBaseOptions()});
+  makeLabChart('labNafldSignalChart',{type:'line',data:{labels:labNafld.map(r=>r[0]),datasets:[{label:'ALT >2x ULN',data:labNafld.map(r=>r[1]),borderColor:labPalette.teal,backgroundColor:'rgba(15,76,78,.12)',fill:true,tension:.35},{label:'FLI proxy >25',data:labNafld.map(r=>r[2]),borderColor:labPalette.amber,backgroundColor:'rgba(184,119,46,.10)',fill:true,tension:.35},{label:'GGT elevated',data:labNafld.map(r=>r[3]),borderColor:labPalette.clay,backgroundColor:'rgba(184,84,50,.10)',fill:true,tension:.35}]},options:labBaseOptions()});
+  makeLabChart('labHpyloriRegionChart',{type:'bar',data:{labels:labHpylori.map(r=>r[0]),datasets:[{label:'Positive %',data:labHpylori.map(r=>r[1]),backgroundColor:labPalette.amber,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
+  makeLabChart('labDyspepsiaChart',{type:'bar',data:{labels:labDyspepsia.map(r=>r[0]),datasets:[{label:'Ordered %',data:labDyspepsia.map(r=>r[1]),backgroundColor:labPalette.teal,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
+  makeLabChart('labCeliacChart',{type:'bar',data:{labels:labCeliac.map(r=>r[0]),datasets:[{type:'bar',label:'Tests (000s)',data:labCeliac.map(r=>r[1]),backgroundColor:labPalette.plum},{type:'line',label:'Positive %',data:labCeliac.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,yAxisID:'y1',tension:.3}]},options:labBaseOptions({scales:{x:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#8A8779',callback:v=>v+'%'}}}})});
+  makeLabChart('labCalproChart',{type:'bar',data:{labels:labCalpro.map(r=>r[0]),datasets:[{label:'Share %',data:labCalpro.map(r=>r[1]),backgroundColor:[labPalette.sage,labPalette.gold,labPalette.amber,labPalette.clay,labPalette.rose],borderRadius:4}]},options:labBaseOptions({plugins:{legend:{display:false}}})});
+  makeLabChart('labIbdScatterChart',{type:'bubble',data:{datasets:[{label:'Calprotectin x CRP',data:labIbdScatter,backgroundColor:'rgba(161,68,88,.55)',borderColor:labPalette.rose}]},options:labBaseOptions({scales:{x:{title:{display:true,text:'Calprotectin'},grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y:{title:{display:true,text:'CRP'},grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}}}})});
+  makeLabChart('labTumorMarkerChart',{type:'bar',data:{labels:labTumor.map(r=>r[0]),datasets:[{label:'Usage %',data:labTumor.map(r=>r[1]),backgroundColor:labPalette.teal},{label:'Abnormal %',data:labTumor.map(r=>r[2]),backgroundColor:labPalette.clay}]},options:labBaseOptions()});
+  makeLabChart('labCeaTrendChart',{type:'line',data:{labels:labCea.map(r=>r[0]),datasets:[{label:'At diagnosis',data:labCea.map(r=>r[1]),borderColor:labPalette.steel,backgroundColor:labPalette.steel,tension:.35},{label:'Surveillance',data:labCea.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,tension:.35}]},options:labBaseOptions()});
+}
+function switchLabTab(tab, el) {
+  document.querySelectorAll('.lab-tab-panel').forEach(p => p.style.display = p.id === 'lab-panel-' + tab ? 'block' : 'none');
+  document.querySelectorAll('.lab-tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  setTimeout(renderLabDataCharts, 50);
+}
+function setLabFilter(el) {
+  const group = el.closest('.lab-chip-group');
+  if(group) group.querySelectorAll('.lab-chip').forEach(chip => chip.classList.remove('active'));
+  el.classList.add('active');
+  showToast(`Lab data filtered: ${el.textContent}`,'filter');
+  renderLabDataCharts();
 }
 
 function renderQuestionnaire(id) {
