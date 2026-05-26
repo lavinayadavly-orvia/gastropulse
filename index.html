@@ -380,6 +380,13 @@ button.link-code:hover{color:var(--brand)}
 .vignette-open{width:100%;min-height:72px;margin-top:10px;resize:vertical}
 .vignette-summary{display:none}
 .vignette-summary.show{display:block}
+.vignette-selector-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:1rem}
+.vignette-select-card{background:#fff;border:1px solid #E1EAF3;border-radius:14px;padding:1rem;text-align:left;cursor:pointer;transition:all .14s;box-shadow:0 8px 22px rgba(13,58,108,.045);font-family:inherit;color:#18344E}
+.vignette-select-card:hover{border-color:#0D7680;transform:translateY(-2px)}
+.vignette-select-card.active{border-color:#064E4A;background:#E6F4F1;box-shadow:0 0 0 2px rgba(6,78,74,.12)}
+.vignette-select-card i{font-size:22px;color:#064E4A;margin-bottom:8px}
+.vignette-select-card b{display:block;font-size:15px;color:#10283E}
+.vignette-select-card span{display:block;font-size:12px;color:#60768B;margin-top:5px;line-height:1.4}
 @media print{
   .topnav,.sidebar,.qual-survey-hero .btn,.page-header .btn,.toast{display:none!important}
   .layout,.main{display:block;padding:0;background:#fff}
@@ -408,6 +415,7 @@ button.link-code:hover{color:var(--brand)}
   .qual-hero,.qual-grid,.qual-route-grid{grid-template-columns:1fr}
   .qual-actions{justify-content:flex-start}
   .qual-survey-hero{display:block}
+  .vignette-selector-grid{grid-template-columns:1fr}
   .demo-shell,.phone-wrap,.doctor-preview{grid-template-columns:1fr}
   .demo-menu{position:relative}
   .response-grid,.demo-note-grid{grid-template-columns:1fr}
@@ -1298,12 +1306,12 @@ button.link-code:hover{color:var(--brand)}
         <span class="badge badge-gray">25-35 minutes</span>
       </div>
       <h2>Gastroenterology HCP Survey</h2>
-      <p>Clinical vignettes covering NAFLD/MASLD, GERD, and IBS. Physicians answer based on real-world practice patterns, treatment preferences, evidence gaps, and decision drivers.</p>
+      <p>Select an indication card to open the relevant vignette survey. Physicians answer based on real-world practice patterns, treatment preferences, evidence gaps, and decision drivers.</p>
     </div>
     <div class="qual-actions">
-      <button class="btn" onclick="document.getElementById('hcp-vig-nafld').scrollIntoView({behavior:'smooth'})"><i class="ti ti-liver"></i>NAFLD</button>
-      <button class="btn" onclick="document.getElementById('hcp-vig-gerd').scrollIntoView({behavior:'smooth'})"><i class="ti ti-stomach"></i>GERD</button>
-      <button class="btn" onclick="document.getElementById('hcp-vig-ibs').scrollIntoView({behavior:'smooth'})"><i class="ti ti-brain"></i>IBS</button>
+      <button class="btn" onclick="selectHcpVignette('nafld')"><i class="ti ti-liver"></i>NAFLD</button>
+      <button class="btn" onclick="selectHcpVignette('gerd')"><i class="ti ti-stomach"></i>GERD</button>
+      <button class="btn" onclick="selectHcpVignette('ibs')"><i class="ti ti-brain"></i>IBS</button>
     </div>
   </div>
 
@@ -1321,6 +1329,8 @@ button.link-code:hover{color:var(--brand)}
       <div class="finding">Confidentiality<span>Responses are shown in aggregate for Medical Affairs, Commercial Strategy, and Academic research purposes.</span></div>
     </div>
   </div>
+
+  <div class="vignette-selector-grid" id="hcp-vignette-selector"></div>
 
   <div id="hcp-vignette-body"></div>
 
@@ -1566,7 +1576,7 @@ let qualAnswers = {};
 
 const hcpVignettes = [
   {
-    key:'nafld', title:'Vignette 1 - NAFLD / MASLD', short:'NAFLD', color:'#1B3A6B',
+    key:'nafld', title:'Vignette NAFLD', short:'NAFLD', color:'#1B3A6B',
     caseLines:[
       'Harshad Raheja, 52-year-old male software professional, BMI 29.4 kg/m2, waist 98 cm, BP 142/88 mmHg.',
       'Fatigue, vague right upper quadrant discomfort, ALT 92 U/L on annual health check. HbA1c 6.4%, triglycerides 218 mg/dL, HDL 36 mg/dL.',
@@ -1589,7 +1599,7 @@ const hcpVignettes = [
     ]
   },
   {
-    key:'gerd', title:'Vignette 2 - GERD / Acid-Related Disorders', short:'GERD', color:'#0D7680',
+    key:'gerd', title:'Vignette GERD', short:'GERD', color:'#0D7680',
     caseLines:[
       'Sunita K., 44-year-old female school teacher, BMI 26.8 kg/m2, non-smoker.',
       'Heartburn 4-5 days/week, regurgitation, nocturnal cough, hoarseness for 8 months. Partial relief with OTC omeprazole.',
@@ -1612,7 +1622,7 @@ const hcpVignettes = [
     ]
   },
   {
-    key:'ibs', title:'Vignette 3 - IBS / Functional GI Disorder', short:'IBS', color:'#1A6B45',
+    key:'ibs', title:'Vignette IBS', short:'IBS', color:'#1A6B45',
     caseLines:[
       'Priya N., 34-year-old female IT professional, BMI 22.1 kg/m2.',
       'Recurrent abdominal pain, bloating, alternating bowel habits for 2+ years. IBS-SSS 285.',
@@ -1636,12 +1646,30 @@ const hcpVignettes = [
   }
 ];
 let hcpAnswers = {};
+let activeHcpVignette = 'nafld';
 
 function renderHcpSurvey() {
   const body = document.getElementById('hcp-vignette-body');
+  const selector = document.getElementById('hcp-vignette-selector');
   if(!body) return;
+  if(selector) {
+    selector.innerHTML = hcpVignettes.map(v => {
+      const answered = v.qs.filter(q => {
+        const a = hcpAnswers[q[0]];
+        if(q[2] === 'matrix') return a && Object.keys(a).length > 0;
+        if(Array.isArray(a)) return a.length > 0;
+        return a !== undefined && a !== '';
+      }).length;
+      return `<button class="vignette-select-card ${v.key === activeHcpVignette ? 'active' : ''}" onclick="selectHcpVignette('${v.key}')">
+        <i class="ti ${v.key === 'nafld' ? 'ti-liver' : v.key === 'gerd' ? 'ti-stomach' : 'ti-brain'}"></i>
+        <b>${escapeHtml(v.title)}</b>
+        <span>${escapeHtml(v.short)} indication survey · ${answered}/${v.qs.length} answered</span>
+      </button>`;
+    }).join('');
+  }
+  const selected = hcpVignettes.find(v => v.key === activeHcpVignette) || hcpVignettes[0];
   let n = 0;
-  body.innerHTML = hcpVignettes.map(v => `
+  body.innerHTML = [selected].map(v => `
     <div class="qual-question-section" id="hcp-vig-${v.key}">
       <h3>${escapeHtml(v.title)}</h3>
       <p>Answer based on current real-world practice. There are no right or wrong answers.</p>
@@ -1660,6 +1688,13 @@ function renderHcpSurvey() {
     </div>
   `).join('');
   updateHcpProgress();
+}
+
+function selectHcpVignette(key) {
+  activeHcpVignette = key;
+  renderHcpSurvey();
+  const body = document.getElementById('hcp-vignette-body');
+  if(body) body.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function isHcpSelected(key, idx) {
