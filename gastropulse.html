@@ -572,14 +572,18 @@ button.link-code:hover{color:var(--brand)}
       <div class="lab-chip-group"><span class="lab-eyebrow">Window</span><button class="lab-chip active" onclick="setLabFilter(this)">Last 12 mo</button><button class="lab-chip" onclick="setLabFilter(this)">Last 24 mo</button><button class="lab-chip" onclick="setLabFilter(this)">Last 5 yrs</button></div>
       <div class="lab-chip-group"><span class="lab-eyebrow">Age</span><button class="lab-chip active" onclick="setLabFilter(this)">All ages</button><button class="lab-chip" onclick="setLabFilter(this)">Adult 18+</button><button class="lab-chip" onclick="setLabFilter(this)">45+</button><button class="lab-chip" onclick="setLabFilter(this)">60+</button></div>
     </div>
+    <div class="card" style="background:#FFFDF9;border-color:#E4DDCB;margin-bottom:1rem;padding:.8rem 1rem">
+      <div class="lab-eyebrow">Active lab cohort</div>
+      <div id="lab-filter-summary" style="font-size:13px;color:#4B5063;margin-top:4px">All India · Last 12 mo · All ages</div>
+    </div>
 
     <div class="lab-kpi-grid">
-      <div class="lab-kpi"><span>Tests / window</span><b>12.85M</b><p>+18.2% YoY · across GI-relevant assays</p></div>
-      <div class="lab-kpi"><span>Unique patients</span><b>3.41M</b><p>Approx. 3.8 tests per patient encounter</p></div>
-      <div class="lab-kpi"><span>Abnormal share</span><b>31.4%</b><p>Any GI panel flagged out of range</p></div>
-      <div class="lab-kpi"><span>Top category</span><b>LFT</b><p>27.8% of GI lab test mix</p></div>
-      <div class="lab-kpi"><span>Guideline adherence</span><b>54.7%</b><p>Recommended workup completeness</p></div>
-      <div class="lab-kpi"><span>Molecular uptake</span><b>1.8%</b><p>MSI · RAS · HER2 · BRCA and related tests</p></div>
+      <div class="lab-kpi"><span>Tests / window</span><b id="lab-kpi-tests">12.85M</b><p id="lab-kpi-tests-copy">+18.2% YoY · across GI-relevant assays</p></div>
+      <div class="lab-kpi"><span>Unique patients</span><b id="lab-kpi-patients">3.41M</b><p id="lab-kpi-patients-copy">Approx. 3.8 tests per patient encounter</p></div>
+      <div class="lab-kpi"><span>Abnormal share</span><b id="lab-kpi-abnormal">31.4%</b><p id="lab-kpi-abnormal-copy">Any GI panel flagged out of range</p></div>
+      <div class="lab-kpi"><span>Top category</span><b id="lab-kpi-top">LFT</b><p id="lab-kpi-top-copy">27.8% of GI lab test mix</p></div>
+      <div class="lab-kpi"><span>Guideline adherence</span><b id="lab-kpi-guideline">54.7%</b><p id="lab-kpi-guideline-copy">Recommended workup completeness</p></div>
+      <div class="lab-kpi"><span>Molecular uptake</span><b id="lab-kpi-molecular">1.8%</b><p id="lab-kpi-molecular-copy">MSI · RAS · HER2 · BRCA and related tests</p></div>
     </div>
 
     <div class="lab-tabbar">
@@ -2604,6 +2608,101 @@ const labTumor = [['CEA',12.1,12.1],['CA 19-9',9.4,14.8],['AFP',7.6,7.4],['CA 72
 const labCea = [['2021',38,42],['2022',41,49],['2023',44,56],['2024',47,62],['2025',49,67]];
 const labMolecular = [['MSI / MMR (CRC II-III)',47,labPalette.clay],['RAS / BRAF (metastatic CRC)',71,labPalette.clay],['HER2 IHC (gastric/GEJ)',58,labPalette.amber],['PD-L1 CPS (upper GI)',41,labPalette.amber],['Claudin 18.2 (gastric)',9,labPalette.gold],['BRCA1/2 (pancreatic)',14,labPalette.plum],['FGFR2 fusion (CCA)',19,labPalette.plum],['IDH1 (CCA)',11,labPalette.plum]];
 const labCharts = {};
+let labState = {region:'All India', window:'Last 12 mo', age:'All ages'};
+const labRegionProfiles = {
+  'All India': {volume:.996, abnormal:1, hpylori:1, hepatitis:1, inflammation:1, oncology:1, molecular:1, guideline:1, lft:1},
+  North: {volume:.26, abnormal:1.06, hpylori:1.11, hepatitis:.88, inflammation:1.07, oncology:1.03, molecular:1.09, guideline:1.03, lft:1.04},
+  South: {volume:.31, abnormal:.94, hpylori:.87, hepatitis:.72, inflammation:.90, oncology:1.08, molecular:1.18, guideline:1.08, lft:.96},
+  West: {volume:.24, abnormal:.99, hpylori:.98, hepatitis:.97, inflammation:.98, oncology:1.10, molecular:1.14, guideline:1.05, lft:.99},
+  East: {volume:.12, abnormal:1.13, hpylori:1.15, hepatitis:1.35, inflammation:1.15, oncology:.88, molecular:.78, guideline:.91, lft:1.08},
+  Central: {volume:.05, abnormal:1.09, hpylori:1.07, hepatitis:1.18, inflammation:1.06, oncology:.82, molecular:.70, guideline:.88, lft:1.06},
+  NE: {volume:.02, abnormal:1.18, hpylori:1.21, hepatitis:1.65, inflammation:1.23, oncology:.74, molecular:.58, guideline:.82, lft:1.10}
+};
+const labWindowProfiles = {
+  'Last 12 mo': {volume:1, growth:18.2, guideline:1, molecular:1, trend:1},
+  'Last 24 mo': {volume:1.92, growth:15.4, guideline:.98, molecular:.86, trend:.92},
+  'Last 5 yrs': {volume:4.25, growth:11.8, guideline:.94, molecular:.68, trend:.78}
+};
+const labAgeProfiles = {
+  'All ages': {volume:1, abnormal:1, hpylori:1, hepatitis:1, inflammation:1, oncology:1, molecular:1, guideline:1},
+  'Adult 18+': {volume:.94, abnormal:1.04, hpylori:1.03, hepatitis:1.06, inflammation:1.02, oncology:1.05, molecular:1.04, guideline:1.01},
+  '45+': {volume:.52, abnormal:1.23, hpylori:1.08, hepatitis:1.22, inflammation:1.10, oncology:1.55, molecular:1.30, guideline:.99},
+  '60+': {volume:.21, abnormal:1.42, hpylori:1.02, hepatitis:1.38, inflammation:1.15, oncology:2.05, molecular:1.54, guideline:.96}
+};
+function clampRate(v, min=0, max=96) { return Math.max(min, Math.min(max, Number(v.toFixed(1)))); }
+function fmtLabM(v) { return v >= 1 ? v.toFixed(2).replace(/\.00$/,'') + 'M' : Math.round(v * 1000) + 'K'; }
+function getLabModifiers() {
+  const region = labRegionProfiles[labState.region] || labRegionProfiles['All India'];
+  const window = labWindowProfiles[labState.window] || labWindowProfiles['Last 12 mo'];
+  const age = labAgeProfiles[labState.age] || labAgeProfiles['All ages'];
+  return {region, window, age};
+}
+function labRateMultiplier(label) {
+  const {region, age} = getLabModifiers();
+  if(/H\. pylori/i.test(label)) return region.hpylori * age.hpylori;
+  if(/HBsAg|HCV|hepatitis/i.test(label)) return region.hepatitis * age.hepatitis;
+  if(/calprotectin|CRP|Inflammatory/i.test(label)) return region.inflammation * age.inflammation;
+  if(/CEA|CA 19|AFP|Tumor|molecular|MSI|HER2|RAS|BRCA|FGFR|IDH|Claudin/i.test(label)) return region.oncology * age.oncology;
+  if(/ALT|ALP|bilirubin|GGT|LFT|liver/i.test(label)) return region.lft * age.abnormal;
+  return region.abnormal * age.abnormal;
+}
+function deriveLabTestMix() {
+  const {region, age} = getLabModifiers();
+  const adjusted = labTestMix.map(r => {
+    let factor = labRateMultiplier(r[0]);
+    if(/Molecular/i.test(r[0])) factor = region.molecular * age.molecular;
+    return [r[0], r[1] * factor, r[2]];
+  });
+  const total = adjusted.reduce((sum, r) => sum + r[1], 0);
+  return adjusted.map(r => [r[0], Number((r[1] * 100 / total).toFixed(1)), r[2]]);
+}
+function deriveLabMonthly() {
+  const {region, window, age} = getLabModifiers();
+  const vol = region.volume * window.volume * age.volume;
+  const rate = (idx, label) => vol * (idx === 7 ? region.molecular * age.molecular : labRateMultiplier(label)) * window.trend;
+  return labMonthly.map(r => [r[0], clampRate(r[1] * rate(1,'LFT'),0,9999), clampRate(r[2] * rate(2,'hepatitis'),0,9999), clampRate(r[3] * vol * region.abnormal * age.abnormal,0,9999), clampRate(r[4] * rate(4,'H. pylori'),0,9999), clampRate(r[5] * rate(5,'Tumor'),0,9999), clampRate(r[6] * rate(6,'calprotectin'),0,9999), clampRate(r[7] * rate(7,'molecular'),0,9999)]);
+}
+function deriveLabAbnormal() { return labAbnormal.map(r => [r[0], clampRate(r[1] * labRateMultiplier(r[0])), r[2]]); }
+function deriveLabRegionBars() {
+  if(labState.region === 'All India') return labRegion;
+  const selected = labRegion.find(r => r[0] === labState.region) || labRegion[0];
+  return [
+    [`${selected[0]} metro labs`, 44, clampRate(selected[2] * .94)],
+    [`${selected[0]} urban labs`, 36, selected[2]],
+    [`${selected[0]} semi-urban labs`, 20, clampRate(selected[2] * 1.08)]
+  ];
+}
+function deriveLabAge() {
+  const rows = labState.age === '60+' ? labAge.filter(r => ['60-74','75+'].includes(r[0])) : labState.age === '45+' ? labAge.filter(r => ['45-59','60-74','75+'].includes(r[0])) : labState.age === 'Adult 18+' ? labAge.filter(r => r[0] !== '0-17') : labAge;
+  return rows.map(r => [r[0], r[1], clampRate(r[2] * getLabModifiers().region.abnormal)]);
+}
+function deriveLabLftPattern() { return labLftPattern.map(r => [r[0], clampRate(r[1] * (r[0].includes('ALT') ? labRateMultiplier('ALT') : getLabModifiers().region.abnormal))]); }
+function deriveLabHepAge() {
+  const rows = labState.age === '60+' ? labHepAge.filter(r => ['60-74','75+'].includes(r[0])) : labState.age === '45+' ? labHepAge.filter(r => ['45-59','60-74','75+'].includes(r[0])) : labHepAge;
+  const mult = getLabModifiers().region.hepatitis;
+  return rows.map(r => [r[0], clampRate(r[1] * mult), clampRate(r[2] * mult)]);
+}
+function deriveLabNafld() { return labNafld.map(r => [r[0], clampRate(r[1] * labRateMultiplier('ALT')), clampRate(r[2] * getLabModifiers().region.lft * getLabModifiers().age.abnormal), clampRate(r[3] * labRateMultiplier('GGT'))]); }
+function deriveSimpleRates(rows, typeLabel) { return rows.map(r => [r[0], clampRate(r[1] * labRateMultiplier(typeLabel || r[0]))]); }
+function deriveLabCeliac() {
+  const {region, window, age} = getLabModifiers();
+  return labCeliac.map(r => [r[0], Math.round(r[1] * region.volume * window.volume * age.volume), clampRate(r[2] * region.abnormal * age.abnormal,0,12)]);
+}
+function deriveLabCalpro() {
+  const {region, age} = getLabModifiers();
+  const factor = region.inflammation * age.inflammation;
+  const adjusted = labCalpro.map((r,i) => [r[0], r[1] * (i < 2 ? 1 / Math.sqrt(factor) : factor)]);
+  const total = adjusted.reduce((sum,r)=>sum+r[1],0);
+  return adjusted.map(r => [r[0], Number((r[1] * 100 / total).toFixed(1))]);
+}
+function deriveLabIbdScatter() {
+  const factor = getLabModifiers().region.inflammation * getLabModifiers().age.inflammation;
+  return labIbdScatter.map(p => ({x:Math.round(p.x * factor), y:clampRate(p.y * factor,0,90), r:p.r}));
+}
+function deriveLabIbdNutrition() { return labIbdNutrition.map(r => [r[0], clampRate(r[1] * getLabModifiers().age.inflammation * getLabModifiers().region.inflammation)]); }
+function deriveLabTumor() { return labTumor.map(r => [r[0], clampRate(r[1] * getLabModifiers().region.oncology * getLabModifiers().age.oncology), clampRate(r[2] * getLabModifiers().age.oncology)]); }
+function deriveLabCea() { return labCea.map(r => [r[0], clampRate(r[1] * getLabModifiers().region.oncology * getLabModifiers().age.oncology,0,100), clampRate(r[2] * getLabModifiers().region.oncology * getLabModifiers().age.oncology,0,100)]); }
+function deriveLabMolecular() { return labMolecular.map(r => [r[0], clampRate(r[1] * getLabModifiers().region.molecular * getLabModifiers().age.molecular * getLabModifiers().window.molecular,0,100), r[2]]); }
 function makeLabChart(id, config) {
   const el = document.getElementById(id);
   if(!el || typeof Chart === 'undefined') return;
@@ -2614,31 +2713,63 @@ function labBaseOptions(extra={}) {
   return Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#1A1F2E',titleColor:'#F6F2EA',bodyColor:'#F6F2EA'}},scales:{x:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779',font:{size:10}}},y:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779',font:{size:10}}}}}, extra);
 }
 function renderLabBars() {
+  const regionRows = deriveLabRegionBars();
+  const ibdRows = deriveLabIbdNutrition();
+  const molecularRows = deriveLabMolecular();
   const regionEl = document.getElementById('lab-region-bars');
-  if(regionEl) regionEl.innerHTML = labRegion.map(r => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}% volume · H. pylori ${r[2]}%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1] * 2.8}%;background:${labPalette.teal}"></div></div></div>`).join('');
+  if(regionEl) regionEl.innerHTML = regionRows.map(r => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}% volume · H. pylori ${r[2]}%</span></div><div class="lab-track"><div class="lab-fill" style="width:${Math.min(100, r[1] * 2.8)}%;background:${labPalette.teal}"></div></div></div>`).join('');
   const ibdEl = document.getElementById('lab-ibd-bars');
-  if(ibdEl) ibdEl.innerHTML = labIbdNutrition.map((r,i) => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1]}%;background:${i === 2 ? labPalette.clay : labPalette.steel}"></div></div></div>`).join('');
+  if(ibdEl) ibdEl.innerHTML = ibdRows.map((r,i) => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1]}%;background:${i === 2 ? labPalette.clay : labPalette.steel}"></div></div></div>`).join('');
   const molecularEl = document.getElementById('lab-molecular-bars');
-  if(molecularEl) molecularEl.innerHTML = labMolecular.map(r => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}% / target 100%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1]}%;background:${r[2]}"></div></div></div>`).join('');
+  if(molecularEl) molecularEl.innerHTML = molecularRows.map(r => `<div class="lab-bar-row"><div class="lab-bar-head"><span>${r[0]}</span><span>${r[1]}% / target 100%</span></div><div class="lab-track"><div class="lab-fill" style="width:${r[1]}%;background:${r[2]}"></div></div></div>`).join('');
   const legend = document.getElementById('lab-testmix-legend');
-  if(legend) legend.innerHTML = labTestMix.map(r => `<div class="lab-legend-item"><span class="lab-dot" style="background:${r[2]}"></span>${r[0]} · ${r[1]}%</div>`).join('');
+  const mix = deriveLabTestMix();
+  if(legend) legend.innerHTML = mix.map(r => `<div class="lab-legend-item"><span class="lab-dot" style="background:${r[2]}"></span>${r[0]} · ${r[1]}%</div>`).join('');
+}
+function updateLabKpis() {
+  const {region, window, age} = getLabModifiers();
+  const mix = deriveLabTestMix();
+  const abnormal = deriveLabAbnormal();
+  const molecular = deriveLabMolecular();
+  const totalTests = 12.847 * region.volume * window.volume * age.volume;
+  const patients = 3.41 * region.volume * window.volume * age.volume * (age.volume < 1 ? .92 : 1);
+  const abnormalShare = clampRate(31.4 * region.abnormal * age.abnormal,0,90);
+  const top = mix.reduce((best, row) => row[1] > best[1] ? row : best, mix[0]);
+  const guideline = clampRate(54.7 * region.guideline * window.guideline * age.guideline,0,100);
+  const mol = molecular.reduce((sum,row) => sum + row[1], 0) / molecular.length;
+  const setText = (id, value) => { const el = document.getElementById(id); if(el) el.textContent = value; };
+  setText('lab-filter-summary', `${labState.region} · ${labState.window} · ${labState.age}`);
+  setText('lab-kpi-tests', fmtLabM(totalTests));
+  setText('lab-kpi-tests-copy', `+${window.growth}% trend · filtered GI-relevant assays`);
+  setText('lab-kpi-patients', fmtLabM(patients));
+  setText('lab-kpi-patients-copy', `${labState.region} cohort · ${labState.age}`);
+  setText('lab-kpi-abnormal', `${abnormalShare}%`);
+  setText('lab-kpi-abnormal-copy', `Highest signal: ${abnormal.reduce((a,b)=>b[1]>a[1]?b:a, abnormal[0])[0]}`);
+  setText('lab-kpi-top', top[0].replace('Liver function (','').replace(')',''));
+  setText('lab-kpi-top-copy', `${top[1]}% of filtered GI lab mix`);
+  setText('lab-kpi-guideline', `${guideline}%`);
+  setText('lab-kpi-guideline-copy', `Workup completeness for selected cohort`);
+  setText('lab-kpi-molecular', `${clampRate(mol / 10,0,30)}%`);
+  setText('lab-kpi-molecular-copy', `Average biomarker uptake in eligible GI oncology cases`);
 }
 function renderLabDataCharts() {
+  updateLabKpis();
   renderLabBars();
-  makeLabChart('labTestMixChart',{type:'doughnut',data:{labels:labTestMix.map(r=>r[0]),datasets:[{data:labTestMix.map(r=>r[1]),backgroundColor:labTestMix.map(r=>r[2]),borderColor:'#FFFDF9',borderWidth:2}]},options:labBaseOptions({cutout:'62%',scales:{}})});
-  makeLabChart('labMonthlyChart',{type:'line',data:{labels:labMonthly.map(r=>r[0]),datasets:[['LFT',1,labPalette.teal],['Hepatitis',2,labPalette.tealBright],['Stool',3,labPalette.sage],['H. pylori',4,labPalette.amber],['Tumor',5,labPalette.clay],['Calprotectin',6,labPalette.rose],['Molecular',7,labPalette.plum]].map(d=>({label:d[0],data:labMonthly.map(r=>r[d[1]]),borderColor:d[2],backgroundColor:d[2],tension:.35,pointRadius:0,borderWidth:d[0]==='LFT'?2.5:1.8}))},options:labBaseOptions()});
-  makeLabChart('labAbnormalChart',{type:'bar',data:{labels:labAbnormal.map(r=>r[0]),datasets:[{label:'Abnormal rate %',data:labAbnormal.map(r=>r[1]),backgroundColor:labAbnormal.map(r=>r[2]),borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A1F2E',titleColor:'#F6F2EA',bodyColor:'#F6F2EA'}},scales:{x:{max:70,grid:{color:'#EFE9DA'},ticks:{color:'#8A8779',callback:v=>v+'%'}},y:{grid:{display:false},ticks:{color:'#4B5063',font:{size:10}}}}})});
-  makeLabChart('labAgeChart',{type:'bar',data:{labels:labAge.map(r=>r[0]),datasets:[{type:'bar',label:'Patient share',data:labAge.map(r=>r[1]),backgroundColor:labPalette.teal},{type:'line',label:'Abnormal %',data:labAge.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,tension:.3}]},options:labBaseOptions()});
-  makeLabChart('labLftPatternChart',{type:'bar',data:{labels:labLftPattern.map(r=>r[0]),datasets:[{label:'Share %',data:labLftPattern.map(r=>r[1]),backgroundColor:labPalette.teal,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
-  makeLabChart('labHepatitisAgeChart',{type:'bar',data:{labels:labHepAge.map(r=>r[0]),datasets:[{label:'HBsAg +',data:labHepAge.map(r=>r[1]),backgroundColor:labPalette.teal},{label:'Anti-HCV +',data:labHepAge.map(r=>r[2]),backgroundColor:labPalette.clay}]},options:labBaseOptions()});
-  makeLabChart('labNafldSignalChart',{type:'line',data:{labels:labNafld.map(r=>r[0]),datasets:[{label:'ALT >2x ULN',data:labNafld.map(r=>r[1]),borderColor:labPalette.teal,backgroundColor:'rgba(15,76,78,.12)',fill:true,tension:.35},{label:'FLI proxy >25',data:labNafld.map(r=>r[2]),borderColor:labPalette.amber,backgroundColor:'rgba(184,119,46,.10)',fill:true,tension:.35},{label:'GGT elevated',data:labNafld.map(r=>r[3]),borderColor:labPalette.clay,backgroundColor:'rgba(184,84,50,.10)',fill:true,tension:.35}]},options:labBaseOptions()});
-  makeLabChart('labHpyloriRegionChart',{type:'bar',data:{labels:labHpylori.map(r=>r[0]),datasets:[{label:'Positive %',data:labHpylori.map(r=>r[1]),backgroundColor:labPalette.amber,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
-  makeLabChart('labDyspepsiaChart',{type:'bar',data:{labels:labDyspepsia.map(r=>r[0]),datasets:[{label:'Ordered %',data:labDyspepsia.map(r=>r[1]),backgroundColor:labPalette.teal,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
-  makeLabChart('labCeliacChart',{type:'bar',data:{labels:labCeliac.map(r=>r[0]),datasets:[{type:'bar',label:'Tests (000s)',data:labCeliac.map(r=>r[1]),backgroundColor:labPalette.plum},{type:'line',label:'Positive %',data:labCeliac.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,yAxisID:'y1',tension:.3}]},options:labBaseOptions({scales:{x:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#8A8779',callback:v=>v+'%'}}}})});
-  makeLabChart('labCalproChart',{type:'bar',data:{labels:labCalpro.map(r=>r[0]),datasets:[{label:'Share %',data:labCalpro.map(r=>r[1]),backgroundColor:[labPalette.sage,labPalette.gold,labPalette.amber,labPalette.clay,labPalette.rose],borderRadius:4}]},options:labBaseOptions({plugins:{legend:{display:false}}})});
-  makeLabChart('labIbdScatterChart',{type:'bubble',data:{datasets:[{label:'Calprotectin x CRP',data:labIbdScatter,backgroundColor:'rgba(161,68,88,.55)',borderColor:labPalette.rose}]},options:labBaseOptions({scales:{x:{title:{display:true,text:'Calprotectin'},grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y:{title:{display:true,text:'CRP'},grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}}}})});
-  makeLabChart('labTumorMarkerChart',{type:'bar',data:{labels:labTumor.map(r=>r[0]),datasets:[{label:'Usage %',data:labTumor.map(r=>r[1]),backgroundColor:labPalette.teal},{label:'Abnormal %',data:labTumor.map(r=>r[2]),backgroundColor:labPalette.clay}]},options:labBaseOptions()});
-  makeLabChart('labCeaTrendChart',{type:'line',data:{labels:labCea.map(r=>r[0]),datasets:[{label:'At diagnosis',data:labCea.map(r=>r[1]),borderColor:labPalette.steel,backgroundColor:labPalette.steel,tension:.35},{label:'Surveillance',data:labCea.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,tension:.35}]},options:labBaseOptions()});
+  const mix = deriveLabTestMix(), monthly = deriveLabMonthly(), abnormal = deriveLabAbnormal(), ageRows = deriveLabAge(), lftRows = deriveLabLftPattern(), hepRows = deriveLabHepAge(), nafldRows = deriveLabNafld(), hpRows = deriveSimpleRates(labHpylori,'H. pylori'), dysRows = deriveSimpleRates(labDyspepsia), celiacRows = deriveLabCeliac(), calproRows = deriveLabCalpro(), ibdScatter = deriveLabIbdScatter(), tumorRows = deriveLabTumor(), ceaRows = deriveLabCea();
+  makeLabChart('labTestMixChart',{type:'doughnut',data:{labels:mix.map(r=>r[0]),datasets:[{data:mix.map(r=>r[1]),backgroundColor:mix.map(r=>r[2]),borderColor:'#FFFDF9',borderWidth:2}]},options:labBaseOptions({cutout:'62%',scales:{}})});
+  makeLabChart('labMonthlyChart',{type:'line',data:{labels:monthly.map(r=>r[0]),datasets:[['LFT',1,labPalette.teal],['Hepatitis',2,labPalette.tealBright],['Stool',3,labPalette.sage],['H. pylori',4,labPalette.amber],['Tumor',5,labPalette.clay],['Calprotectin',6,labPalette.rose],['Molecular',7,labPalette.plum]].map(d=>({label:d[0],data:monthly.map(r=>r[d[1]]),borderColor:d[2],backgroundColor:d[2],tension:.35,pointRadius:0,borderWidth:d[0]==='LFT'?2.5:1.8}))},options:labBaseOptions()});
+  makeLabChart('labAbnormalChart',{type:'bar',data:{labels:abnormal.map(r=>r[0]),datasets:[{label:'Abnormal rate %',data:abnormal.map(r=>r[1]),backgroundColor:abnormal.map(r=>r[2]),borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A1F2E',titleColor:'#F6F2EA',bodyColor:'#F6F2EA'}},scales:{x:{max:90,grid:{color:'#EFE9DA'},ticks:{color:'#8A8779',callback:v=>v+'%'}},y:{grid:{display:false},ticks:{color:'#4B5063',font:{size:10}}}}})});
+  makeLabChart('labAgeChart',{type:'bar',data:{labels:ageRows.map(r=>r[0]),datasets:[{type:'bar',label:'Patient share',data:ageRows.map(r=>r[1]),backgroundColor:labPalette.teal},{type:'line',label:'Abnormal %',data:ageRows.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,tension:.3}]},options:labBaseOptions()});
+  makeLabChart('labLftPatternChart',{type:'bar',data:{labels:lftRows.map(r=>r[0]),datasets:[{label:'Share %',data:lftRows.map(r=>r[1]),backgroundColor:labPalette.teal,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
+  makeLabChart('labHepatitisAgeChart',{type:'bar',data:{labels:hepRows.map(r=>r[0]),datasets:[{label:'HBsAg +',data:hepRows.map(r=>r[1]),backgroundColor:labPalette.teal},{label:'Anti-HCV +',data:hepRows.map(r=>r[2]),backgroundColor:labPalette.clay}]},options:labBaseOptions()});
+  makeLabChart('labNafldSignalChart',{type:'line',data:{labels:nafldRows.map(r=>r[0]),datasets:[{label:'ALT >2x ULN',data:nafldRows.map(r=>r[1]),borderColor:labPalette.teal,backgroundColor:'rgba(15,76,78,.12)',fill:true,tension:.35},{label:'FLI proxy >25',data:nafldRows.map(r=>r[2]),borderColor:labPalette.amber,backgroundColor:'rgba(184,119,46,.10)',fill:true,tension:.35},{label:'GGT elevated',data:nafldRows.map(r=>r[3]),borderColor:labPalette.clay,backgroundColor:'rgba(184,84,50,.10)',fill:true,tension:.35}]},options:labBaseOptions()});
+  makeLabChart('labHpyloriRegionChart',{type:'bar',data:{labels:hpRows.map(r=>r[0]),datasets:[{label:'Positive %',data:hpRows.map(r=>r[1]),backgroundColor:labPalette.amber,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
+  makeLabChart('labDyspepsiaChart',{type:'bar',data:{labels:dysRows.map(r=>r[0]),datasets:[{label:'Ordered %',data:dysRows.map(r=>r[1]),backgroundColor:labPalette.teal,borderRadius:4}]},options:labBaseOptions({indexAxis:'y',plugins:{legend:{display:false}}})});
+  makeLabChart('labCeliacChart',{type:'bar',data:{labels:celiacRows.map(r=>r[0]),datasets:[{type:'bar',label:'Tests (000s)',data:celiacRows.map(r=>r[1]),backgroundColor:labPalette.plum},{type:'line',label:'Positive %',data:celiacRows.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,yAxisID:'y1',tension:.3}]},options:labBaseOptions({scales:{x:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y:{grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#8A8779',callback:v=>v+'%'}}}})});
+  makeLabChart('labCalproChart',{type:'bar',data:{labels:calproRows.map(r=>r[0]),datasets:[{label:'Share %',data:calproRows.map(r=>r[1]),backgroundColor:[labPalette.sage,labPalette.gold,labPalette.amber,labPalette.clay,labPalette.rose],borderRadius:4}]},options:labBaseOptions({plugins:{legend:{display:false}}})});
+  makeLabChart('labIbdScatterChart',{type:'bubble',data:{datasets:[{label:'Calprotectin x CRP',data:ibdScatter,backgroundColor:'rgba(161,68,88,.55)',borderColor:labPalette.rose}]},options:labBaseOptions({scales:{x:{title:{display:true,text:'Calprotectin'},grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}},y:{title:{display:true,text:'CRP'},grid:{color:'#EFE9DA'},ticks:{color:'#8A8779'}}}})});
+  makeLabChart('labTumorMarkerChart',{type:'bar',data:{labels:tumorRows.map(r=>r[0]),datasets:[{label:'Usage %',data:tumorRows.map(r=>r[1]),backgroundColor:labPalette.teal},{label:'Abnormal %',data:tumorRows.map(r=>r[2]),backgroundColor:labPalette.clay}]},options:labBaseOptions()});
+  makeLabChart('labCeaTrendChart',{type:'line',data:{labels:ceaRows.map(r=>r[0]),datasets:[{label:'At diagnosis',data:ceaRows.map(r=>r[1]),borderColor:labPalette.steel,backgroundColor:labPalette.steel,tension:.35},{label:'Surveillance',data:ceaRows.map(r=>r[2]),borderColor:labPalette.clay,backgroundColor:labPalette.clay,tension:.35}]},options:labBaseOptions()});
 }
 function switchLabTab(tab, el) {
   document.querySelectorAll('.lab-tab-panel').forEach(p => p.style.display = p.id === 'lab-panel-' + tab ? 'block' : 'none');
@@ -2650,7 +2781,11 @@ function setLabFilter(el) {
   const group = el.closest('.lab-chip-group');
   if(group) group.querySelectorAll('.lab-chip').forEach(chip => chip.classList.remove('active'));
   el.classList.add('active');
-  showToast(`Lab data filtered: ${el.textContent}`,'filter');
+  const label = group ? group.querySelector('.lab-eyebrow')?.textContent.trim().toLowerCase() : '';
+  if(label === 'region') labState.region = el.textContent.trim();
+  if(label === 'window') labState.window = el.textContent.trim();
+  if(label === 'age') labState.age = el.textContent.trim();
+  showToast(`Lab cohort updated: ${labState.region} · ${labState.window} · ${labState.age}`,'filter');
   renderLabDataCharts();
 }
 
