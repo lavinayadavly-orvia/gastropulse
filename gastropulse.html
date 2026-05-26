@@ -134,9 +134,13 @@ body{font-family:var(--font-sans,'system-ui');background:#F3F7FB;min-height:100v
 .dashboard-program-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1rem}
 .dashboard-program-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;cursor:pointer;transition:all .15s;min-height:132px}
 .dashboard-program-card:hover{border-color:var(--brand);box-shadow:0 10px 24px rgba(0,0,0,.07)}
-.dashboard-program-card.active{border-color:var(--brand);background:var(--brand-light)}
+.dashboard-program-card.active{border-color:var(--brand);background:var(--brand-light);box-shadow:0 0 0 2px rgba(6,78,74,.12)}
 .dashboard-program-card .program-title{font-size:14px}
 .dashboard-program-card .program-stat{padding:7px}
+.active-analysis-panel{background:#fff;border:1px solid #D6E8E5;border-left:5px solid var(--brand);border-radius:14px;padding:1rem 1.1rem;margin-bottom:1rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;box-shadow:0 10px 24px rgba(13,58,108,.05)}
+.active-analysis-panel b{font-size:16px;color:#10283E}
+.active-analysis-panel p{font-size:13px;color:#60768B;margin-top:4px;line-height:1.45}
+.active-analysis-panel .badge{align-self:start}
 .insight-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1rem}
 .insight-callout{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
 .insight-callout .ti{font-size:18px;color:var(--brand);margin-bottom:8px}
@@ -1005,13 +1009,16 @@ button.link-code:hover{color:var(--brand)}
 <!-- =================== QUESTION ANALYSIS DASHBOARD =================== -->
 <div class="page" id="page-analytics">
   <div class="page-header">
-    <div><div class="page-title">Dashboard</div><div class="page-sub" id="analysis-subtitle">Question-level analysis for IBS-D KAP Survey 2025</div></div>
+    <div><div class="page-title">Dashboard</div><div class="page-sub" id="analysis-subtitle">Select one study below. The dashboard applies that study as the active backend filter.</div></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
       <button class="btn" onclick="showToast('Report exported to Excel','ti-download')"><i class="ti ti-download"></i>Export</button>
     </div>
   </div>
 
-  <div class="dashboard-program-grid">
+  <div class="card" style="margin-bottom:.75rem">
+    <div class="card-title">Select Study for Analysis</div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:.8rem">Only the selected study is loaded into the analysis area below. Switching tiles replaces the metrics, intelligence summary, and question-level tiles.</div>
+  <div class="dashboard-program-grid" style="margin-bottom:0">
     <div class="dashboard-program-card active" data-analysis-program="ibs-kap" onclick="selectAnalysisProgram('ibs-kap',this)">
       <div class="program-title">IBS-D KAP Survey 2025</div>
       <div class="program-meta"><span class="badge badge-info">KAP</span><span class="badge badge-success">Live</span></div>
@@ -1033,48 +1040,54 @@ button.link-code:hover{color:var(--brand)}
       <div class="program-stats"><div class="program-stat"><b>20</b><div>Questions</div></div><div class="program-stat"><b>178</b><div>Responses</div></div></div>
     </div>
   </div>
+  </div>
+
+  <div class="active-analysis-panel">
+    <div><b id="active-analysis-title">IBS-D KAP Survey 2025</b><p id="active-analysis-copy">Showing question-level analysis for this selected study only.</p></div>
+    <span class="badge badge-success" id="active-analysis-badge">Active filter</span>
+  </div>
 
   <div class="analysis-toolbar">
     <select style="max-width:160px"><option>All city tiers</option><option>Tier 1</option><option>Tier 2</option><option>Tier 3</option></select>
     <select style="max-width:190px"><option>All specialties</option><option>Gastroenterology</option><option>Internal Medicine</option><option>General Physician</option></select>
     <select style="max-width:160px"><option>All regions</option><option>North</option><option>West</option><option>South</option><option>East</option></select>
-    <button class="btn btn-primary" onclick="showToast('Dashboard refreshed','ti-refresh')"><i class="ti ti-refresh"></i>Refresh</button>
+    <button class="btn btn-primary" onclick="showToast('Selected study analysis refreshed','ti-refresh')"><i class="ti ti-refresh"></i>Refresh</button>
   </div>
 
   <div class="insight-strip">
-    <div class="insight-callout"><i class="ti ti-brain"></i><b>4.2 / 5</b><p>Average KAP score. Strong knowledge base, but practice consistency varies by city tier.</p></div>
-    <div class="insight-callout"><i class="ti ti-alert-triangle"></i><b>27%</b><p>Do not consistently document baseline stool form and pain severity before treatment.</p></div>
-    <div class="insight-callout"><i class="ti ti-map-pin"></i><b>+14 pts</b><p>Tier 1 doctors report higher confidence than Tier 2/3 doctors on differential diagnosis.</p></div>
-    <div class="insight-callout"><i class="ti ti-bulb"></i><b>Top action</b><p>Create a diagnostic checklist and follow-up tracker for lower-volume clinics.</p></div>
+    <div class="insight-callout"><i class="ti ti-brain"></i><b id="analysis-kpi-1">4.2 / 5</b><p id="analysis-kpi-1-copy">Average KAP score. Strong knowledge base, but practice consistency varies by city tier.</p></div>
+    <div class="insight-callout"><i class="ti ti-alert-triangle"></i><b id="analysis-kpi-2">27%</b><p id="analysis-kpi-2-copy">Do not consistently document baseline stool form and pain severity before treatment.</p></div>
+    <div class="insight-callout"><i class="ti ti-map-pin"></i><b id="analysis-kpi-3">+14 pts</b><p id="analysis-kpi-3-copy">Tier 1 doctors report higher confidence than Tier 2/3 doctors on differential diagnosis.</p></div>
+    <div class="insight-callout"><i class="ti ti-bulb"></i><b>Top action</b><p id="analysis-action-copy">Create a diagnostic checklist and follow-up tracker for lower-volume clinics.</p></div>
   </div>
 
   <div class="split-2" style="margin-bottom:1rem">
     <div class="card">
-      <div class="card-title">Knowledge vs Practice Gap</div>
+      <div class="card-title" id="analysis-chart-title-1">Knowledge vs Practice Gap</div>
       <div class="chart-container"><canvas id="kapGapChart" role="img" aria-label="Knowledge attitude practice score gap by domain">Domain score comparison.</canvas></div>
     </div>
     <div class="card">
       <div class="card-title">Response Quality Signals</div>
       <table><tbody>
-        <tr><td>Median completion time</td><td><b>11.4 min</b></td><td><span class="badge badge-success">Healthy</span></td></tr>
-        <tr><td>Straight-line Likert patterns</td><td><b>3.1%</b></td><td><span class="badge badge-success">Low</span></td></tr>
-        <tr><td>Open-text richness</td><td><b>64%</b></td><td><span class="badge badge-info">Usable</span></td></tr>
-        <tr><td>Partial responses</td><td><b>17</b></td><td><span class="badge badge-warn">Review</span></td></tr>
+        <tr><td>Median completion time</td><td><b id="quality-time">11.4 min</b></td><td><span class="badge badge-success">Healthy</span></td></tr>
+        <tr><td>Low-effort response patterns</td><td><b id="quality-patterns">3.1%</b></td><td><span class="badge badge-success">Low</span></td></tr>
+        <tr><td>Open-text richness</td><td><b id="quality-richness">64%</b></td><td><span class="badge badge-info">Usable</span></td></tr>
+        <tr><td>Partial responses</td><td><b id="quality-partials">17</b></td><td><span class="badge badge-warn">Review</span></td></tr>
       </tbody></table>
-      <div class="analysis-intel" style="margin-top:12px">No evidence of low-effort response clusters. Most partials drop after the practice section, suggesting survey length is acceptable but final barrier questions may need clearer wording.</div>
+      <div class="analysis-intel" style="margin-top:12px" id="quality-intel">No evidence of low-effort response clusters. Most partials drop after the practice section, suggesting survey length is acceptable but final barrier questions may need clearer wording.</div>
     </div>
   </div>
 
   <div class="split-2" style="margin-bottom:1rem">
     <div class="card">
-      <div class="card-title">Composite Practice Archetypes</div>
+      <div class="card-title" id="analysis-chart-title-2">Composite Practice Archetypes</div>
       <div class="chart-container"><canvas id="practiceArchetypeChart" role="img" aria-label="Scatter chart combining diagnostic confidence and structured practice behavior">Practice archetype scatter.</canvas></div>
-      <div class="analysis-intel" style="margin-top:10px"><b>Compiled from Q8, Q13, Q16, Q17, Q18.</b> High-confidence doctors do not always run structured follow-up. The best intervention is not more disease education; it is operational tools for documentation and follow-up.</div>
+      <div class="analysis-intel" style="margin-top:10px" id="analysis-compiled-1"><b>Compiled from Q8, Q13, Q16, Q17, Q18.</b> High-confidence doctors do not always run structured follow-up. The best intervention is not more disease education; it is operational tools for documentation and follow-up.</div>
     </div>
     <div class="card">
-      <div class="card-title">Treatment Choice vs Barrier Cluster</div>
+      <div class="card-title" id="analysis-chart-title-3">Treatment Choice vs Barrier Cluster</div>
       <div class="chart-container"><canvas id="barrierClusterChart" role="img" aria-label="Stacked chart combining treatment selections and reported barriers">Treatment and barrier clusters.</canvas></div>
-      <div class="analysis-intel" style="margin-top:10px"><b>Compiled from Q14, Q15, Q21, Q22.</b> Cost-sensitive physicians select lower-access regimens and request patient handouts more often than digital trackers.</div>
+      <div class="analysis-intel" style="margin-top:10px" id="analysis-compiled-2"><b>Compiled from Q14, Q15, Q21, Q22.</b> Cost-sensitive physicians select lower-access regimens and request patient handouts more often than digital trackers.</div>
     </div>
   </div>
 
@@ -1092,7 +1105,7 @@ button.link-code:hover{color:var(--brand)}
     </div>
     <div class="card">
       <div class="card-title">Intelligence Summary</div>
-      <div class="finding-list">
+      <div class="finding-list" id="analysis-finding-list">
         <div class="finding">Knowledge is not the limiting factor<span>Rome IV and alarm-feature recognition are reasonably strong. The drop appears when translating knowledge into documentation and monitoring.</span></div>
         <div class="finding">Tier drives the operating model<span>Tier 1 doctors show higher confidence and therapy range; Tier 2/3 doctors need lightweight tools that work without specialist support.</span></div>
         <div class="finding">Best next action<span>Create a one-page diagnostic checklist, baseline severity template, and 2-4 week follow-up reminder workflow.</span></div>
@@ -2248,10 +2261,50 @@ const analysisInsights = [
 ];
 
 const analysisProgramMeta = {
-  'ibs-kap': {title:'IBS-D KAP Survey 2025', subtitle:'Question-level analysis for IBS-D KAP Survey 2025', responses:'n=180'},
-  'ibs-pro': {title:'IBS-D PRO - QoL Assessment', subtitle:'Patient-level symptom, function, and quality-of-life analysis', responses:'n=116'},
-  hpylori: {title:'H. pylori Eradication Survey', subtitle:'Physician KAP analysis for eradication confirmation practices', responses:'n=18'},
-  constipation: {title:'Constipation Management KAP', subtitle:'Closed benchmark analysis for constipation management practices', responses:'n=178'}
+  'ibs-kap': {
+    title:'IBS-D KAP Survey 2025', subtitle:'IBS-D KAP Survey 2025 is selected. Only this study is loaded below.', responses:'n=180',
+    copy:'Analysis is filtered to physician KAP responses for IBS-D diagnosis, treatment, barriers, and follow-up behavior.',
+    kpis:['4.2 / 5','27%','+14 pts'],
+    kpiCopy:['Average KAP score. Strong knowledge base, but practice consistency varies by city tier.','Do not consistently document baseline stool form and pain severity before treatment.','Tier 1 doctors report higher confidence than Tier 2/3 doctors on differential diagnosis.'],
+    action:'Create a diagnostic checklist and follow-up tracker for lower-volume clinics.',
+    quality:['11.4 min','3.1%','64%','17','No evidence of low-effort response clusters. Most partials drop after the practice section, suggesting survey length is acceptable but final barrier questions may need clearer wording.'],
+    charts:['Knowledge vs Practice Gap','Composite Practice Archetypes','Treatment Choice vs Barrier Cluster'],
+    compiled:['<b>Compiled from Q8, Q13, Q16, Q17, Q18.</b> High-confidence doctors do not always run structured follow-up. The best intervention is operational tools for documentation and follow-up.','<b>Compiled from Q14, Q15, Q21, Q22.</b> Cost-sensitive physicians select lower-access regimens and request patient handouts more often than digital trackers.'],
+    findings:[['Knowledge is not the limiting factor','Rome IV and alarm-feature recognition are reasonably strong. The drop appears when translating knowledge into documentation and monitoring.'],['Tier drives the operating model','Tier 1 doctors show higher confidence and therapy range; Tier 2/3 doctors need lightweight tools that work without specialist support.'],['Best next action','Create a one-page diagnostic checklist, baseline severity template, and 2-4 week follow-up reminder workflow.']]
+  },
+  'ibs-pro': {
+    title:'IBS-D PRO - QoL Assessment', subtitle:'IBS-D PRO - QoL Assessment is selected. Only patient-reported outcome responses are loaded below.', responses:'n=116',
+    copy:'Analysis is filtered to patient symptom, function, quality-of-life, treatment, safety, and open-feedback responses.',
+    kpis:['58%','31%','2.1x'],
+    kpiCopy:['Patient link completion across 203 generated links.','Report daily activity disruption on 4 or more days per week.','High urgency scores are associated with higher work/activity impact.'],
+    action:'Prioritize patient education around urgency planning and daily-activity support.',
+    quality:['8.2 min','1.8%','72%','48','Response quality is healthy. In-progress links cluster around the function section, suggesting reminders should mention time remaining.'],
+    charts:['Symptom Burden vs Function Impact','Patient QoL Archetypes','Treatment Use vs Daily Disruption'],
+    compiled:['<b>Compiled from symptom, urgency, function, and QoL items.</b> Activity disruption is concentrated among patients with urgency plus sleep impact.','<b>Compiled from treatment and global assessment items.</b> Patients using medication every day still report residual symptoms, indicating unmet control needs.'],
+    findings:[['Function impact is the dominant signal','Daily activity and travel avoidance drive the strongest quality-of-life burden.'],['Symptoms and confidence move together','Patients with more frequent urgency are also more worried about sudden symptoms away from home.'],['Best next action','Add a patient-facing flare plan, urgency checklist, and 7-day symptom tracker.']]
+  },
+  hpylori: {
+    title:'H. pylori Eradication Survey', subtitle:'H. pylori Eradication Survey is selected. Only eradication-confirmation KAP responses are loaded below.', responses:'n=18',
+    copy:'Analysis is filtered to physician responses on eradication confirmation testing, adherence, barriers, reminders, and second-line choices.',
+    kpis:['12%','44%','Top gap'],
+    kpiCopy:['Completion is still low because first invite batch is enrolling.','Prefer stool antigen testing for confirmation in this early response set.','Follow-up loss and test access are the leading barriers.'],
+    action:'Send reminder batch and add confirmation-testing instruction sheet.',
+    quality:['7.6 min','0.0%','58%','6','Current sample is small. Treat directional insights as early signals until enrollment reaches target.'],
+    charts:['Confirmation Testing Practice Gap','Follow-up Behavior Archetypes','Regimen Choice vs Access Barrier'],
+    compiled:['<b>Compiled from confirmation test, timing, and PPI-hold questions.</b> Knowledge of testing timing is better than operational follow-up completion.','<b>Compiled from regimen, adherence, and barrier items.</b> Access and reminder systems shape confirmation behavior more than test preference alone.'],
+    findings:[['Operational gap dominates','Physicians value confirmation but patient return behavior is inconsistent.'],['Reminder infrastructure is missing','Manual reminders outperform no-reminder clinics in early responses.'],['Best next action','Deploy SMS reminder templates plus pre-test instruction cards for PPI/antibiotic hold.']]
+  },
+  constipation: {
+    title:'Constipation Management KAP', subtitle:'Constipation Management KAP is selected. Only the closed benchmark study is loaded below.', responses:'n=178',
+    copy:'Analysis is filtered to constipation screening, red flags, first-line therapy, escalation, and follow-up benchmarking.',
+    kpis:['99%','68%','+22 pts'],
+    kpiCopy:['Closed study completion rate.','Routinely assess medication-induced constipation.','Structured follow-up is higher in gastroenterology clinics than general practice.'],
+    action:'Use the benchmark as a reference pack for new constipation programs.',
+    quality:['9.1 min','2.4%','69%','2','Closed benchmark has stable response quality and minimal partial response risk.'],
+    charts:['Screening vs Escalation Gap','Constipation Practice Archetypes','First-line Choice vs Follow-up Pattern'],
+    compiled:['<b>Compiled from red flag, baseline, and pelvic floor items.</b> Documentation is strong, but pelvic floor screening remains inconsistent.','<b>Compiled from first-line and escalation items.</b> Combination therapy use varies most by specialty and patient volume.'],
+    findings:[['Benchmark is mature','Completion and response quality are high enough to use as a reference study.'],['Pelvic floor screening remains uneven','This is the biggest actionable gap in the closed dataset.'],['Best next action','Turn the closed study into a benchmark dashboard and compare future constipation programs against it.']]
+  }
 };
 let activeAnalysisProgram = 'ibs-kap';
 
@@ -2262,6 +2315,29 @@ function renderAnalysisDashboard(programId=activeAnalysisProgram) {
   const meta = analysisProgramMeta[activeAnalysisProgram] || analysisProgramMeta['ibs-kap'];
   const subtitle = document.getElementById('analysis-subtitle');
   if(subtitle) subtitle.textContent = meta.subtitle;
+  const setText = (id, value) => { const el = document.getElementById(id); if(el) el.textContent = value; };
+  const setHTML = (id, value) => { const el = document.getElementById(id); if(el) el.innerHTML = value; };
+  setText('active-analysis-title', meta.title);
+  setText('active-analysis-copy', meta.copy);
+  setText('active-analysis-badge', `${meta.responses} active`);
+  setText('analysis-kpi-1', meta.kpis[0]);
+  setText('analysis-kpi-2', meta.kpis[1]);
+  setText('analysis-kpi-3', meta.kpis[2]);
+  setText('analysis-kpi-1-copy', meta.kpiCopy[0]);
+  setText('analysis-kpi-2-copy', meta.kpiCopy[1]);
+  setText('analysis-kpi-3-copy', meta.kpiCopy[2]);
+  setText('analysis-action-copy', meta.action);
+  setText('quality-time', meta.quality[0]);
+  setText('quality-patterns', meta.quality[1]);
+  setText('quality-richness', meta.quality[2]);
+  setText('quality-partials', meta.quality[3]);
+  setText('quality-intel', meta.quality[4]);
+  setText('analysis-chart-title-1', meta.charts[0]);
+  setText('analysis-chart-title-2', meta.charts[1]);
+  setText('analysis-chart-title-3', meta.charts[2]);
+  setHTML('analysis-compiled-1', meta.compiled[0]);
+  setHTML('analysis-compiled-2', meta.compiled[1]);
+  setHTML('analysis-finding-list', meta.findings.map(f => `<div class="finding">${escapeHtml(f[0])}<span>${escapeHtml(f[1])}</span></div>`).join(''));
   document.querySelectorAll('.dashboard-program-card').forEach(card => card.classList.toggle('active', card.dataset.analysisProgram === activeAnalysisProgram));
   const items = questionnaireLibrary[activeAnalysisProgram].questions;
   grid.innerHTML = items.map((item, idx) => {
