@@ -345,6 +345,34 @@ button.link-code:hover{color:var(--brand)}
 .link-preview-row:last-child{border-bottom:0}
 .link-preview-row b{display:block;font-size:13px;color:#10283E;margin-bottom:3px}
 .link-preview-row span{font-size:12px;color:#60768B}
+.qual-survey-shell{max-width:1160px;margin:0 auto}
+.qual-survey-hero{background:linear-gradient(135deg,#033B3A,#075955 64%,#12A68A);border-radius:16px;padding:1.25rem 1.35rem;color:#fff;margin-bottom:1rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1rem}
+.qual-survey-hero h2{font-size:25px;margin-bottom:6px}
+.qual-survey-hero p{font-size:13px;line-height:1.5;color:rgba(255,255,255,.78);max-width:760px}
+.qual-section-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1rem}
+.qual-section-chip{background:#fff;border:1px solid #E1EAF3;border-radius:12px;padding:10px;cursor:pointer;transition:all .12s}
+.qual-section-chip:hover{border-color:#0F766E;background:#F3FBF9}
+.qual-section-chip b{display:block;font-size:12px;color:#10283E}
+.qual-section-chip span{display:block;font-size:11px;color:#60768B;margin-top:3px}
+.qual-question-section{background:#fff;border:1px solid #E1EAF3;border-radius:14px;padding:1rem;margin-bottom:1rem;box-shadow:0 8px 22px rgba(13,58,108,.045)}
+.qual-question-section h3{font-size:16px;color:#10283E;margin-bottom:4px}
+.qual-question-section p{font-size:12px;color:#60768B;margin-bottom:12px;line-height:1.45}
+.qual-answer-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px;margin-left:34px}
+.qual-answer{border:1px solid #DCE8F2;background:#F8FBFE;border-radius:9px;padding:8px 9px;font-size:12px;color:#39556F;cursor:pointer;text-align:left;transition:all .12s;font-family:inherit}
+.qual-answer:hover,.qual-answer.selected{border-color:#0F766E;background:#E6F4F1;color:#064E4A}
+.qual-summary{display:none}
+.qual-summary.show{display:block}
+.summary-score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:1rem 0}
+.summary-score{background:#F8FBFE;border:1px solid #E1EAF3;border-radius:12px;padding:12px}
+.summary-score b{display:block;font-size:22px;color:#10283E}
+.summary-score span{font-size:12px;color:#60768B}
+@media print{
+  .topnav,.sidebar,.qual-survey-hero .btn,.page-header .btn,.toast{display:none!important}
+  .layout,.main{display:block;padding:0;background:#fff}
+  .page{display:block!important}
+  .page:not(.active){display:none!important}
+  .card,.qual-question-section{box-shadow:none;break-inside:avoid}
+}
 
 /* Form builder */
 .question-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;margin-bottom:.75rem;border:.5px solid var(--color-border-tertiary)}
@@ -365,6 +393,7 @@ button.link-code:hover{color:var(--brand)}
   .home-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
   .qual-hero,.qual-grid,.qual-route-grid{grid-template-columns:1fr}
   .qual-actions{justify-content:flex-start}
+  .qual-survey-hero{display:block}
   .demo-shell,.phone-wrap,.doctor-preview{grid-template-columns:1fr}
   .demo-menu{position:relative}
   .response-grid,.demo-note-grid{grid-template-columns:1fr}
@@ -468,7 +497,7 @@ button.link-code:hover{color:var(--brand)}
     </div>
     <div class="qual-actions">
       <button class="btn" onclick="showToast('Physician send list prepared','ti-users')"><i class="ti ti-users"></i>Physician Route</button>
-      <button class="btn btn-primary" onclick="openPatientQuestionnaire('GQL-2025-0007')"><i class="ti ti-device-mobile"></i>Preview Patient Link</button>
+      <button class="btn btn-primary" onclick="openQualSurvey('GQL-2025-0007')"><i class="ti ti-device-mobile"></i>Preview Patient Link</button>
     </div>
   </div>
 
@@ -525,7 +554,60 @@ button.link-code:hover{color:var(--brand)}
         <div class="questionnaire-item-head"><span class="q-num">5</span><div><div class="questionnaire-text">How would you rate how well your current treatment supports control of your GI symptoms?</div><div class="question-meta"><span class="badge badge-success">Treatment Experience</span><span class="badge badge-gray">Scale</span></div></div></div>
         <div class="questionnaire-options"><span>Very well</span><span>Well</span><span>Neutral</span><span>Not very well</span><span>Not well</span></div>
       </div>
-      <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="showToast('Full 30-question instrument loaded from Gastro QualLife survey','ti-clipboard-list')"><i class="ti ti-clipboard-list"></i>Full instrument: 30 questions across 5 domains</button>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="openQualSurvey('GQL-2025')"><i class="ti ti-clipboard-list"></i>Open full questionnaire: 30 questions across 5 domains</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== GASTRO QUALIFE FULL QUESTIONNAIRE =================== -->
+<div class="page" id="page-qual-survey">
+  <div class="qual-survey-shell">
+    <div class="page-header">
+      <div>
+        <button class="btn btn-sm" style="margin-bottom:10px" onclick="showPage('qual-life',document.getElementById('nav-qual-life'))"><i class="ti ti-arrow-left"></i>Gastro QualLife</button>
+        <div class="page-title">Gastro QualLife Patient Questionnaire</div>
+        <div class="page-sub">Full patient-facing questionnaire with scoring summary and PDF export</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn" onclick="resetQualSurvey()"><i class="ti ti-refresh"></i>Reset</button>
+        <button class="btn btn-primary" onclick="exportQualPDF()"><i class="ti ti-file-type-pdf"></i>Export PDF</button>
+      </div>
+    </div>
+
+    <div class="qual-survey-hero">
+      <div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <span class="badge badge-info">Secure patient link</span>
+          <span class="badge badge-success" id="qual-link-id">GQL-2025</span>
+          <span class="badge badge-gray">10-12 minutes</span>
+        </div>
+        <h2>GI Patient Quality of Life Survey</h2>
+        <p>This survey asks about GI symptoms, wellbeing, daily activities, financial burden, and treatment experience. Responses are used in aggregated form for research and care-improvement insights.</p>
+      </div>
+      <button class="btn btn-primary" onclick="submitQualSurvey()"><i class="ti ti-circle-check"></i>Submit & View Summary</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Survey Landing</div>
+      <div class="qual-section-nav" id="qual-section-nav"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Age group</label><select id="qual-age"><option>Prefer not to say</option><option>18-24</option><option>25-34</option><option>35-44</option><option>45-54</option><option>55-64</option><option>65+</option></select></div>
+        <div class="form-group"><label class="form-label">Primary GI diagnosis</label><select id="qual-condition"><option>Prefer not to say</option><option>IBD - Crohn's Disease</option><option>IBD - Ulcerative Colitis</option><option>IBS</option><option>GERD / Acid reflux</option><option>Mixed / More than one</option><option>Other GI condition</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Consent</label><div class="check-opt selected" onclick="toggleOpt(this)"><input type="checkbox" style="width:auto" checked> <div><div style="font-weight:600;font-size:13px">I understand and agree to participate in this survey.</div><div style="font-size:11px;color:var(--color-text-secondary)">No personally identifiable information is required.</div></div></div></div>
+    </div>
+
+    <div id="qual-questionnaire"></div>
+
+    <div class="card qual-summary" id="qual-summary">
+      <div class="card-title">Submission Summary</div>
+      <div id="qual-summary-copy" style="font-size:13px;color:#60768B;line-height:1.55"></div>
+      <div class="summary-score-grid" id="qual-summary-grid"></div>
+      <div class="finding-list" id="qual-summary-actions"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:1rem;flex-wrap:wrap">
+        <button class="btn" onclick="showPage('qual-life',document.getElementById('nav-qual-life'))"><i class="ti ti-arrow-left"></i>Back to Program</button>
+        <button class="btn btn-primary" onclick="exportQualPDF()"><i class="ti ti-file-type-pdf"></i>Export PDF</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1335,6 +1417,171 @@ const patientDemoQuestions = [
   }
 ];
 
+const qualSections = [
+  {
+    key:'sym', title:'GI Symptom Burden', desc:'How GI symptoms have affected day-to-day life over the past 4 weeks.',
+    questions:[
+      ['s1','How often have your GI symptoms (for example pain, bloating, urgency, reflux, nausea) been present in the past 4 weeks?',['Never','Rarely','Several days','Most days','Every day']],
+      ['s2','At their most difficult, how intense were your GI symptoms in the past 4 weeks?',['None','Mild','Moderate','High','Very high']],
+      ['s3','How often did your symptoms affect your sleep in the past 4 weeks?',['Never','1-2 nights','3-7 nights','8-14 nights','More than 14 nights']],
+      ['s4','How many days in the past 4 weeks did your GI condition make it difficult to complete your usual activities?',['0 days','1-3 days','4-7 days','8-14 days','15+ days']],
+      ['s5','Have you modified or restricted your diet in the past month because of your GI condition?',['No','Yes']],
+      ['s6','Have you had unplanned visits to a doctor, clinic, or emergency department in the past 3 months due to GI symptoms?',['No','Yes']]
+    ]
+  },
+  {
+    key:'men', title:'Mental Wellbeing', desc:'How the condition may connect with emotional health and support needs.',
+    questions:[
+      ['m1','Over the past 2 weeks, how often have you felt worried, tense, or unsettled?',['Not at all','A few days','About half the days','More than half the days','Nearly every day']],
+      ['m2','Over the past 2 weeks, how often have you felt low, down, or emotionally overwhelmed?',['Not at all','A few days','About half the days','More than half the days','Nearly every day']],
+      ['m3','How much does your GI condition add to your overall stress?',['Not at all','Slightly','Moderately','A lot','Very much']],
+      ['m4','How often do you feel emotionally strained by living with your GI condition?',['Never','Rarely','Sometimes','Often','Very often']],
+      ['m5','Have you changed or cancelled social activities, travel, or plans you would otherwise enjoy because of your GI condition?',['No','Yes']],
+      ['m6','Do you feel you have enough support to manage your condition?',['Definitely yes','Mostly yes','Somewhat','Mostly no','Not really']],
+      ['m7','Have you discussed emotional wellbeing with your doctor in the context of your GI condition?',['No','Yes']]
+    ]
+  },
+  {
+    key:'fun', title:'Functional & Social QoL', desc:'Work, study, relationships, and day-to-day functioning.',
+    questions:[
+      ['f1','How much has your GI condition affected your work or study routine in the past month?',['No impact','Slight impact','Moderate impact','Considerable impact','Not able to work/study']],
+      ['f2','How often do you change or decline social plans because of concerns about GI symptoms?',['Never','Rarely','Sometimes','Often','Always']],
+      ['f3','How much has your GI condition influenced your closest personal relationships?',['No impact','Minor impact','Moderate impact','Significant impact','Very significant impact']],
+      ['f4','Overall, how would you rate your quality of life at this time?',['Very good','Good','Neutral','Challenging','Very challenging']],
+      ['f5','Has your GI condition led you to adjust your career or professional plans?',['No','Yes']]
+    ]
+  },
+  {
+    key:'fin', title:'Financial Stress', desc:'Care-related expenses, work impact, and access considerations.',
+    questions:[
+      ['fi1','In the past 3 months, how much financial stress have you experienced as a result of care-related expenses for your GI condition?',['None','Mild','Moderate','High','Very high']],
+      ['fi2','Has your GI condition affected your work attendance or income in the past 3 months?',['No','Yes']],
+      ['fi3','Have you ever delayed or avoided a medical appointment, test, or procedure because of financial burden?',['No','Yes']],
+      ['fi4','Have you ever skipped, reduced, or stopped taking prescribed medication because of financial burden?',['No','Yes']],
+      ['fi5','How much does financial worry related to your GI condition affect your overall mental wellbeing?',['Not at all','Slightly','Moderately','A lot','Very much']],
+      ['fi6','Do you feel your healthcare provider understands the financial burden your condition places on you?',['Definitely yes','Mostly yes','Somewhat','Mostly no','Not really']]
+    ]
+  },
+  {
+    key:'trt', title:'Treatment Experience', desc:'Treatment control, communication, confidence, and support needs.',
+    questions:[
+      ['t1','How would you rate how well your current treatment supports control of your GI symptoms?',['Very well','Well','Neutral','Not very well','Not well at all']],
+      ['t2','In the past month, how often did you miss or skip doses of your prescribed medication?',['Never','Rarely (1-2 times)','Sometimes (3-5 times)','Often (6-10 times)','Most of the time']],
+      ['t3','How confident are you that you understand your treatment plan and what steps to take if symptoms increase?',['Very confident','Mostly confident','Somewhat confident','Mostly unsure','Not confident']],
+      ['t4','How clearly does your treating physician communicate with you about your condition and treatment options?',['Very clearly','Clearly','Somewhat clearly','Not very clearly','Not clearly']],
+      ['t5','Have you ever stopped or changed a treatment without consulting your doctor, due to side effects, financial burden, or lack of efficacy?',['No','Yes']],
+      ['t6','Overall, how well is your GI condition managed compared to 12 months ago?',['Much better','Somewhat better','About the same','Somewhat worse','Much worse']]
+    ]
+  }
+];
+let qualAnswers = {};
+
+function openQualSurvey(linkId) {
+  showPage('qual-survey', document.getElementById('nav-qual-life'));
+  const badge = document.getElementById('qual-link-id');
+  if(badge) badge.textContent = linkId || 'GQL-2025';
+  renderQualSurvey();
+  setRouteHash(`qual-survey:${linkId || 'GQL-2025'}`);
+}
+
+function renderQualSurvey() {
+  const nav = document.getElementById('qual-section-nav');
+  const body = document.getElementById('qual-questionnaire');
+  if(!nav || !body) return;
+  nav.innerHTML = qualSections.map(s => `
+    <div class="qual-section-chip" onclick="document.getElementById('qual-sec-${s.key}').scrollIntoView({behavior:'smooth',block:'start'})">
+      <b>${escapeHtml(s.title)}</b><span>${s.questions.length} questions</span>
+    </div>
+  `).join('');
+  let qCount = 0;
+  body.innerHTML = qualSections.map(section => `
+    <div class="qual-question-section" id="qual-sec-${section.key}">
+      <h3>${escapeHtml(section.title)}</h3>
+      <p>${escapeHtml(section.desc)}</p>
+      ${section.questions.map(q => {
+        qCount += 1;
+        return `
+          <div class="questionnaire-item">
+            <div class="questionnaire-item-head">
+              <span class="q-num">${qCount}</span>
+              <div>
+                <div class="questionnaire-text">${escapeHtml(q[1])}</div>
+                <div class="question-meta"><span class="badge badge-gray">${q[2].length === 2 ? 'Yes/No' : 'Scale'}</span><span class="badge badge-info">${escapeHtml(section.title)}</span></div>
+              </div>
+            </div>
+            <div class="qual-answer-row">
+              ${q[2].map((opt, idx) => `<button class="qual-answer ${qualAnswers[q[0]] === idx ? 'selected' : ''}" onclick="selectQualAnswer('${q[0]}',${idx},this)">${escapeHtml(opt)}</button>`).join('')}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+function selectQualAnswer(id, value, el) {
+  qualAnswers[id] = value;
+  el.parentElement.querySelectorAll('.qual-answer').forEach(btn => btn.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function totalQualQuestions() {
+  return qualSections.reduce((sum, section) => sum + section.questions.length, 0);
+}
+
+function scoreQualSection(section) {
+  let answered = 0;
+  let score = 0;
+  let max = 0;
+  section.questions.forEach(q => {
+    if(qualAnswers[q[0]] !== undefined) {
+      answered += 1;
+      score += qualAnswers[q[0]];
+      max += q[2].length - 1;
+    }
+  });
+  return { answered, pct: max ? Math.round((score / max) * 100) : 0 };
+}
+
+function submitQualSurvey() {
+  renderQualSurvey();
+  const answered = Object.keys(qualAnswers).length;
+  const total = totalQualQuestions();
+  const summary = document.getElementById('qual-summary');
+  const copy = document.getElementById('qual-summary-copy');
+  const grid = document.getElementById('qual-summary-grid');
+  const actions = document.getElementById('qual-summary-actions');
+  if(!summary || !copy || !grid || !actions) return;
+  const condition = document.getElementById('qual-condition')?.value || 'Prefer not to say';
+  copy.innerHTML = `<b>${answered}/${total}</b> questions answered. Diagnosis segment: <b>${escapeHtml(condition)}</b>. Summary below is a demo scoring view for research and care-improvement workflows.`;
+  grid.innerHTML = qualSections.map(section => {
+    const sc = scoreQualSection(section);
+    return `<div class="summary-score"><b>${sc.pct}%</b><span>${escapeHtml(section.title)}<br>${sc.answered}/${section.questions.length} answered</span></div>`;
+  }).join('');
+  const high = qualSections.map(section => ({ section, score: scoreQualSection(section) })).sort((a,b) => b.score.pct - a.score.pct)[0];
+  actions.innerHTML = `
+    <div class="finding">Primary signal<span>${escapeHtml(high.section.title)} is the highest-scoring domain in this demo response. Review the related question responses first.</span></div>
+    <div class="finding">Suggested action<span>Consider physician follow-up, patient education, or support pathway routing depending on the active domain signals.</span></div>
+    <div class="finding">Export-ready<span>Use Export PDF to save the questionnaire responses and summary for demo review.</span></div>
+  `;
+  summary.classList.add('show');
+  summary.scrollIntoView({behavior:'smooth',block:'start'});
+  showToast('Questionnaire submitted · summary generated','check');
+}
+
+function resetQualSurvey() {
+  qualAnswers = {};
+  renderQualSurvey();
+  const summary = document.getElementById('qual-summary');
+  if(summary) summary.classList.remove('show');
+  showToast('Questionnaire reset','refresh');
+}
+
+function exportQualPDF() {
+  showToast('Opening print dialog for PDF export','file-type-pdf');
+  setTimeout(() => window.print(), 250);
+}
+
 function openDemoPanel(panel) {
   ['patient','doctor','responses'].forEach(id => {
     const p = document.getElementById('demo-panel-'+id);
@@ -1400,7 +1647,7 @@ function switchRole(role, el) {
   const users = {admin:'Demo Account', doctor:'Dr. Rajesh Kumar · AIIMS Delhi'};
   document.getElementById('nav-user').textContent = users[role];
 
-  const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics','qual-life'];
+  const adminPages = ['dashboard','studies','create','doctors','pro-links','analytics','qual-life','qual-survey'];
   const doctorPages = ['my-studies','my-patients'];
   const adminNavs = ['nav-dashboard','nav-studies','nav-create','nav-doctors','nav-pro-links','nav-analytics','nav-demo','nav-qual-life'];
   const doctorNavs = ['nav-my-studies','nav-my-patients'];
@@ -1451,6 +1698,11 @@ function initRouteFromHash() {
     openStudyDetail(studyId);
     return;
   }
+  if(route.startsWith('qual-survey')) {
+    const linkId = route.split(':')[1] || 'GQL-2025';
+    openQualSurvey(linkId);
+    return;
+  }
   if(document.getElementById('page-' + route)) {
     showPage(route, pageRouteNav(route), true);
   }
@@ -1465,6 +1717,7 @@ function showPage(id, navEl, skipHash) {
   if(navEl) navEl.classList.add('active');
   if(id === 'analytics') renderAnalysisDashboard();
   if(id === 'demo') openDemoPanel('patient');
+  if(id === 'qual-survey') renderQualSurvey();
   if(!skipHash) setRouteHash(id);
 }
 
